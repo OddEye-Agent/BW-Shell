@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Admin Portal UI</title>
   <style>
     :root {
@@ -301,6 +304,52 @@
       gap: 0.85rem;
     }
 
+
+    .compliance-subnav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      border-bottom: 1px solid var(--line);
+      margin: 0.2rem 0 1.1rem;
+    }
+
+    .compliance-subnav-item {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 0.05rem;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+    }
+
+    .compliance-subnav-item:hover {
+      color: var(--text);
+    }
+
+    .compliance-subnav-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .compliance-panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 1rem;
+    }
+
+    .compliance-panel h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .compliance-panel p {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+    }
+
     .placeholder-card {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -356,6 +405,7 @@
   <nav class="main-nav" aria-label="Primary">
     <button class="nav-item active" data-page="Accounts">Accounts</button>
     <button class="nav-item" data-page="Users">Users</button>
+    <button class="nav-item" data-page="Compliance">Compliance</button>
     <button class="nav-item" data-page="Content">Content</button>
     <button class="nav-item" data-page="Websites">Websites</button>
     <button class="nav-item" data-page="Locator">Locator</button>
@@ -372,6 +422,9 @@
     const pageContainer = document.getElementById('pageContainer');
     const userMenuButton = document.getElementById('userMenuButton');
     const userDropdown = document.getElementById('userDropdown');
+    const uiVersion = 'compliance-v2';
+
+    document.body.setAttribute('data-ui-version', uiVersion);
 
     const accountRows = [
       {
@@ -441,6 +494,26 @@
       ]
     };
 
+
+
+    const complianceTabs = [
+      {
+        name: 'Workflows',
+        description: 'Review and configure compliance workflows for onboarding and policy checks.'
+      },
+      {
+        name: 'Compliance Queue',
+        description: 'Track pending compliance reviews, status updates, and assigned owners.'
+      },
+      {
+        name: 'Advisor Queue',
+        description: 'Monitor advisor requests requiring guidance, remediation, or escalation.'
+      },
+      {
+        name: 'Archive',
+        description: 'Access historical compliance records, completed tasks, and audit references.'
+      }
+    ];
     function setUserMenuOpen(isOpen) {
       userDropdown.classList.toggle('open', isOpen);
       userDropdown.hidden = !isOpen;
@@ -493,7 +566,7 @@
         .join('');
 
       pageContainer.innerHTML = `
-          <h1 class="page-title">Account Management</h1>
+        < h1 class="page-title" > Account Management</h1 >
           <div class="filter-row">
             <div class="field-group">
               <label for="accountSearch">Account Name</label>
@@ -532,27 +605,78 @@
               <button class="page-btn" type="button">Next</button>
             </div>
           </div>
-        `;
+      `;
 
       attachRowMenuEvents();
     }
 
     function renderPlaceholderView(sectionName) {
       const cards = placeholderSections[sectionName]
-        .map(([title, desc]) => `<article class="placeholder-card"><h3>${title}</h3><p>${desc}</p></article>`)
+        .map(([title, desc]) => `< article class="placeholder-card" ><h3>${title}</h3><p>${desc}</p></article > `)
         .join('');
 
       pageContainer.innerHTML = `
-          <h1 class="page-title">${sectionName}</h1>
+        < h1 class="page-title" > ${sectionName}</h1 >
           <p class="page-subtitle">This section is ready for the next phase of UI buildout.</p>
           <div class="placeholder-grid">${cards}</div>
+      `;
+    }
+
+    function attachComplianceTabEvents() {
+      const complianceSubnavItems = document.querySelectorAll('.compliance-subnav-item');
+      const compliancePanel = document.getElementById('compliancePanel');
+
+      complianceSubnavItems.forEach((item) => {
+        item.addEventListener('click', () => {
+          complianceSubnavItems.forEach((button) => button.classList.remove('active'));
+          item.classList.add('active');
+
+          const selectedTab = complianceTabs.find((tab) => tab.name === item.dataset.complianceTab);
+          compliancePanel.innerHTML = `
+        < h3 > ${selectedTab.name}</h3 >
+          <p>${selectedTab.description}</p>
+      `;
+        });
+      });
+    }
+
+    function renderComplianceView() {
+      const subnavButtons = complianceTabs
+        .map(
+          (tab, index) => `
+        < button
+      class="compliance-subnav-item${index === 0 ? ' active' : ''}"
+      type = "button"
+      data - compliance - tab="${tab.name}"
+        >
+        ${tab.name}
+              </button >
+        `
+        )
+        .join('');
+
+      pageContainer.innerHTML = `
+        < h1 class="page-title" > Compliance</h1 >
+          <div class="compliance-subnav" aria-label="Compliance sub navigation">
+            ${subnavButtons}
+          </div>
+          <section class="compliance-panel" id="compliancePanel">
+            <h3>${complianceTabs[0].name}</h3>
+            <p>${complianceTabs[0].description}</p>
+          </section>
         `;
+
+      attachComplianceTabEvents();
     }
 
     function renderSection(sectionName) {
       closeAllRowMenus();
       if (sectionName === 'Accounts') {
         renderAccountsView();
+        return;
+      }
+      if (sectionName === 'Compliance') {
+        renderComplianceView();
         return;
       }
       renderPlaceholderView(sectionName);
