@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal UI</title>
+    <style>
+      :root {
+        --navy: #102a5c;
+        --navy-dark: #0b1e43;
+        --text: #1b2430;
+        --muted: #6a7689;
+        --line: #dce2eb;
+        --panel: #f5f7fb;
+        --white: #ffffff;
+        --accent: #2158d8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        background: var(--panel);
+        color: var(--text);
+      }
+
+      .top-bar {
+        background: linear-gradient(0deg, var(--navy-dark), var(--navy));
+        color: var(--white);
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+
+      .brand {
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .user-menu {
+        position: relative;
+      }
+
+      .user-menu-button {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--white);
+        font-size: 0.95rem;
+        font-weight: 600;
+        padding: 0.15rem 0;
+        cursor: pointer;
+        line-height: 1.2;
+      }
+
+      .user-menu-button:hover,
+      .user-menu-button:focus-visible {
+        opacity: 0.82;
+      }
+
+      .dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 0.5rem);
+        background: var(--white);
+        color: var(--text);
+        min-width: 200px;
+        border-radius: 12px;
+        box-shadow: 0 12px 40px rgba(10, 23, 50, 0.18);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        display: none;
+      }
+
+      .dropdown[hidden] {
+        display: none;
+      }
+
+      .dropdown.open {
+        display: block;
+      }
+
+      .dropdown button {
+        width: 100%;
+        border: none;
+        background: transparent;
+        text-align: left;
+        padding: 0.75rem 0.9rem;
+        cursor: pointer;
+        color: inherit;
+      }
+
+      .dropdown button:hover {
+        background: #f0f4fa;
+      }
+
+      .main-nav {
+        background: var(--white);
+        border-bottom: 1px solid var(--line);
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        overflow-x: auto;
+      }
+
+      .nav-item {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-weight: 600;
+        padding: 0.95rem 0.85rem;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+      }
+
+      .nav-item:hover {
+        color: var(--text);
+        background: #f7f9fc;
+      }
+
+      .nav-item.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 1.25rem auto;
+        padding: 0 1rem 1.5rem;
+      }
+
+      .content-card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(16, 42, 92, 0.06);
+        padding: 1.2rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.35rem;
+      }
+
+      .subtitle {
+        margin-top: 0.4rem;
+        color: var(--muted);
+      }
+
+      .mock-grid {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.85rem;
+      }
+
+      .mock-panel {
+        background: #f8faff;
+        border: 1px solid #d7e2f7;
+        border-radius: 12px;
+        padding: 0.9rem;
+      }
+
+      .mock-panel h2 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .mock-panel p {
+        margin: 0.4rem 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 640px) {
+        .top-bar {
+          padding: 0 0.85rem;
+        }
+
+        .brand {
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="brand">Project Admin Portal</div>
+      <div class="user-menu">
+        <button class="user-menu-button" id="userMenuButton" aria-expanded="false" aria-haspopup="true">
+          jdoe_admin ▾
+        </button>
+        <div class="dropdown" id="userDropdown" role="menu" aria-label="User menu" hidden>
+          <button type="button" role="menuitem">My Profile</button>
+          <button type="button" role="menuitem">Preferences</button>
+          <button type="button" role="menuitem">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="main-nav" aria-label="Primary">
+      <button class="nav-item active" data-page="Accounts">Accounts</button>
+      <button class="nav-item" data-page="Users">Users</button>
+      <button class="nav-item" data-page="Content">Content</button>
+      <button class="nav-item" data-page="Websites">Websites</button>
+      <button class="nav-item" data-page="Locator">Locator</button>
+      <button class="nav-item" data-page="Video">Video</button>
+      <button class="nav-item" data-page="Admin Tools">Admin Tools</button>
+    </nav>
+
+    <main>
+      <section class="content-card">
+        <h1 id="pageTitle">Accounts</h1>
+        <p class="subtitle" id="pageSubtitle">UI mockup area for the Accounts section. Add your workflows and widgets next.</p>
+
+        <div class="mock-grid" id="mockGrid"></div>
+      </section>
+    </main>
+
+    <script>
+      const navItems = document.querySelectorAll('.nav-item');
+      const title = document.getElementById('pageTitle');
+      const subtitle = document.getElementById('pageSubtitle');
+      const grid = document.getElementById('mockGrid');
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userDropdown = document.getElementById('userDropdown');
+
+      const sectionBlocks = {
+        Accounts: [
+          ['Account Overview', 'High-level KPIs and account health indicators.'],
+          ['Recent Activity', 'Latest updates and account modifications.'],
+          ['Alerts', 'Important account notices and pending actions.']
+        ],
+        Users: [
+          ['User Directory', 'Browse users, roles, and status snapshots.'],
+          ['Access Requests', 'Pending approvals for user permissions.'],
+          ['Audit Trail', 'User login and privilege activity.']
+        ],
+        Content: [
+          ['Publishing Queue', 'Track drafts, approvals, and publish states.'],
+          ['Asset Library', 'Manage reusable media and documents.'],
+          ['Editorial Notes', 'Capture collaboration notes and next steps.']
+        ],
+        Websites: [
+          ['Site Health', 'Uptime and basic environment indicators.'],
+          ['Release History', 'Recent deployments and rollback options.'],
+          ['Domain Settings', 'Placeholder controls for DNS and routing.']
+        ],
+        Locator: [
+          ['Region Filters', 'Prototype controls to narrow location data.'],
+          ['Map Panel', 'Reserved space for map visualization.'],
+          ['Location Table', 'Scrollable list of managed locations.']
+        ],
+        Video: [
+          ['Upload Queue', 'Monitor incoming video processing jobs.'],
+          ['Channel Configuration', 'Manage playback targets and metadata.'],
+          ['Compliance Checks', 'Track review status and quality gates.']
+        ],
+        'Admin Tools': [
+          ['System Settings', 'Centralized admin-level configuration options.'],
+          ['Job Scheduler', 'Control recurring maintenance automation.'],
+          ['Permissions Matrix', 'Visualize and tune role-based access.']
+        ]
+      };
+
+      function renderSection(sectionName) {
+        title.textContent = sectionName;
+        subtitle.textContent = `UI mockup area for the ${sectionName} section. Add your workflows and widgets next.`;
+        grid.innerHTML = '';
+
+        sectionBlocks[sectionName].forEach(([panelTitle, panelText]) => {
+          const panel = document.createElement('article');
+          panel.className = 'mock-panel';
+          panel.innerHTML = `<h2>${panelTitle}</h2><p>${panelText}</p>`;
+          grid.appendChild(panel);
+        });
+      }
+
+      navItems.forEach((button) => {
+        button.addEventListener('click', () => {
+          navItems.forEach((item) => item.classList.remove('active'));
+          button.classList.add('active');
+          renderSection(button.dataset.page);
+        });
+      });
+
+      function setUserMenuOpen(isOpen) {
+        userDropdown.classList.toggle('open', isOpen);
+        userDropdown.hidden = !isOpen;
+        userMenuButton.setAttribute('aria-expanded', String(isOpen));
+      }
+
+      setUserMenuOpen(false);
+
+      userMenuButton.addEventListener('click', () => {
+        const isOpen = userMenuButton.getAttribute('aria-expanded') === 'true';
+        setUserMenuOpen(!isOpen);
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.user-menu')) {
+          setUserMenuOpen(false);
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setUserMenuOpen(false);
+        }
+      });
+
+      renderSection('Accounts');
+    </script>
+  </body>
+</html>
