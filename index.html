@@ -356,6 +356,120 @@
       color: var(--muted);
     }
 
+
+
+    .archive-toolbar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .archive-summary {
+      margin: 0 0 0.85rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .archive-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .archive-pill.approved {
+      color: #0f6a35;
+      background: #dff7ea;
+    }
+
+    .archive-pill.rejected {
+      color: #8d1428;
+      background: #fde7eb;
+    }
+
+    .archive-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .archive-link:hover {
+      text-decoration: underline;
+    }
+
+    .admin-tools-subnav {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--line);
+      margin: 0.2rem 0 1.1rem;
+    }
+
+    .admin-tools-subnav-item {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 0.05rem;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      margin-bottom: -1px;
+    }
+
+    .admin-tools-subnav-item:hover {
+      color: var(--text);
+    }
+
+    .admin-tools-subnav-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .admin-tools-panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 1rem;
+    }
+
+    .admin-tools-panel h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .admin-tools-panel p {
+      margin: 0.5rem 0 1rem;
+      color: var(--muted);
+    }
+
+    .admin-tools-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .admin-tools-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 0.8rem;
+    }
+
+    .admin-tools-card h4 {
+      margin: 0 0 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .admin-tools-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     .placeholder-card {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -531,6 +645,123 @@
         description: 'Access historical compliance records, completed tasks, and audit references.'
       }
     ];
+
+    const defaultComplianceTab = 'Archive';
+
+    const adminToolsTabs = [
+      {
+        name: 'Wix Websites',
+        description: 'Manage synced Wix websites and operational metadata.',
+        cards: [
+          ['Website Sync Queue', 'Track pending sync jobs and status changes.'],
+          ['Publishing Targets', 'Configure destination websites and environments.'],
+          ['Domain Mapping', 'Review domain-to-site relationships.']
+        ]
+      },
+      {
+        name: 'Wix Roles',
+        description: 'Configure role mappings between platform and Wix permissions.',
+        cards: [
+          ['Role Matrix', 'Map internal roles to Wix role assignments.'],
+          ['Provisioning Rules', 'Define default role grants for new users.'],
+          ['Role Audit', 'Review role changes and access history.']
+        ]
+      },
+      {
+        name: 'Wix Folders',
+        description: 'Organize folder structures used by Wix content operations.',
+        cards: [
+          ['Folder Templates', 'Maintain standard folder blueprints.'],
+          ['Ownership Rules', 'Control who can manage each folder path.'],
+          ['Retention Controls', 'Set archival and cleanup behavior.']
+        ]
+      },
+      {
+        name: 'Calculators',
+        description: 'Access administrative calculators and utility tooling.',
+        cards: [
+          ['Cost Estimator', 'Estimate implementation and publishing costs.'],
+          ['Capacity Planner', 'Forecast workload and team utilization.'],
+          ['SLA Calculator', 'Model expected review and publish timelines.']
+        ]
+      }
+    ];
+
+    const defaultAdminToolsTab = 'Wix Websites';
+
+    const complianceArchiveRows = [
+      {
+        status: 'Approved',
+        file_type: 'PDF',
+        submitter_id: 'Ariana.Holt',
+        approver_id: 'Derek.Mills',
+        published_date: '2026-01-12',
+        bas_account_id: 'BAS-West-114',
+        wix_account_id: 'wix-91142',
+        site_id: 'site-west-coast',
+        website_id: 'West Coast Primary',
+        revision: 'REV-4821',
+        revision_url: 'https://example.com/revision/4821',
+        diff_json: '{"header":"updated","hero":"copy-change"}'
+      },
+      {
+        status: 'Rejected',
+        file_type: '',
+        submitter_id: 'Jordan.Kim',
+        approver_id: 'Celine.Brooks',
+        published_date: '2026-01-10',
+        bas_account_id: 'BAS-East-332',
+        wix_account_id: 'wix-22184',
+        site_id: 'site-east-main',
+        website_id: 'East Hub Website',
+        revision: '',
+        revision_url: '',
+        diff_json: ''
+      },
+      {
+        status: 'Approved',
+        file_type: 'PDF',
+        submitter_id: 'Nia.Patel',
+        approver_id: 'Marco.Sloan',
+        published_date: '2026-01-08',
+        bas_account_id: 'BAS-Midwest-201',
+        wix_account_id: 'wix-77109',
+        site_id: 'site-midwest-core',
+        website_id: 'Midwest Service Portal',
+        revision: 'REV-4794',
+        revision_url: 'https://example.com/revision/4794',
+        diff_json: '{"footer":"policy-link"}'
+      },
+      {
+        status: 'Rejected',
+        file_type: '',
+        submitter_id: 'Leo.Foster',
+        approver_id: 'Celine.Brooks',
+        published_date: '2026-01-06',
+        bas_account_id: 'BAS-South-090',
+        wix_account_id: 'wix-45002',
+        site_id: 'site-south-ops',
+        website_id: 'Southern Operations',
+        revision: '',
+        revision_url: '',
+        diff_json: '{"notes":"missing legal disclaimer"}'
+      },
+      {
+        status: 'Approved',
+        file_type: 'PDF',
+        submitter_id: 'Maya.Chen',
+        approver_id: 'Derek.Mills',
+        published_date: '2026-01-04',
+        bas_account_id: 'BAS-North-512',
+        wix_account_id: 'wix-88371',
+        site_id: 'site-north-digital',
+        website_id: 'Northern Digital HQ',
+        revision: 'REV-4702',
+        revision_url: 'https://example.com/revision/4702',
+        diff_json: ''
+      }
+    ];
+
     function setUserMenuOpen(isOpen) {
       userDropdown.classList.toggle('open', isOpen);
       userDropdown.hidden = !isOpen;
@@ -646,7 +877,148 @@
         `;
     }
 
+    function renderArchiveTableRows(filteredRows) {
+      return filteredRows
+        .map((row) => {
+          const isApproved = row.status === 'Approved';
+          const statusClass = isApproved ? 'approved' : 'rejected';
+          const pdfCell = isApproved ? '<a href="#" class="archive-link">PDF</a>' : '—';
+          const revisionCell = isApproved ? row.revision : '—';
+          const revisionUrlCell = isApproved
+            ? `<a href="${row.revision_url}" class="archive-link" target="_blank" rel="noopener noreferrer">Revision Link</a>`
+            : '—';
+          const diffCell = row.diff_json ? `<code>${row.diff_json}</code>` : '—';
+
+          return `
+              <tr>
+                <td>${row.submitter_id}</td>
+                <td>${row.approver_id}</td>
+                <td>${row.published_date}</td>
+                <td><span class="archive-pill ${statusClass}">${row.status}</span></td>
+                <td>${row.website_id}</td>
+                <td>${pdfCell}</td>
+                <td>${row.bas_account_id}</td>
+                <td>${row.wix_account_id}</td>
+                <td>${row.site_id}</td>
+                <td>${revisionCell}</td>
+                <td>${revisionUrlCell}</td>
+                <td>${diffCell}</td>
+              </tr>
+            `;
+        })
+        .join('');
+    }
+
+    function applyArchiveFilters() {
+      const queryInput = document.getElementById('archiveSearchInput');
+      const statusFilter = document.getElementById('archiveStatusFilter');
+      const fileTypeFilter = document.getElementById('archiveFileTypeFilter');
+      const tableBody = document.getElementById('archiveTableBody');
+      const resultsSummary = document.getElementById('archiveResultsSummary');
+
+      const query = queryInput.value.trim().toLowerCase();
+      const selectedStatus = statusFilter.value;
+      const selectedFileType = fileTypeFilter.value;
+
+      const filteredRows = complianceArchiveRows.filter((row) => {
+        const matchesQuery =
+          !query ||
+          row.submitter_id.toLowerCase().includes(query) ||
+          row.approver_id.toLowerCase().includes(query) ||
+          row.website_id.toLowerCase().includes(query) ||
+          row.bas_account_id.toLowerCase().includes(query) ||
+          row.wix_account_id.toLowerCase().includes(query) ||
+          row.site_id.toLowerCase().includes(query);
+
+        const matchesStatus = !selectedStatus || row.status === selectedStatus;
+        const matchesFileType = !selectedFileType || row.file_type === selectedFileType;
+
+        return matchesQuery && matchesStatus && matchesFileType;
+      });
+
+      tableBody.innerHTML = filteredRows.length
+        ? renderArchiveTableRows(filteredRows)
+        : '<tr><td colspan="12">No archive records match your filters.</td></tr>';
+
+      resultsSummary.textContent = `Showing ${filteredRows.length} of ${complianceArchiveRows.length} compliance archive records`;
+    }
+
+    function attachArchiveFilterEvents() {
+      const queryInput = document.getElementById('archiveSearchInput');
+      const statusFilter = document.getElementById('archiveStatusFilter');
+      const fileTypeFilter = document.getElementById('archiveFileTypeFilter');
+
+      [queryInput, statusFilter, fileTypeFilter].forEach((element) => {
+        element.addEventListener('input', applyArchiveFilters);
+        element.addEventListener('change', applyArchiveFilters);
+      });
+    }
+
+    function renderArchiveView() {
+      const compliancePanel = document.getElementById('compliancePanel');
+      compliancePanel.innerHTML = `
+          <div class="page-header">
+            <h2 class="page-title">Compliance Archive</h2>
+            <p class="page-subtitle">Search approved and rejected compliance reviews. Approved records include richer publication metadata.</p>
+          </div>
+
+          <div class="archive-toolbar" aria-label="Archive search and filters">
+            <div class="field-group">
+              <label for="archiveSearchInput">Search archive records</label>
+              <input id="archiveSearchInput" class="text-input" type="search" placeholder="Search submitter, approver, website, or account IDs" />
+            </div>
+            <div class="field-group">
+              <label for="archiveStatusFilter">Status</label>
+              <select id="archiveStatusFilter" class="text-input">
+                <option value="">All statuses</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="archiveFileTypeFilter">File type</label>
+              <select id="archiveFileTypeFilter" class="text-input">
+                <option value="">All file types</option>
+                <option value="PDF">PDF</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="archive-summary" id="archiveResultsSummary"></p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Submitter ID</th>
+                  <th>Approver ID</th>
+                  <th>Published Date</th>
+                  <th>Status</th>
+                  <th>Website ID (Name)</th>
+                  <th>File Type</th>
+                  <th>BAS Account ID</th>
+                  <th>Wix Account ID</th>
+                  <th>Site ID</th>
+                  <th>Revision</th>
+                  <th>Revision URL</th>
+                  <th>Diff JSON (Optional)</th>
+                </tr>
+              </thead>
+              <tbody id="archiveTableBody"></tbody>
+            </table>
+          </div>
+        `;
+
+      attachArchiveFilterEvents();
+      applyArchiveFilters();
+    }
+
     function renderCompliancePanel(tabName) {
+      if (tabName === 'Archive') {
+        renderArchiveView();
+        return;
+      }
+
       const selectedTab = complianceTabs.find((tab) => tab.name === tabName) || complianceTabs[0];
       const compliancePanel = document.getElementById('compliancePanel');
       compliancePanel.innerHTML = `
@@ -675,11 +1047,11 @@
         .map(
           (tab, index) => `
               <button
-                class="compliance-subnav-item${index === 0 ? ' active' : ''}"
+                class="compliance-subnav-item${tab.name === defaultComplianceTab ? ' active' : ''}"
                 type="button"
                 data-compliance-tab="${tab.name}"
                 role="tab"
-                aria-selected="${index === 0 ? 'true' : 'false'}"
+                aria-selected="${tab.name === defaultComplianceTab ? 'true' : 'false'}"
               >
                 ${tab.name}
               </button>
@@ -697,8 +1069,72 @@
           <section class="compliance-panel" id="compliancePanel"></section>
         `;
 
-      renderCompliancePanel(complianceTabs[0].name);
+      renderCompliancePanel(defaultComplianceTab);
       attachComplianceTabEvents();
+    }
+
+    function renderAdminToolsPanel(tabName) {
+      const selectedTab = adminToolsTabs.find((tab) => tab.name === tabName) || adminToolsTabs[0];
+      const panel = document.getElementById('adminToolsPanel');
+      const cards = selectedTab.cards
+        .map(([title, desc]) => `
+            <article class="admin-tools-card">
+              <h4>${title}</h4>
+              <p>${desc}</p>
+            </article>
+          `)
+        .join('');
+
+      panel.innerHTML = `
+          <h3>${selectedTab.name}</h3>
+          <p>${selectedTab.description}</p>
+          <div class="admin-tools-grid">${cards}</div>
+        `;
+    }
+
+    function attachAdminToolsTabEvents() {
+      const items = document.querySelectorAll('.admin-tools-subnav-item');
+      items.forEach((item) => {
+        item.addEventListener('click', () => {
+          const selectedTabName = item.dataset.adminToolsTab;
+          items.forEach((button) => {
+            button.classList.toggle('active', button === item);
+            button.setAttribute('aria-selected', String(button === item));
+          });
+          renderAdminToolsPanel(selectedTabName);
+        });
+      });
+    }
+
+    function renderAdminToolsView() {
+      const subnavButtons = adminToolsTabs
+        .map(
+          (tab) => `
+              <button
+                class="admin-tools-subnav-item${tab.name === defaultAdminToolsTab ? ' active' : ''}"
+                type="button"
+                data-admin-tools-tab="${tab.name}"
+                role="tab"
+                aria-selected="${tab.name === defaultAdminToolsTab ? 'true' : 'false'}"
+              >
+                ${tab.name}
+              </button>
+            `
+        )
+        .join('');
+
+      pageContainer.innerHTML = `
+          <div class="page-header">
+            <h1 class="page-title">Admin Tools</h1>
+          </div>
+          <div class="admin-tools-subnav" aria-label="Admin tools sub navigation" role="tablist">
+            ${subnavButtons}
+          </div>
+          <section class="admin-tools-panel" id="adminToolsPanel"></section>
+        `;
+
+      renderAdminToolsPanel(defaultAdminToolsTab);
+      attachAdminToolsTabEvents();
     }
 
     function renderSection(sectionName) {
@@ -709,6 +1145,10 @@
       }
       if (sectionName === 'Compliance') {
         renderComplianceView();
+        return;
+      }
+      if (sectionName === 'Admin Tools') {
+        renderAdminToolsView();
         return;
       }
       renderPlaceholderView(sectionName);
