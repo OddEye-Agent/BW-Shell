@@ -813,6 +813,7 @@
       {
         name: 'Wix Websites',
         description: 'Manage synced Wix websites and operational metadata.',
+        enableCrud: false,
         searchPlaceholder: 'Search name, display name, owner account ID, or folder ID',
         searchFields: ['name', 'displayName', 'ownerAccountId', 'folderId', 'namespace'],
         filters: [
@@ -885,6 +886,7 @@
       {
         name: 'Wix Folders',
         description: 'Manage Wix folder records used for organizing sites and content in lower environments.',
+        enableCrud: false,
         searchPlaceholder: 'Search folder name or path',
         searchFields: ['folderName', 'path'],
         filters: [
@@ -1313,6 +1315,7 @@
     }
 
     function renderAdminToolsTableRows(tabConfig, rows) {
+      const showCrud = tabConfig.enableCrud !== false;
       return rows
         .map((row) => {
           const valueCells = tabConfig.columns
@@ -1328,10 +1331,14 @@
           return `
               <tr>
                 ${valueCells}
+                ${showCrud
+                  ? `
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Create</button></td>
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Update</button></td>
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Delete</button></td>
+                `
+                  : ''}
               </tr>
             `;
         })
@@ -1346,6 +1353,7 @@
 
       const selectedTabName = panel.dataset.activeAdminToolsTab;
       const tabConfig = adminToolsTabs.find((tab) => tab.name === selectedTabName) || adminToolsTabs[0];
+      const showCrud = tabConfig.enableCrud !== false;
       const searchInput = document.getElementById('adminToolsSearchInput');
       const tableBody = document.getElementById('adminToolsTableBody');
       const resultsSummary = document.getElementById('adminToolsResultsSummary');
@@ -1376,7 +1384,7 @@
 
       tableBody.innerHTML = filteredRows.length
         ? renderAdminToolsTableRows(tabConfig, filteredRows)
-        : `<tr><td colspan="${tabConfig.columns.length + 4}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
+        : `<tr><td colspan="${tabConfig.columns.length + (showCrud ? 4 : 0)}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
 
       resultsSummary.textContent = `Showing ${filteredRows.length} of ${tabConfig.rows.length} ${tabConfig.name.toLowerCase()} records`;
     }
@@ -1524,6 +1532,7 @@
       const headerCells = selectedTab.columns
         .map((column) => `<th scope="col">${column.label}</th>`)
         .join('');
+      const showCrud = selectedTab.enableCrud !== false;
 
       panel.dataset.activeAdminToolsTab = selectedTab.name;
       panel.innerHTML = `
@@ -1542,10 +1551,14 @@
               <thead>
                 <tr>
                   ${headerCells}
+                  ${showCrud
+                    ? `
                   <th scope="col">Create</th>
                   <th scope="col">Read</th>
                   <th scope="col">Update</th>
                   <th scope="col">Delete</th>
+                  `
+                    : ''}
                 </tr>
               </thead>
               <tbody id="adminToolsTableBody"></tbody>
