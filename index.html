@@ -162,6 +162,10 @@
       color: var(--muted);
     }
 
+    .page-header {
+      margin-bottom: 1rem;
+    }
+
     .filter-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -309,6 +313,7 @@
       display: flex;
       align-items: center;
       gap: 1.25rem;
+      flex-wrap: wrap;
       border-bottom: 1px solid var(--line);
       margin: 0.2rem 0 1.1rem;
     }
@@ -322,6 +327,7 @@
       padding: 0.7rem 0.05rem;
       border-bottom: 3px solid transparent;
       cursor: pointer;
+      margin-bottom: -1px;
     }
 
     .compliance-subnav-item:hover {
@@ -496,6 +502,17 @@
 
 
 
+    const pageHeaderTitles = {
+      Accounts: 'Account Management',
+      Users: 'User Management',
+      Compliance: 'Compliance',
+      Content: 'Content Management',
+      Websites: 'Website Management',
+      Locator: 'Locator',
+      Video: 'Video',
+      'Admin Tools': 'Admin Tools'
+    };
+
     const complianceTabs = [
       {
         name: 'Workflows',
@@ -566,7 +583,9 @@
         .join('');
 
       pageContainer.innerHTML = `
-        < h1 class="page-title" > Account Management</h1 >
+          <div class="page-header">
+            <h1 class="page-title">Account Management</h1>
+          </div>
           <div class="filter-row">
             <div class="field-group">
               <label for="accountSearch">Account Name</label>
@@ -605,37 +624,48 @@
               <button class="page-btn" type="button">Next</button>
             </div>
           </div>
-      `;
+        `;
 
       attachRowMenuEvents();
     }
 
     function renderPlaceholderView(sectionName) {
-      const cards = placeholderSections[sectionName]
-        .map(([title, desc]) => `< article class="placeholder-card" ><h3>${title}</h3><p>${desc}</p></article > `)
+      const sectionCards = placeholderSections[sectionName] || [];
+      const cards = sectionCards
+        .map(([title, desc]) => `<article class="placeholder-card"><h3>${title}</h3><p>${desc}</p></article>`)
         .join('');
 
+      const headerTitle = pageHeaderTitles[sectionName] || sectionName;
+
       pageContainer.innerHTML = `
-        < h1 class="page-title" > ${sectionName}</h1 >
-          <p class="page-subtitle">This section is ready for the next phase of UI buildout.</p>
+          <div class="page-header">
+            <h1 class="page-title">${headerTitle}</h1>
+            <p class="page-subtitle">This section is ready for the next phase of UI buildout.</p>
+          </div>
           <div class="placeholder-grid">${cards}</div>
-      `;
+        `;
+    }
+
+    function renderCompliancePanel(tabName) {
+      const selectedTab = complianceTabs.find((tab) => tab.name === tabName) || complianceTabs[0];
+      const compliancePanel = document.getElementById('compliancePanel');
+      compliancePanel.innerHTML = `
+          <h3>${selectedTab.name}</h3>
+          <p>${selectedTab.description}</p>
+        `;
     }
 
     function attachComplianceTabEvents() {
       const complianceSubnavItems = document.querySelectorAll('.compliance-subnav-item');
-      const compliancePanel = document.getElementById('compliancePanel');
 
       complianceSubnavItems.forEach((item) => {
         item.addEventListener('click', () => {
-          complianceSubnavItems.forEach((button) => button.classList.remove('active'));
-          item.classList.add('active');
-
-          const selectedTab = complianceTabs.find((tab) => tab.name === item.dataset.complianceTab);
-          compliancePanel.innerHTML = `
-        < h3 > ${selectedTab.name}</h3 >
-          <p>${selectedTab.description}</p>
-      `;
+          const selectedTabName = item.dataset.complianceTab;
+          complianceSubnavItems.forEach((button) => {
+            button.classList.toggle('active', button === item);
+            button.setAttribute('aria-selected', String(button === item));
+          });
+          renderCompliancePanel(selectedTabName);
         });
       });
     }
@@ -644,28 +674,30 @@
       const subnavButtons = complianceTabs
         .map(
           (tab, index) => `
-        < button
-      class="compliance-subnav-item${index === 0 ? ' active' : ''}"
-      type = "button"
-      data - compliance - tab="${tab.name}"
-        >
-        ${tab.name}
-              </button >
-        `
+              <button
+                class="compliance-subnav-item${index === 0 ? ' active' : ''}"
+                type="button"
+                data-compliance-tab="${tab.name}"
+                role="tab"
+                aria-selected="${index === 0 ? 'true' : 'false'}"
+              >
+                ${tab.name}
+              </button>
+            `
         )
         .join('');
 
       pageContainer.innerHTML = `
-        < h1 class="page-title" > Compliance</h1 >
-          <div class="compliance-subnav" aria-label="Compliance sub navigation">
+          <div class="page-header">
+            <h1 class="page-title">Compliance</h1>
+          </div>
+          <div class="compliance-subnav" aria-label="Compliance sub navigation" role="tablist">
             ${subnavButtons}
           </div>
-          <section class="compliance-panel" id="compliancePanel">
-            <h3>${complianceTabs[0].name}</h3>
-            <p>${complianceTabs[0].description}</p>
-          </section>
+          <section class="compliance-panel" id="compliancePanel"></section>
         `;
 
+      renderCompliancePanel(complianceTabs[0].name);
       attachComplianceTabEvents();
     }
 
