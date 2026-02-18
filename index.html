@@ -446,29 +446,91 @@
       color: var(--muted);
     }
 
-    .admin-tools-grid {
+    .admin-tools-toolbar {
       display: grid;
-      gap: 0.75rem;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.95rem;
     }
 
-    .admin-tools-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #ffffff;
-      padding: 0.8rem;
-    }
-
-    .admin-tools-card h4 {
-      margin: 0 0 0.35rem;
-      font-size: 0.95rem;
-    }
-
-    .admin-tools-card p {
-      margin: 0;
+    .admin-tools-summary {
+      margin: 0 0 0.85rem;
       color: var(--muted);
       font-size: 0.9rem;
     }
+
+    .admin-tools-subtable-title {
+      margin: 1rem 0 0.55rem;
+      font-size: 1rem;
+    }
+
+    .admin-tools-subtable-title:first-of-type {
+      margin-top: 0.25rem;
+    }
+
+
+    .crud-cell {
+      text-align: center;
+      min-width: 88px;
+    }
+
+    .crud-action-btn {
+      border: 1px solid #d5deec;
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.3rem 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #33435e;
+      cursor: pointer;
+    }
+
+    .crud-action-btn:hover {
+      background: #eef4ff;
+      border-color: #bed0f6;
+    }
+
+    .admin-tools-table {
+      min-width: 2100px;
+    }
+
+    .calculators-table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow-x: auto;
+      background: #fff;
+    }
+
+    .calculators-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    .calculators-table thead th {
+      background: #c5ccd6;
+      color: #2e3a4a;
+      font-size: 0.8rem;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .calculators-table tbody tr {
+      background: #fff8cf;
+    }
+
+    .calculators-table td,
+    .calculators-table th {
+      border-bottom: 1px solid #e9ddaa;
+      padding: 0.72rem;
+      vertical-align: top;
+    }
+
+    .calc-checkbox-cell {
+      width: 54px;
+      text-align: center;
+    }
+
 
     .placeholder-card {
       border: 1px solid var(--line);
@@ -650,44 +712,221 @@
 
     const adminToolsTabs = [
       {
+        name: 'BAS Roles',
+        description: 'Manage BAS role records for lower-environment testing and quick permission cleanup.',
+        searchPlaceholder: 'Search role name, key, or description',
+        searchFields: ['roleName', 'roleKey', 'description'],
+        filters: [
+          {
+            id: 'assignmentBand',
+            label: 'Users Assigned',
+            allLabel: 'All assignment counts',
+            options: ['0-10', '11-25', '26+']
+          }
+        ],
+        columns: [
+          { key: 'roleName', label: 'Role Name' },
+          { key: 'roleKey', label: 'Role Key' },
+          { key: 'description', label: 'Description' },
+          { key: 'usersAssigned', label: 'Users Assigned' },
+          { key: 'updatedOn', label: 'Updated On' }
+        ],
+        rows: [
+          { roleName: 'Financial Advisor', roleKey: 'FIN_ADVISOR', description: 'Advisory workspace access for portfolio planning and client actions.', usersAssigned: 22, assignmentBand: '11-25', updatedOn: '2026-02-08' },
+          { roleName: 'Staff Admin', roleKey: 'STAFF_ADMIN', description: 'Internal staff administration access for lower-environment data maintenance.', usersAssigned: 8, assignmentBand: '0-10', updatedOn: '2026-02-07' },
+          { roleName: 'Compliance Reviewer', roleKey: 'COMPLIANCE_REVIEW', description: 'Can review queued compliance artifacts and submit approval decisions.', usersAssigned: 15, assignmentBand: '11-25', updatedOn: '2026-02-05' },
+          { roleName: 'Compliance Admin', roleKey: 'COMPLIANCE_ADMIN', description: 'Manages compliance configuration, escalations, and remediation routing.', usersAssigned: 6, assignmentBand: '0-10', updatedOn: '2026-02-04' },
+          { roleName: 'Program Admin', roleKey: 'PROGRAM_ADMIN', description: 'Configures program-level metadata and onboarding defaults for testing.', usersAssigned: 12, assignmentBand: '11-25', updatedOn: '2026-02-03' },
+          { roleName: 'Developer', roleKey: 'DEVELOPER', description: 'Engineering access for integration validation and sandbox troubleshooting.', usersAssigned: 31, assignmentBand: '26+', updatedOn: '2026-02-01' }
+        ]
+      },
+      {
+        name: 'BAS Users',
+        description: 'Find and clean up BAS user test records, role assignments, and account links quickly.',
+        searchPlaceholder: 'Search email, user id, or name',
+        searchFields: ['userId', 'name', 'email'],
+        filters: [
+          {
+            id: 'environment',
+            label: 'Environment',
+            allLabel: 'All environments',
+            options: ['DEV', 'QA', 'UAT']
+          },
+          {
+            id: 'state',
+            label: 'State',
+            allLabel: 'All states',
+            options: ['Active', 'Disabled', 'Pending']
+          }
+        ],
+        columns: [
+          { key: 'userId', label: 'User ID' },
+          { key: 'name', label: 'Name' },
+          { key: 'email', label: 'Email' },
+          { key: 'role', label: 'Primary Role' },
+          { key: 'accountId', label: 'BAS Account ID' },
+          { key: 'environment', label: 'Environment' },
+          { key: 'state', label: 'State' }
+        ],
+        rows: [
+          { userId: 'usr-10012', name: 'Talia Morrow', email: 'talia.morrow+qa@internal.local', role: 'Staff Admin', accountId: 'BAS-ACCT-4421', environment: 'QA', state: 'Active' },
+          { userId: 'usr-10041', name: 'Jesse Patel', email: 'jesse.patel+dev@internal.local', role: 'Developer', accountId: 'BAS-ACCT-1180', environment: 'DEV', state: 'Pending' },
+          { userId: 'usr-10103', name: 'Morgan Ellis', email: 'morgan.ellis+uat@internal.local', role: 'Compliance Reviewer', accountId: 'BAS-ACCT-9008', environment: 'UAT', state: 'Disabled' },
+          { userId: 'usr-10155', name: 'Nora Castillo', email: 'nora.castillo+qa@internal.local', role: 'Program Admin', accountId: 'BAS-ACCT-7774', environment: 'QA', state: 'Active' }
+        ]
+      },
+      {
+        name: 'BAS Accounts',
+        description: 'Review and maintain BAS account test data used by staff across lower environments.',
+        searchPlaceholder: 'Search account id, account name, or owner',
+        searchFields: ['accountId', 'accountName', 'owner'],
+        filters: [
+          {
+            id: 'environment',
+            label: 'Environment',
+            allLabel: 'All environments',
+            options: ['DEV', 'QA', 'UAT']
+          },
+          {
+            id: 'health',
+            label: 'Health',
+            allLabel: 'All health states',
+            options: ['Healthy', 'Needs Cleanup', 'Archived']
+          }
+        ],
+        columns: [
+          { key: 'accountId', label: 'Account ID' },
+          { key: 'accountName', label: 'Account Name' },
+          { key: 'owner', label: 'Owner' },
+          { key: 'linkedUsers', label: 'Linked Users' },
+          { key: 'environment', label: 'Environment' },
+          { key: 'health', label: 'Health' },
+          { key: 'updatedOn', label: 'Updated On' }
+        ],
+        rows: [
+          { accountId: 'BAS-ACCT-4421', accountName: 'Northwind QA Sandbox', owner: 'Identity Ops', linkedUsers: 14, environment: 'QA', health: 'Healthy', updatedOn: '2026-02-07' },
+          { accountId: 'BAS-ACCT-1180', accountName: 'Blue Harbor Dev Seed', owner: 'Automation Team', linkedUsers: 7, environment: 'DEV', health: 'Needs Cleanup', updatedOn: '2026-02-03' },
+          { accountId: 'BAS-ACCT-9008', accountName: 'Evergreen UAT Replay', owner: 'Support Tools', linkedUsers: 2, environment: 'UAT', health: 'Archived', updatedOn: '2026-01-28' },
+          { accountId: 'BAS-ACCT-7774', accountName: 'Summit Regression QA', owner: 'QA Automation', linkedUsers: 19, environment: 'QA', health: 'Needs Cleanup', updatedOn: '2026-02-05' }
+        ]
+      },
+      {
         name: 'Wix Websites',
         description: 'Manage synced Wix websites and operational metadata.',
-        cards: [
-          ['Website Sync Queue', 'Track pending sync jobs and status changes.'],
-          ['Publishing Targets', 'Configure destination websites and environments.'],
-          ['Domain Mapping', 'Review domain-to-site relationships.']
+        searchPlaceholder: 'Search name, display name, owner account ID, or folder ID',
+        searchFields: ['name', 'displayName', 'ownerAccountId', 'folderId', 'namespace'],
+        filters: [
+          {
+            id: 'published',
+            label: 'Published',
+            allLabel: 'All publish states',
+            options: ['Yes', 'No']
+          },
+          {
+            id: 'isPremium',
+            label: 'Is Premium',
+            allLabel: 'All premium states',
+            options: ['Yes', 'No']
+          },
+          {
+            id: 'blocked',
+            label: 'Blocked',
+            allLabel: 'All block states',
+            options: ['Yes', 'No']
+          },
+          {
+            id: 'editorType',
+            label: 'Editor Type',
+            allLabel: 'All editor types',
+            options: ['Studio', 'Editor']
+          }
+        ],
+        columns: [
+          { key: 'name', label: 'Name' },
+          { key: 'displayName', label: 'Display Name' },
+          { key: 'published', label: 'Published' },
+          { key: 'dateCreated', label: 'Date Created' },
+          { key: 'lastUpdate', label: 'Last Update' },
+          { key: 'isPremium', label: 'Is Premium' },
+          { key: 'viewUrl', label: 'View URL' },
+          { key: 'blocked', label: 'Blocked' },
+          { key: 'ownerAccountId', label: 'Owner Account ID' },
+          { key: 'contributorAccountIds', label: 'Contributor Account IDs' },
+          { key: 'folderId', label: 'Folder ID' },
+          { key: 'editorType', label: 'Editor Type' },
+          { key: 'namespace', label: 'Namespace' }
+        ],
+        rows: [
+          { name: 'west-coast-primary', displayName: 'West Coast Primary', published: 'Yes', dateCreated: '2025-12-10', lastUpdate: '2026-02-08', isPremium: 'Yes', viewUrl: 'https://west.example.internal', blocked: 'No', ownerAccountId: 'A7H29KQ8D-4F12-9B8C-72D3-5E19A2B4C6D7', contributorAccountIds: 'B3F10H2KQ-98A7-4C11-8D3E-2A9F41B6D8C2, C9L24N7PZ-65D1-4A22-9F8E-7B3C12D5E6A4', folderId: 'F8A31D2LQ-77B3-4D11-92C8-1E7F4A5B9D0C', editorType: 'Studio', namespace: 'Wix' },
+          { name: 'east-hub-site', displayName: 'East Hub Website', published: 'No', dateCreated: '2025-11-04', lastUpdate: '2026-02-06', isPremium: 'No', viewUrl: 'https://east.example.internal', blocked: 'No', ownerAccountId: 'D2M67R4TY-1C45-4B9D-8A2E-3F6A90B1C5D7', contributorAccountIds: 'E5Q18S2UV-83D2-4E19-9C4B-5A7F31D8G6H2', folderId: 'G7K25T9WP-41A8-4F20-8B7D-9C2E6L3M1N5R', editorType: 'Editor', namespace: 'Wix' },
+          { name: 'midwest-service-portal', displayName: 'Midwest Service Portal', published: 'Yes', dateCreated: '2025-09-19', lastUpdate: '2026-02-05', isPremium: 'Yes', viewUrl: 'https://midwest.example.internal', blocked: 'Yes', ownerAccountId: 'H4P39V8YX-52E6-4A71-9D0B-6L2Q84R5T1U3', contributorAccountIds: 'J8R42W1ZA-73B9-4C20-8F1D-4M6N92P3Q7S5, K2T61X4BC-95C3-4D11-9A7E-8R1U53V6W0Y2', folderId: 'L6V54Y3DE-29D4-4B88-7C2F-0T9W15X8Z4A6', editorType: 'Studio', namespace: 'Wix' }
         ]
       },
       {
         name: 'Wix Roles',
-        description: 'Configure role mappings between platform and Wix permissions.',
-        cards: [
-          ['Role Matrix', 'Map internal roles to Wix role assignments.'],
-          ['Provisioning Rules', 'Define default role grants for new users.'],
-          ['Role Audit', 'Review role changes and access history.']
+        description: 'Review pre-defined Wix roles and staff-created custom role profiles.',
+        preDefinedRoles: [
+          { roleName: 'Owner', description: 'Full control across website configuration, billing, publishing, roles, and connected integrations.', permissions: 'NO Restricitons' },
+          { roleName: 'Account Admin', description: 'Can manage account-level settings, team membership, and operational controls for linked websites.', permissions: 'Account' },
+          { roleName: 'Admin', description: 'Can update key settings, publishing preferences, and user access within assigned scopes.', permissions: 'SIte' },
+          { roleName: 'Website Manager', description: 'Manages page structure, navigation, SEO settings, and publishing readiness for sites.', permissions: 'SIte' },
+          { roleName: 'Website Designer', description: 'Edits layout, theme, styling, and visual components without account administration rights.', permissions: 'SIte' }
+        ],
+        customRoles: [
+          { roleName: 'Fianancial Advisor', description: 'Supports advisor-specific content updates and review workflows for assigned web properties.', permissions: 'SIte' },
+          { roleName: 'Program Admin', description: 'Coordinates program-level pages, release updates, and scoped collaborator permissions.', permissions: 'Account' },
+          { roleName: 'Developer', description: 'Maintains technical implementations, integrations, and troubleshooting in lower environments.', permissions: 'NO Restricitons' },
+          { roleName: 'Home Office Executive', description: 'Read/review access to executive dashboards and strategic website reporting areas.', permissions: 'Account' },
+          { roleName: 'Content Editor', description: 'Creates and edits content blocks, media, and draft updates for designated sites.', permissions: 'SIte' },
+          { roleName: 'Assistant', description: 'Supports operational updates and limited content edits under guided team oversight.', permissions: 'SIte' },
+          { roleName: 'Marketing Support', description: 'Updates campaign assets, promotion sections, and marketing copy across approved pages.', permissions: 'SIte' }
         ]
       },
       {
         name: 'Wix Folders',
-        description: 'Organize folder structures used by Wix content operations.',
-        cards: [
-          ['Folder Templates', 'Maintain standard folder blueprints.'],
-          ['Ownership Rules', 'Control who can manage each folder path.'],
-          ['Retention Controls', 'Set archival and cleanup behavior.']
+        description: 'Manage Wix folder records used for organizing sites and content in lower environments.',
+        searchPlaceholder: 'Search folder name or path',
+        searchFields: ['folderName', 'path'],
+        filters: [
+          {
+            id: 'siteCountBand',
+            label: 'Site Count',
+            allLabel: 'All site counts',
+            options: ['0-10', '11-25', '26+']
+          }
+        ],
+        columns: [
+          { key: 'folderName', label: 'Folder Name' },
+          { key: 'dateCreated', label: 'Date Created' },
+          { key: 'lastUpdated', label: 'Last Updated' },
+          { key: 'siteCount', label: 'Site Count' },
+          { key: 'path', label: 'Path' }
+        ],
+        rows: [
+          { folderName: 'BAS Marketing', dateCreated: '2025-10-12', lastUpdated: '2026-02-08', siteCount: 14, path: '\\BAS Marketing', siteCountBand: '11-25' },
+          { folderName: 'Enterprise Demo Sites', dateCreated: '2025-09-03', lastUpdated: '2026-02-05', siteCount: 8, path: '\\Enterprise Demo sites', siteCountBand: '0-10' },
+          { folderName: 'CFP Websites', dateCreated: '2025-07-21', lastUpdated: '2026-02-02', siteCount: 31, path: '\\CFP Websites', siteCountBand: '26+' }
         ]
       },
       {
         name: 'Calculators',
-        description: 'Access administrative calculators and utility tooling.',
-        cards: [
-          ['Cost Estimator', 'Estimate implementation and publishing costs.'],
-          ['Capacity Planner', 'Forecast workload and team utilization.'],
-          ['SLA Calculator', 'Model expected review and publish timelines.']
+        description: 'Functional table for automated calculator validation records in lower environments.',
+        rows: [
+          { checked: false, status: 'Deployed', description: 'automated test validation for content type CALCUALTOR created on 2026-02-01', expiryDate: '2026-03-01', publishDate: '2026-02-02' },
+          { checked: false, status: 'Redeployed', description: 'automated test validation for content type CALCUALTOR created on 2026-02-02', expiryDate: '2026-03-04', publishDate: '2026-02-03' },
+          { checked: true, status: 'Deployed', description: 'automated test validation for content type CALCUALTOR created on invalid-date', expiryDate: 'invalid-date', publishDate: '2026-02-04' },
+          { checked: false, status: 'Redeployed', description: 'Annuity Calculator', expiryDate: '2026-03-10', publishDate: '2026-02-05' },
+          { checked: true, status: 'Deployed', description: 'Mortgage Calculator', expiryDate: '2026-03-11', publishDate: '2026-02-06' },
+          { checked: false, status: 'Redeployed', description: 'automated test validation for content type CALCUALTOR created on 2026-02-06', expiryDate: '2026-03-13', publishDate: 'invalid-date' },
+          { checked: false, status: 'Deployed', description: 'automated test validation for content type tax CALCUALTOR created on 2026-02-07', expiryDate: '2026-03-14', publishDate: '2026-02-08' },
+          { checked: false, status: 'Redeployed', description: 'automated test validation for content type savings CALCUALTOR created on invalid-date', expiryDate: '2026-03-15', publishDate: '2026-02-09' },
+          { checked: true, status: 'Deployed', description: 'automated test validation for content type CALCUALTOR created on 2026-02-09', expiryDate: '2026-03-18', publishDate: '2026-02-10' },
+          { checked: false, status: 'Redeployed', description: 'automated test validation for content type college CALCUALTOR created on 2026-02-10', expiryDate: 'invalid-date', publishDate: '2026-02-11' }
         ]
       }
     ];
 
-    const defaultAdminToolsTab = 'Wix Websites';
+    const defaultAdminToolsTab = 'BAS Roles';
 
     const complianceArchiveRows = [
       {
@@ -1073,23 +1312,249 @@
       attachComplianceTabEvents();
     }
 
-    function renderAdminToolsPanel(tabName) {
-      const selectedTab = adminToolsTabs.find((tab) => tab.name === tabName) || adminToolsTabs[0];
+    function renderAdminToolsTableRows(tabConfig, rows) {
+      return rows
+        .map((row) => {
+          const valueCells = tabConfig.columns
+            .map((column) => {
+              const value = row[column.key];
+              if (column.key === 'viewUrl' && value) {
+                return `<td><a href="${value}" class="archive-link" target="_blank" rel="noopener noreferrer">${value}</a></td>`;
+              }
+              return `<td>${value}</td>`;
+            })
+            .join('');
+
+          return `
+              <tr>
+                ${valueCells}
+                <td class="crud-cell"><button class="crud-action-btn" type="button">Create</button></td>
+                <td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>
+                <td class="crud-cell"><button class="crud-action-btn" type="button">Update</button></td>
+                <td class="crud-cell"><button class="crud-action-btn" type="button">Delete</button></td>
+              </tr>
+            `;
+        })
+        .join('');
+    }
+
+    function applyAdminToolsFilters() {
       const panel = document.getElementById('adminToolsPanel');
-      const cards = selectedTab.cards
-        .map(([title, desc]) => `
-            <article class="admin-tools-card">
-              <h4>${title}</h4>
-              <p>${desc}</p>
-            </article>
-          `)
+      if (!panel) {
+        return;
+      }
+
+      const selectedTabName = panel.dataset.activeAdminToolsTab;
+      const tabConfig = adminToolsTabs.find((tab) => tab.name === selectedTabName) || adminToolsTabs[0];
+      const searchInput = document.getElementById('adminToolsSearchInput');
+      const tableBody = document.getElementById('adminToolsTableBody');
+      const resultsSummary = document.getElementById('adminToolsResultsSummary');
+
+      if (!searchInput || !tableBody || !resultsSummary) {
+        return;
+      }
+
+      const query = searchInput.value.trim().toLowerCase();
+      const filterSelections = tabConfig.filters.reduce((accumulator, filter) => {
+        const filterElement = document.getElementById(`adminToolsFilter-${filter.id}`);
+        accumulator[filter.id] = filterElement ? filterElement.value : '';
+        return accumulator;
+      }, {});
+
+      const filteredRows = tabConfig.rows.filter((row) => {
+        const matchesQuery =
+          !query ||
+          tabConfig.searchFields.some((fieldName) => String(row[fieldName]).toLowerCase().includes(query));
+
+        const matchesAllFilters = tabConfig.filters.every((filter) => {
+          const selectedValue = filterSelections[filter.id];
+          return !selectedValue || String(row[filter.id]) === selectedValue;
+        });
+
+        return matchesQuery && matchesAllFilters;
+      });
+
+      tableBody.innerHTML = filteredRows.length
+        ? renderAdminToolsTableRows(tabConfig, filteredRows)
+        : `<tr><td colspan="${tabConfig.columns.length + 4}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
+
+      resultsSummary.textContent = `Showing ${filteredRows.length} of ${tabConfig.rows.length} ${tabConfig.name.toLowerCase()} records`;
+    }
+
+    function attachAdminToolsFilterEvents(tabConfig) {
+      const searchInput = document.getElementById('adminToolsSearchInput');
+      if (!searchInput) {
+        return;
+      }
+
+      const elements = [
+        searchInput,
+        ...tabConfig.filters
+          .map((filter) => document.getElementById(`adminToolsFilter-${filter.id}`))
+          .filter(Boolean)
+      ];
+
+      elements.forEach((element) => {
+        element.addEventListener('input', applyAdminToolsFilters);
+        element.addEventListener('change', applyAdminToolsFilters);
+      });
+    }
+
+    function renderCalculatorsPanel(selectedTab) {
+      const panel = document.getElementById('adminToolsPanel');
+      const tableRows = selectedTab.rows
+        .map(
+          (row, index) => `
+              <tr>
+                <td class="calc-checkbox-cell"><input type="checkbox" aria-label="Select calculator row ${index + 1}" ${row.checked ? 'checked' : ''} /></td>
+                <td>${row.status}</td>
+                <td>${row.description}</td>
+                <td>${row.expiryDate}</td>
+                <td>${row.publishDate}</td>
+              </tr>
+            `
+        )
         .join('');
 
+      panel.dataset.activeAdminToolsTab = selectedTab.name;
       panel.innerHTML = `
           <h3>${selectedTab.name}</h3>
           <p>${selectedTab.description}</p>
-          <div class="admin-tools-grid">${cards}</div>
+          <div class="calculators-table-wrap">
+            <table class="calculators-table">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Calcualtor Status</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Expiry Date</th>
+                  <th scope="col">Publish Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
         `;
+    }
+
+    function renderWixRolesPanel(selectedTab) {
+      const panel = document.getElementById('adminToolsPanel');
+      const renderRows = (rows) =>
+        rows
+          .map(
+            (row) => `
+                <tr>
+                  <td>${row.roleName}</td>
+                  <td>${row.description}</td>
+                  <td>${row.permissions}</td>
+                </tr>
+              `
+          )
+          .join('');
+
+      panel.dataset.activeAdminToolsTab = selectedTab.name;
+      panel.innerHTML = `
+          <h3>${selectedTab.name}</h3>
+          <p>${selectedTab.description}</p>
+
+          <h4 class="admin-tools-subtable-title">Pre defined roles</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Role name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Permissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderRows(selectedTab.preDefinedRoles)}
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="admin-tools-subtable-title">Custom Roles</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Role name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Permissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${renderRows(selectedTab.customRoles)}
+              </tbody>
+            </table>
+          </div>
+        `;
+    }
+
+    function renderAdminToolsPanel(tabName) {
+      const selectedTab = adminToolsTabs.find((tab) => tab.name === tabName) || adminToolsTabs[0];
+
+      if (selectedTab.name === 'Wix Roles') {
+        renderWixRolesPanel(selectedTab);
+        return;
+      }
+
+      if (selectedTab.name === 'Calculators') {
+        renderCalculatorsPanel(selectedTab);
+        return;
+      }
+
+      const panel = document.getElementById('adminToolsPanel');
+      const filterFields = selectedTab.filters
+        .map(
+          (filter) => `
+              <div class="field-group">
+                <label for="adminToolsFilter-${filter.id}">${filter.label}</label>
+                <select id="adminToolsFilter-${filter.id}" class="text-input">
+                  <option value="">${filter.allLabel}</option>
+                  ${filter.options.map((option) => `<option value="${option}">${option}</option>`).join('')}
+                </select>
+              </div>
+            `
+        )
+        .join('');
+
+      const headerCells = selectedTab.columns
+        .map((column) => `<th scope="col">${column.label}</th>`)
+        .join('');
+
+      panel.dataset.activeAdminToolsTab = selectedTab.name;
+      panel.innerHTML = `
+          <h3>${selectedTab.name}</h3>
+          <p>${selectedTab.description}</p>
+          <div class="admin-tools-toolbar" aria-label="${selectedTab.name} search and filters">
+            <div class="field-group">
+              <label for="adminToolsSearchInput">Search</label>
+              <input id="adminToolsSearchInput" class="text-input" type="search" placeholder="${selectedTab.searchPlaceholder}" />
+            </div>
+            ${filterFields}
+          </div>
+          <p class="admin-tools-summary" id="adminToolsResultsSummary"></p>
+          <div class="table-wrap">
+            <table class="admin-tools-table">
+              <thead>
+                <tr>
+                  ${headerCells}
+                  <th scope="col">Create</th>
+                  <th scope="col">Read</th>
+                  <th scope="col">Update</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody id="adminToolsTableBody"></tbody>
+            </table>
+          </div>
+        `;
+
+      attachAdminToolsFilterEvents(selectedTab);
+      applyAdminToolsFilters();
     }
 
     function attachAdminToolsTabEvents() {
