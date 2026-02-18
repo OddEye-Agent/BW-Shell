@@ -1,472 +1,476 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Portal UI</title>
-    <style>
-      :root {
-        --navy: #102a5c;
-        --navy-dark: #0b1e43;
-        --text: #1b2430;
-        --muted: #6a7689;
-        --line: #dce2eb;
-        --panel: #f5f7fb;
-        --white: #ffffff;
-        --accent: #2158d8;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal UI</title>
+  <style>
+    :root {
+      --navy: #102a5c;
+      --navy-dark: #0b1e43;
+      --text: #1b2430;
+      --muted: #6a7689;
+      --line: #dce2eb;
+      --panel: #f5f7fb;
+      --white: #ffffff;
+      --accent: #2158d8;
+    }
 
-      body {
-        margin: 0;
-        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-        background: var(--panel);
-        color: var(--text);
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      .top-bar {
-        background: linear-gradient(0deg, var(--navy-dark), var(--navy));
-        color: var(--white);
-        min-height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 1.5rem;
-        position: sticky;
-        top: 0;
-        z-index: 40;
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .top-bar {
+      background: linear-gradient(0deg, var(--navy-dark), var(--navy));
+      color: var(--white);
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .user-menu-button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--white);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.15rem 0;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+
+    .user-menu-button:hover,
+    .user-menu-button:focus-visible {
+      opacity: 0.82;
+    }
+
+    .dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.5rem);
+      background: var(--white);
+      color: var(--text);
+      min-width: 200px;
+      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(10, 23, 50, 0.18);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      display: none;
+    }
+
+    .dropdown[hidden] {
+      display: none;
+    }
+
+    .dropdown.open {
+      display: block;
+    }
+
+    .dropdown button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 0.75rem 0.9rem;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .dropdown button:hover {
+      background: #f0f4fa;
+    }
+
+    .main-nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      overflow-x: auto;
+    }
+
+    .nav-item {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.95rem 0.85rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      color: var(--text);
+      background: #f7f9fc;
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    main {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--white);
+      min-height: calc(100vh - 112px);
+    }
+
+    .page-shell {
+      width: 100%;
+      padding: 1.35rem 1.5rem 1.75rem;
+      background: var(--white);
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .page-subtitle {
+      margin: 0.35rem 0 1rem;
+      color: var(--muted);
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4b586b;
+      margin-bottom: 0.4rem;
+    }
+
+    .text-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.68rem 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+
+    thead th {
+      font-size: 0.77rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      background: #f8fbff;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid #ebeff5;
+      white-space: nowrap;
+    }
+
+    tbody tr:hover {
+      background: #fbfcff;
+    }
+
+    .account-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .account-link:hover {
+      text-decoration: underline;
+    }
+
+    .actions-cell {
+      position: relative;
+    }
+
+    .row-action-button {
+      border: 1px solid #d5deec;
+      background: #fff;
+      border-radius: 8px;
+      width: 34px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      color: #4f5e76;
+    }
+
+    .row-action-menu {
+      position: absolute;
+      right: 0.65rem;
+      top: calc(100% - 0.2rem);
+      min-width: 220px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(10, 23, 50, 0.15);
+      overflow: hidden;
+      z-index: 12;
+      display: none;
+    }
+
+    .row-action-menu button {
+      display: block;
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border: none;
+      background: #fff;
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .row-action-menu button:hover {
+      background: #f0f5ff;
+    }
+
+    .row-action-menu.open {
+      display: block;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0.2rem 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .page-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.45rem 0.65rem;
+      cursor: pointer;
+    }
+
+    .placeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .placeholder-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.9rem;
+      background: #f8faff;
+    }
+
+    .placeholder-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .placeholder-card p {
+      margin: 0.45rem 0 0;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      .top-bar,
+      .page-shell {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
       }
 
       .brand {
-        font-weight: 700;
-        letter-spacing: 0.02em;
-      }
-
-      .user-menu {
-        position: relative;
-      }
-
-      .user-menu-button {
-        appearance: none;
-        border: none;
-        background: transparent;
-        color: var(--white);
-        font-size: 0.95rem;
-        font-weight: 600;
-        padding: 0.15rem 0;
-        cursor: pointer;
-        line-height: 1.2;
-      }
-
-      .user-menu-button:hover,
-      .user-menu-button:focus-visible {
-        opacity: 0.82;
-      }
-
-      .dropdown {
-        position: absolute;
-        right: 0;
-        top: calc(100% + 0.5rem);
-        background: var(--white);
-        color: var(--text);
-        min-width: 200px;
-        border-radius: 12px;
-        box-shadow: 0 12px 40px rgba(10, 23, 50, 0.18);
-        border: 1px solid var(--line);
-        overflow: hidden;
-        display: none;
-      }
-
-      .dropdown[hidden] {
-        display: none;
-      }
-
-      .dropdown.open {
-        display: block;
-      }
-
-      .dropdown button {
-        width: 100%;
-        border: none;
-        background: transparent;
-        text-align: left;
-        padding: 0.75rem 0.9rem;
-        cursor: pointer;
-        color: inherit;
-      }
-
-      .dropdown button:hover {
-        background: #f0f4fa;
-      }
-
-      .main-nav {
-        background: var(--white);
-        border-bottom: 1px solid var(--line);
-        padding: 0 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        overflow-x: auto;
-      }
-
-      .nav-item {
-        border: none;
-        background: transparent;
-        color: var(--muted);
-        font-size: 0.95rem;
-        font-weight: 600;
-        padding: 0.95rem 0.85rem;
-        cursor: pointer;
-        border-bottom: 3px solid transparent;
-        white-space: nowrap;
-      }
-
-      .nav-item:hover {
-        color: var(--text);
-        background: #f7f9fc;
-      }
-
-      .nav-item.active {
-        color: var(--accent);
-        border-bottom-color: var(--accent);
-      }
-
-      main {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background: var(--white);
-        min-height: calc(100vh - 112px);
-      }
-
-      .page-shell {
-        width: 100%;
-        padding: 1.35rem 1.5rem 1.75rem;
-        background: var(--white);
-      }
-
-      .page-title {
-        margin: 0;
-        font-size: 1.45rem;
-      }
-
-      .page-subtitle {
-        margin: 0.35rem 0 1rem;
-        color: var(--muted);
-      }
-
-      .filter-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.95rem;
-        margin-bottom: 1rem;
-      }
-
-      .field-group label {
-        display: block;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #4b586b;
-        margin-bottom: 0.4rem;
-      }
-
-      .text-input {
-        width: 100%;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 0.68rem 0.75rem;
         font-size: 0.95rem;
       }
+    }
+  </style>
+</head>
 
-      .table-wrap {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        overflow-x: auto;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 1180px;
-      }
-
-      thead th {
-        font-size: 0.77rem;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        color: var(--muted);
-        background: #f8fbff;
-      }
-
-      th,
-      td {
-        text-align: left;
-        padding: 0.75rem;
-        border-bottom: 1px solid #ebeff5;
-        white-space: nowrap;
-      }
-
-      tbody tr:hover {
-        background: #fbfcff;
-      }
-
-      .account-link {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      .account-link:hover {
-        text-decoration: underline;
-      }
-
-      .actions-cell {
-        position: relative;
-      }
-
-      .row-action-button {
-        border: 1px solid #d5deec;
-        background: #fff;
-        border-radius: 8px;
-        width: 34px;
-        height: 32px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        line-height: 1;
-        color: #4f5e76;
-      }
-
-      .row-action-menu {
-        position: absolute;
-        right: 0.65rem;
-        top: calc(100% - 0.2rem);
-        min-width: 220px;
-        background: var(--white);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        box-shadow: 0 12px 30px rgba(10, 23, 50, 0.15);
-        overflow: hidden;
-        z-index: 12;
-        display: none;
-      }
-
-      .row-action-menu button {
-        display: block;
-        width: 100%;
-        padding: 0.65rem 0.8rem;
-        border: none;
-        background: #fff;
-        text-align: left;
-        font-size: 0.9rem;
-        cursor: pointer;
-      }
-
-      .row-action-menu button:hover {
-        background: #f0f5ff;
-      }
-
-      .row-action-menu.open {
-        display: block;
-      }
-
-      .pagination {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.8rem 0.2rem 0;
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-
-      .pagination-controls {
-        display: flex;
-        gap: 0.5rem;
-      }
-
-      .page-btn {
-        border: 1px solid var(--line);
-        background: #fff;
-        border-radius: 8px;
-        padding: 0.45rem 0.65rem;
-        cursor: pointer;
-      }
-
-      .placeholder-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 0.85rem;
-      }
-
-      .placeholder-card {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 0.9rem;
-        background: #f8faff;
-      }
-
-      .placeholder-card h3 {
-        margin: 0;
-        font-size: 1rem;
-      }
-
-      .placeholder-card p {
-        margin: 0.45rem 0 0;
-        color: var(--muted);
-      }
-
-      @media (max-width: 900px) {
-        .filter-row {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .top-bar,
-        .page-shell {
-          padding-left: 0.85rem;
-          padding-right: 0.85rem;
-        }
-
-        .brand {
-          font-size: 0.95rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="top-bar">
-      <div class="brand">Project Admin Portal</div>
-      <div class="user-menu">
-        <button class="user-menu-button" id="userMenuButton" aria-expanded="false" aria-haspopup="true">jdoe_admin ▾</button>
-        <div class="dropdown" id="userDropdown" role="menu" aria-label="User menu" hidden>
-          <button type="button" role="menuitem">My Profile</button>
-          <button type="button" role="menuitem">Preferences</button>
-          <button type="button" role="menuitem">Sign Out</button>
-        </div>
+<body>
+  <header class="top-bar">
+    <div class="brand">Project Admin Portal</div>
+    <div class="user-menu">
+      <button class="user-menu-button" id="userMenuButton" aria-expanded="false" aria-haspopup="true">jdoe_admin
+        ▾</button>
+      <div class="dropdown" id="userDropdown" role="menu" aria-label="User menu" hidden>
+        <button type="button" role="menuitem">My Profile</button>
+        <button type="button" role="menuitem">Preferences</button>
+        <button type="button" role="menuitem">Sign Out</button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <nav class="main-nav" aria-label="Primary">
-      <button class="nav-item active" data-page="Accounts">Accounts</button>
-      <button class="nav-item" data-page="Users">Users</button>
-      <button class="nav-item" data-page="Content">Content</button>
-      <button class="nav-item" data-page="Websites">Websites</button>
-      <button class="nav-item" data-page="Locator">Locator</button>
-      <button class="nav-item" data-page="Video">Video</button>
-      <button class="nav-item" data-page="Admin Tools">Admin Tools</button>
-    </nav>
+  <nav class="main-nav" aria-label="Primary">
+    <button class="nav-item active" data-page="Accounts">Accounts</button>
+    <button class="nav-item" data-page="Users">Users</button>
+    <button class="nav-item" data-page="Content">Content</button>
+    <button class="nav-item" data-page="Websites">Websites</button>
+    <button class="nav-item" data-page="Locator">Locator</button>
+    <button class="nav-item" data-page="Video">Video</button>
+    <button class="nav-item" data-page="Admin Tools">Admin Tools</button>
+  </nav>
 
-    <main>
-      <section id="pageContainer" class="page-shell"></section>
-    </main>
+  <main>
+    <section id="pageContainer" class="page-shell"></section>
+  </main>
 
-    <script>
-      const navItems = document.querySelectorAll('.nav-item');
-      const pageContainer = document.getElementById('pageContainer');
-      const userMenuButton = document.getElementById('userMenuButton');
-      const userDropdown = document.getElementById('userDropdown');
+  <script>
+    const navItems = document.querySelectorAll('.nav-item');
+    const pageContainer = document.getElementById('pageContainer');
+    const userMenuButton = document.getElementById('userMenuButton');
+    const userDropdown = document.getElementById('userDropdown');
 
-      const accountRows = [
-        {
-          accountName: 'Northwind Retail Group',
-          parentAccount: 'Global Commerce Holdings',
-          subAccounts: 4,
-          userCount: 58,
-          ownerEmail: 'owner@northwind.com',
-          createdOn: '2024-01-17'
-        },
-        {
-          accountName: 'Summit Health Partners',
-          parentAccount: 'Summit Enterprises',
-          subAccounts: 2,
-          userCount: 31,
-          ownerEmail: 'admin@summithealth.com',
-          createdOn: '2023-09-05'
-        },
-        {
-          accountName: 'Blue Harbor Logistics',
-          parentAccount: 'Blue Harbor Group',
-          subAccounts: 7,
-          userCount: 102,
-          ownerEmail: 'ops@blueharbor.io',
-          createdOn: '2022-11-28'
-        },
-        {
-          accountName: 'Evergreen Academy',
-          parentAccount: 'Evergreen Education Network',
-          subAccounts: 3,
-          userCount: 44,
-          ownerEmail: 'support@evergreenacademy.edu',
-          createdOn: '2024-04-10'
-        }
-      ];
-
-      const placeholderSections = {
-        Users: [
-          ['User Directory', 'Browse users, roles, and status snapshots.'],
-          ['Access Requests', 'Pending approvals for user permissions.'],
-          ['Audit Trail', 'User login and privilege activity.']
-        ],
-        Content: [
-          ['Publishing Queue', 'Track drafts, approvals, and publish states.'],
-          ['Asset Library', 'Manage reusable media and documents.'],
-          ['Editorial Notes', 'Capture collaboration notes and next steps.']
-        ],
-        Websites: [
-          ['Site Health', 'Uptime and environment status indicators.'],
-          ['Release History', 'Recent deployments and rollback options.'],
-          ['Domain Settings', 'Placeholder controls for DNS and routing.']
-        ],
-        Locator: [
-          ['Region Filters', 'Prototype controls to narrow location data.'],
-          ['Map Panel', 'Reserved area for map visualization.'],
-          ['Location Table', 'List of managed locations and tags.']
-        ],
-        Video: [
-          ['Upload Queue', 'Monitor incoming video processing jobs.'],
-          ['Channel Configuration', 'Manage playback targets and metadata.'],
-          ['Compliance Checks', 'Track review status and quality gates.']
-        ],
-        'Admin Tools': [
-          ['System Settings', 'Centralized admin-level configuration options.'],
-          ['Job Scheduler', 'Control recurring maintenance automation.'],
-          ['Permissions Matrix', 'Visualize and tune role-based access.']
-        ]
-      };
-
-      function setUserMenuOpen(isOpen) {
-        userDropdown.classList.toggle('open', isOpen);
-        userDropdown.hidden = !isOpen;
-        userMenuButton.setAttribute('aria-expanded', String(isOpen));
+    const accountRows = [
+      {
+        accountName: 'Northwind Retail Group',
+        parentAccount: 'Global Commerce Holdings',
+        subAccounts: 4,
+        userCount: 58,
+        ownerEmail: 'owner@northwind.com',
+        createdOn: '2024-01-17'
+      },
+      {
+        accountName: 'Summit Health Partners',
+        parentAccount: 'Summit Enterprises',
+        subAccounts: 2,
+        userCount: 31,
+        ownerEmail: 'admin@summithealth.com',
+        createdOn: '2023-09-05'
+      },
+      {
+        accountName: 'Blue Harbor Logistics',
+        parentAccount: 'Blue Harbor Group',
+        subAccounts: 7,
+        userCount: 102,
+        ownerEmail: 'ops@blueharbor.io',
+        createdOn: '2022-11-28'
+      },
+      {
+        accountName: 'Evergreen Academy',
+        parentAccount: 'Evergreen Education Network',
+        subAccounts: 3,
+        userCount: 44,
+        ownerEmail: 'support@evergreenacademy.edu',
+        createdOn: '2024-04-10'
       }
+    ];
 
-      function closeAllRowMenus() {
-        document.querySelectorAll('.row-action-menu.open').forEach((menu) => menu.classList.remove('open'));
-      }
+    const placeholderSections = {
+      Users: [
+        ['User Directory', 'Browse users, roles, and status snapshots.'],
+        ['Access Requests', 'Pending approvals for user permissions.'],
+        ['Audit Trail', 'User login and privilege activity.']
+      ],
+      Content: [
+        ['Publishing Queue', 'Track drafts, approvals, and publish states.'],
+        ['Asset Library', 'Manage reusable media and documents.'],
+        ['Editorial Notes', 'Capture collaboration notes and next steps.']
+      ],
+      Websites: [
+        ['Site Health', 'Uptime and environment status indicators.'],
+        ['Release History', 'Recent deployments and rollback options.'],
+        ['Domain Settings', 'Placeholder controls for DNS and routing.']
+      ],
+      Locator: [
+        ['Region Filters', 'Prototype controls to narrow location data.'],
+        ['Map Panel', 'Reserved area for map visualization.'],
+        ['Location Table', 'List of managed locations and tags.']
+      ],
+      Video: [
+        ['Upload Queue', 'Monitor incoming video processing jobs.'],
+        ['Channel Configuration', 'Manage playback targets and metadata.'],
+        ['Compliance Checks', 'Track review status and quality gates.']
+      ],
+      'Admin Tools': [
+        ['System Settings', 'Centralized admin-level configuration options.'],
+        ['Job Scheduler', 'Control recurring maintenance automation.'],
+        ['Permissions Matrix', 'Visualize and tune role-based access.']
+      ]
+    };
 
-      function attachRowMenuEvents() {
-        const rowButtons = document.querySelectorAll('.row-action-button');
+    function setUserMenuOpen(isOpen) {
+      userDropdown.classList.toggle('open', isOpen);
+      userDropdown.hidden = !isOpen;
+      userMenuButton.setAttribute('aria-expanded', String(isOpen));
+    }
 
-        rowButtons.forEach((button) => {
-          button.addEventListener('click', (event) => {
-            event.stopPropagation();
-            const targetMenu = button.nextElementSibling;
-            const isOpen = targetMenu.classList.contains('open');
-            closeAllRowMenus();
-            if (!isOpen) {
-              targetMenu.classList.add('open');
-            }
-          });
+    function closeAllRowMenus() {
+      document.querySelectorAll('.row-action-menu.open').forEach((menu) => menu.classList.remove('open'));
+    }
+
+    function attachRowMenuEvents() {
+      const rowButtons = document.querySelectorAll('.row-action-button');
+
+      rowButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const targetMenu = button.nextElementSibling;
+          const isOpen = targetMenu.classList.contains('open');
+          closeAllRowMenus();
+          if (!isOpen) {
+            targetMenu.classList.add('open');
+          }
         });
-      }
+      });
+    }
 
-      function renderAccountsView() {
-        const tableRows = accountRows
-          .map(
-            (row) => `
+    function renderAccountsView() {
+      const tableRows = accountRows
+        .map(
+          (row) => `
               <tr>
                 <td><a class="account-link" href="#">${row.accountName}</a></td>
                 <td>${row.parentAccount}</td>
@@ -485,10 +489,10 @@
                 </td>
               </tr>
             `
-          )
-          .join('');
+        )
+        .join('');
 
-        pageContainer.innerHTML = `
+      pageContainer.innerHTML = `
           <h1 class="page-title">Account Management</h1>
           <div class="filter-row">
             <div class="field-group">
@@ -530,63 +534,64 @@
           </div>
         `;
 
-        attachRowMenuEvents();
-      }
+      attachRowMenuEvents();
+    }
 
-      function renderPlaceholderView(sectionName) {
-        const cards = placeholderSections[sectionName]
-          .map(([title, desc]) => `<article class="placeholder-card"><h3>${title}</h3><p>${desc}</p></article>`)
-          .join('');
+    function renderPlaceholderView(sectionName) {
+      const cards = placeholderSections[sectionName]
+        .map(([title, desc]) => `<article class="placeholder-card"><h3>${title}</h3><p>${desc}</p></article>`)
+        .join('');
 
-        pageContainer.innerHTML = `
+      pageContainer.innerHTML = `
           <h1 class="page-title">${sectionName}</h1>
           <p class="page-subtitle">This section is ready for the next phase of UI buildout.</p>
           <div class="placeholder-grid">${cards}</div>
         `;
+    }
+
+    function renderSection(sectionName) {
+      closeAllRowMenus();
+      if (sectionName === 'Accounts') {
+        renderAccountsView();
+        return;
+      }
+      renderPlaceholderView(sectionName);
+    }
+
+    navItems.forEach((button) => {
+      button.addEventListener('click', () => {
+        navItems.forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+        renderSection(button.dataset.page);
+      });
+    });
+
+    setUserMenuOpen(false);
+
+    userMenuButton.addEventListener('click', () => {
+      const isOpen = userMenuButton.getAttribute('aria-expanded') === 'true';
+      setUserMenuOpen(!isOpen);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.user-menu')) {
+        setUserMenuOpen(false);
       }
 
-      function renderSection(sectionName) {
+      if (!event.target.closest('.actions-cell')) {
         closeAllRowMenus();
-        if (sectionName === 'Accounts') {
-          renderAccountsView();
-          return;
-        }
-        renderPlaceholderView(sectionName);
       }
+    });
 
-      navItems.forEach((button) => {
-        button.addEventListener('click', () => {
-          navItems.forEach((item) => item.classList.remove('active'));
-          button.classList.add('active');
-          renderSection(button.dataset.page);
-        });
-      });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setUserMenuOpen(false);
+        closeAllRowMenus();
+      }
+    });
 
-      setUserMenuOpen(false);
+    renderSection('Accounts');
+  </script>
+</body>
 
-      userMenuButton.addEventListener('click', () => {
-        const isOpen = userMenuButton.getAttribute('aria-expanded') === 'true';
-        setUserMenuOpen(!isOpen);
-      });
-
-      document.addEventListener('click', (event) => {
-        if (!event.target.closest('.user-menu')) {
-          setUserMenuOpen(false);
-        }
-
-        if (!event.target.closest('.actions-cell')) {
-          closeAllRowMenus();
-        }
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          setUserMenuOpen(false);
-          closeAllRowMenus();
-        }
-      });
-
-      renderSection('Accounts');
-    </script>
-  </body>
 </html>
