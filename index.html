@@ -490,6 +490,33 @@
       border-color: #bed0f6;
     }
 
+    .crud-action-btn.editing {
+      background: #fff4b8;
+      border-color: #ebc856;
+      color: #5f4a00;
+    }
+
+    .admin-tools-table td[contenteditable='true'] {
+      outline: 2px solid #ebc856;
+      outline-offset: -2px;
+      background: #fffdf2;
+    }
+
+    .status-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: #eceff4;
+      color: #556177;
+    }
+
+    .status-pill.active {
+      background: #def7e7;
+      color: #1f6b3a;
+    }
+
     .admin-tools-table {
       min-width: 2100px;
     }
@@ -709,6 +736,7 @@
     ];
 
     const defaultComplianceTab = 'Archive';
+    const adminToolsEditRows = {};
 
     const adminToolsTabs = [
       {
@@ -754,23 +782,23 @@
           },
           {
             id: 'state',
-            label: 'State',
-            allLabel: 'All states',
-            options: ['Active', 'Disabled', 'Pending']
+            label: 'Status',
+            allLabel: 'All statuses',
+            options: ['Active', 'Disabled']
           }
         ],
         columns: [
           { key: 'userId', label: 'User ID' },
           { key: 'name', label: 'Name' },
           { key: 'email', label: 'Email' },
-          { key: 'role', label: 'Primary Role' },
+          { key: 'role', label: 'Roles' },
           { key: 'accountId', label: 'BAS Account ID' },
           { key: 'environment', label: 'Environment' },
-          { key: 'state', label: 'State' }
+          { key: 'state', label: 'Status' }
         ],
         rows: [
           { userId: 'usr-10012', name: 'Talia Morrow', email: 'talia.morrow+qa@internal.local', role: 'Staff Admin', accountId: 'BAS-ACCT-4421', environment: 'QA', state: 'Active' },
-          { userId: 'usr-10041', name: 'Jesse Patel', email: 'jesse.patel+dev@internal.local', role: 'Developer', accountId: 'BAS-ACCT-1180', environment: 'DEV', state: 'Pending' },
+          { userId: 'usr-10041', name: 'Jesse Patel', email: 'jesse.patel+dev@internal.local', role: 'Developer', accountId: 'BAS-ACCT-1180', environment: 'DEV', state: 'Disabled' },
           { userId: 'usr-10103', name: 'Morgan Ellis', email: 'morgan.ellis+uat@internal.local', role: 'Compliance Reviewer', accountId: 'BAS-ACCT-9008', environment: 'UAT', state: 'Disabled' },
           { userId: 'usr-10155', name: 'Nora Castillo', email: 'nora.castillo+qa@internal.local', role: 'Program Admin', accountId: 'BAS-ACCT-7774', environment: 'QA', state: 'Active' }
         ]
@@ -1314,28 +1342,64 @@
       attachComplianceTabEvents();
     }
 
+    function getAdminToolsRowId(tabConfig, row, index) {
+      if (row.roleKey) {
+        return row.roleKey;
+      }
+
+      if (row.userId) {
+        return row.userId;
+      }
+
+      if (row.accountId) {
+        return row.accountId;
+      }
+
+      if (row.name) {
+        return row.name;
+      }
+
+      return `${tabConfig.name}-${index}`;
+    }
+
     function renderAdminToolsTableRows(tabConfig, rows) {
       const showCrud = tabConfig.enableCrud !== false;
+      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users';
+      const showCreateReadActions = showCrud && !hideCreateReadActions;
       return rows
-        .map((row) => {
+        .map((row, rowIndex) => {
+          const rowId = getAdminToolsRowId(tabConfig, row, rowIndex);
+          const editableRows = adminToolsEditRows[tabConfig.name] || new Set();
+          const isEditing = editableRows.has(rowId);
           const valueCells = tabConfig.columns
             .map((column) => {
               const value = row[column.key];
               if (column.key === 'viewUrl' && value) {
                 return `<td><a href="${value}" class="archive-link" target="_blank" rel="noopener noreferrer">${value}</a></td>`;
               }
-              return `<td>${value}</td>`;
+
+              if (!isEditing && column.key === 'state' && tabConfig.name === 'BAS Users') {
+                const stateClass = String(value).toLowerCase() === 'active' ? 'active' : '';
+                return `<td data-column-key="${column.key}"><span class="status-pill ${stateClass}">${value}</span></td>`;
+              }
+
+              if (isEditing) {
+                return `<td contenteditable="true" data-column-key="${column.key}">${value}</td>`;
+              }
+
+              return `<td data-column-key="${column.key}">${value}</td>`;
             })
             .join('');
 
           return `
-              <tr>
+              <tr data-row-id="${rowId}">
                 ${valueCells}
                 ${showCrud
                   ? `
-                <td class="crud-cell"><button class="crud-action-btn" type="button">Create</button></td>
-                <td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>
-                <td class="crud-cell"><button class="crud-action-btn" type="button">Update</button></td>
+                ${showCreateReadActions ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Create</button></td>' : ''}
+                ${showCreateReadActions ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>' : ''}
+                <td class="crud-cell"><button class="crud-action-btn update-btn${isEditing ? ' editing' : ''}" type="button">Update</button></td>
+                ${tabConfig.name === 'BAS Users' ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Disable</button></td>' : ''}
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Delete</button></td>
                 `
                   : ''}
@@ -1354,6 +1418,9 @@
       const selectedTabName = panel.dataset.activeAdminToolsTab;
       const tabConfig = adminToolsTabs.find((tab) => tab.name === selectedTabName) || adminToolsTabs[0];
       const showCrud = tabConfig.enableCrud !== false;
+      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users';
+      const showCreateReadActions = showCrud && !hideCreateReadActions;
+      const actionColumnCount = !showCrud ? 0 : tabConfig.name === 'BAS Users' ? 3 : showCreateReadActions ? 4 : 2;
       const searchInput = document.getElementById('adminToolsSearchInput');
       const tableBody = document.getElementById('adminToolsTableBody');
       const resultsSummary = document.getElementById('adminToolsResultsSummary');
@@ -1384,7 +1451,11 @@
 
       tableBody.innerHTML = filteredRows.length
         ? renderAdminToolsTableRows(tabConfig, filteredRows)
-        : `<tr><td colspan="${tabConfig.columns.length + (showCrud ? 4 : 0)}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
+        : `<tr><td colspan="${tabConfig.columns.length + actionColumnCount}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
+
+      if (showCrud) {
+        attachAdminToolsCrudEvents(tabConfig);
+      }
 
       resultsSummary.textContent = `Showing ${filteredRows.length} of ${tabConfig.rows.length} ${tabConfig.name.toLowerCase()} records`;
     }
@@ -1405,6 +1476,47 @@
       elements.forEach((element) => {
         element.addEventListener('input', applyAdminToolsFilters);
         element.addEventListener('change', applyAdminToolsFilters);
+      });
+    }
+
+    function attachAdminToolsCrudEvents(tabConfig) {
+      const tableBody = document.getElementById('adminToolsTableBody');
+      if (!tableBody) {
+        return;
+      }
+
+      tableBody.querySelectorAll('.update-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const rowElement = button.closest('tr');
+          if (!rowElement) {
+            return;
+          }
+
+          const rowId = rowElement.dataset.rowId;
+          const editableRows = adminToolsEditRows[tabConfig.name] || new Set();
+          const isEditing = editableRows.has(rowId);
+          const matchingRow = tabConfig.rows.find((row, rowIndex) => getAdminToolsRowId(tabConfig, row, rowIndex) === rowId);
+
+          if (!matchingRow) {
+            return;
+          }
+
+          if (!isEditing) {
+            editableRows.add(rowId);
+            adminToolsEditRows[tabConfig.name] = editableRows;
+            applyAdminToolsFilters();
+            return;
+          }
+
+          rowElement.querySelectorAll('td[data-column-key]').forEach((cell) => {
+            const key = cell.dataset.columnKey;
+            matchingRow[key] = cell.textContent.trim();
+          });
+
+          editableRows.delete(rowId);
+          adminToolsEditRows[tabConfig.name] = editableRows;
+          applyAdminToolsFilters();
+        });
       });
     }
 
@@ -1533,6 +1645,8 @@
         .map((column) => `<th scope="col">${column.label}</th>`)
         .join('');
       const showCrud = selectedTab.enableCrud !== false;
+      const hideCreateReadActions = selectedTab.name === 'BAS Roles' || selectedTab.name === 'BAS Users';
+      const showCreateReadActions = showCrud && !hideCreateReadActions;
 
       panel.dataset.activeAdminToolsTab = selectedTab.name;
       panel.innerHTML = `
@@ -1553,9 +1667,10 @@
                   ${headerCells}
                   ${showCrud
                     ? `
-                  <th scope="col">Create</th>
-                  <th scope="col">Read</th>
+                  ${showCreateReadActions ? '<th scope="col">Create</th>' : ''}
+                  ${showCreateReadActions ? '<th scope="col">Read</th>' : ''}
                   <th scope="col">Update</th>
+                  ${selectedTab.name === 'BAS Users' ? '<th scope="col">Disable</th>' : ''}
                   <th scope="col">Delete</th>
                   `
                     : ''}
