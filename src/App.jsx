@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TopBar from './components/TopBar';
 import AccountsPage from './components/AccountsPage';
 import CompliancePage from './components/CompliancePage';
+import AdminToolsPage from './components/AdminToolsPage';
 import SectionPlaceholder from './components/SectionPlaceholder';
 
 const navItems = ['Accounts', 'Users', 'Compliance', 'Content', 'Websites', 'Locator', 'Video', 'Admin Tools'];
@@ -21,7 +22,7 @@ export default function App() {
         ))}
       </nav>
 
-      <main>{active === 'Accounts' ? <AccountsPage /> : active === 'Compliance' ? <CompliancePage /> : <SectionPlaceholder title={active} />}</main>
+      <main>{active === 'Accounts' ? <AccountsPage /> : active === 'Compliance' ? <CompliancePage /> : active === 'Admin Tools' ? <AdminToolsPage /> : <SectionPlaceholder title={active} />}</main>
     </div>
   );
 }
