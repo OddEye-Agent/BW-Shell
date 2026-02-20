@@ -2,7 +2,6 @@
 
 ## Unreleased
 
-- Migrated Admin Tools BAS tabs to React (BAS Roles, BAS Users, BAS Accounts) with functional search and status chips.
 - Migrated Compliance section to React (tab shell + functional Archive filtering table with status chips).
 - Pivoted frontend to React + Tailwind (Vite) while preserving GitHub Pages compatibility via static `dist` deploy.
 - Rebuilt app shell/nav and Accounts page as first migration slice with existing visual palette.
