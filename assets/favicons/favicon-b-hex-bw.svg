@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#f5f7fb"/>
+  <path d="M32 8l18 10v28L32 56 14 46V18z" fill="#102a5c"/>
+  <path d="M32 14l13 7v22l-13 7-13-7V21z" fill="none" stroke="#2158d8" stroke-width="2"/>
+  <text x="32" y="39" text-anchor="middle" font-family="Open Sans, Arial, sans-serif" font-size="17" font-weight="700" fill="#ffffff">BW</text>
+</svg>

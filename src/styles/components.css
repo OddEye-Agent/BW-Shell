@@ -980,3 +980,23 @@ tbody tr:hover {
   height: 100%;
   border: none;
 }
+
+.brand-with-favicons {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.favicon-preview-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.favicon-preview {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+}
