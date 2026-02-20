@@ -169,17 +169,17 @@
 
       const filteredRows = complianceArchiveRows
         .filter((row) => {
-        const matchesQuery =
-          !query ||
-          row.submitter_id.toLowerCase().includes(query) ||
-          row.approver_id.toLowerCase().includes(query) ||
-          row.website_id.toLowerCase().includes(query) ||
-          row.bas_account_id.toLowerCase().includes(query) ||
-          row.wix_account_id.toLowerCase().includes(query) ||
-          row.site_id.toLowerCase().includes(query);
+          const matchesQuery =
+            !query ||
+            row.submitter_id.toLowerCase().includes(query) ||
+            row.approver_id.toLowerCase().includes(query) ||
+            row.website_id.toLowerCase().includes(query) ||
+            row.bas_account_id.toLowerCase().includes(query) ||
+            row.wix_account_id.toLowerCase().includes(query) ||
+            row.site_id.toLowerCase().includes(query);
 
           const matchesStatus = !selectedStatus || row.status === selectedStatus;
-
+          return matchesQuery && matchesStatus;
         })
         .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
