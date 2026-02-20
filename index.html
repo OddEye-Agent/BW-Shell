@@ -371,27 +371,21 @@
       font-size: 0.9rem;
     }
 
-    .archive-pill {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 0.2rem 0.55rem;
+    .archive-status {
       font-size: 0.78rem;
       font-weight: 700;
     }
 
-    .archive-pill.approved {
+    .archive-status.approved {
       color: #0f6a35;
-      background: #dff7ea;
     }
 
-    .archive-pill.rejected {
+    .archive-status.rejected {
       color: #8d1428;
-      background: #fde7eb;
     }
 
-    .archive-pill.submitted {
-      color: #6b4b00;
-      background: #fff1cc;
+    .archive-status.submitted {
+      color: #6c778a;
     }
 
     .archive-link {
@@ -405,7 +399,26 @@
     }
 
     .archive-website-id {
-      font-weight: 700;
+      font-weight: 400;
+    }
+
+    .archive-table-wrap {
+      background: #fbfcfe;
+      border-color: #d7deea;
+    }
+
+    .archive-table thead th {
+      text-transform: none;
+      letter-spacing: normal;
+      background: #f1f4f8;
+    }
+
+    .archive-table tbody tr {
+      background: #fbfcfe;
+    }
+
+    .archive-table tbody tr:hover {
+      background: #f5f7fb;
     }
 
     .json-payload-btn {
@@ -1255,7 +1268,7 @@
                 <td class="archive-website-id">${row.website_id}</td>
                 <td>${row.submitter_id}</td>
                 <td>${row.approver_id}</td>
-                <td><span class="archive-pill ${statusClass}">${row.status}</span></td>
+                <td><span class="archive-status ${statusClass}">${row.status}</span></td>
                 <td>${row.bas_account_id}</td>
                 <td>${row.wix_account_id}</td>
                 <td>${row.site_id}</td>
@@ -1349,8 +1362,8 @@
 
           <p class="archive-summary" id="archiveResultsSummary"></p>
 
-          <div class="table-wrap">
-            <table>
+          <div class="table-wrap archive-table-wrap">
+            <table class="archive-table">
               <thead>
                 <tr>
                   <th>Event Date</th>
