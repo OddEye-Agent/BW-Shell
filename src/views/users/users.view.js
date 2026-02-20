@@ -42,7 +42,6 @@
       .join('');
 
     container.innerHTML = `
-      <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <span>Roles</span></div>
       <div class="users-header-row">
         <h1 class="page-title">Roles & Permissions</h1>
       </div>
@@ -187,7 +186,6 @@
   function renderCreateRole(container) {
     const role = state.editingRole;
     container.innerHTML = `
-      <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <a href="#" id="backToRoles">Roles</a> <span>›</span> <span>Create Role</span></div>
       <div class="users-header-row"><h1 class="page-title">${role ? 'Edit Role' : 'New Role'}</h1></div>
       <section class="create-role-layout">
         <div class="role-form-col">

@@ -1,1 +1,8 @@
-/* PR2: base split target. Intentionally empty while preserving visual parity. */
+/* Base typography standards */
+body {
+  font-size: 14px;
+}
+
+p {
+  font-size: 14px;
+}
