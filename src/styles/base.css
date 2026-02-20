@@ -1,4 +1,17 @@
 /* Base typography standards */
+html,
+body,
+button,
+input,
+select,
+textarea,
+th,
+td,
+label,
+span {
+  font-size: 14px;
+}
+
 body {
   font-size: 14px;
 }
