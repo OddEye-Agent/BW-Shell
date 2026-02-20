@@ -52,7 +52,7 @@
         <button class="new-role-btn" id="newRoleBtn" type="button">New Role</button>
       </div>
       <section class="roles-panel">
-        <h2 class="roles-panel-title">BW-Shell User Roles</h2>
+        <h2 class="roles-panel-title">BW Roles</h2>
         <div class="role-card-list">${cards}</div>
       </section>
     `;

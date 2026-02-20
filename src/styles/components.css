@@ -694,8 +694,8 @@ tbody tr:hover {
   border-bottom: 1px solid #e5e9f1;
 }
 .role-card:last-child { border-bottom: none; }
-.role-card h3 { margin: 0 0 0.55rem; font-size: 1.7rem; font-weight: 600; color: #0b1830; }
-.role-card p { margin: 0.22rem 0; color: #1b2a3c; line-height: 1.35; }
+.role-card h3 { margin: 0 0 0.55rem; font-size: 14px; font-weight: 600; color: #0b1830; }
+.role-card p { margin: 0.22rem 0; color: #1b2a3c; line-height: 1.35; font-size: 14px; }
 .role-edit-btn {
   border: none;
   background: transparent;
