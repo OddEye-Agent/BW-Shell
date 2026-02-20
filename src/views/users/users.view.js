@@ -7,7 +7,8 @@
     selectedPermissions: new Set(),
     baselinePermissions: new Set(),
     activePermissionCategory: 'Account',
-    permissionSearch: ''
+    permissionSearch: '',
+    groupDrawerOpen: false
   };
 
   const usersRows = [
@@ -55,7 +56,7 @@
         <button class="users-subnav-item ${state.activeTab === 'Users' ? 'active' : ''}" type="button" data-users-tab="Users">Users</button>
         <button class="users-subnav-item ${state.activeTab === 'Manage Roles' ? 'active' : ''}" type="button" data-users-tab="Manage Roles">Manage Roles</button>
         <button class="users-subnav-item ${state.activeTab === 'Groups' ? 'active' : ''}" type="button" data-users-tab="Groups">Groups</button>
-        ${state.activeTab === 'Manage Roles' ? '<button class=\"new-role-btn\" id=\"newRoleBtn\" type=\"button\">New Role</button>' : state.activeTab === 'Users' ? '<button class=\"new-role-btn\" id=\"newUserBtn\" type=\"button\">New User</button>' : state.activeTab === 'Groups' ? '<button class=\"new-role-btn\" type=\"button\">New Group</button>' : ''}
+        ${state.activeTab === 'Manage Roles' ? '<button class=\"new-role-btn\" id=\"newRoleBtn\" type=\"button\">New Role</button>' : state.activeTab === 'Users' ? '<button class=\"new-role-btn\" id=\"newUserBtn\" type=\"button\">New User</button>' : state.activeTab === 'Groups' ? '<button class=\"new-role-btn\" id=\"newGroupBtn\" type=\"button\">New Group</button>' : ''}
       </div>
     `;
   }
@@ -320,9 +321,70 @@
           <tbody>${rows}</tbody>
         </table>
       </div>
+
+      <div class="group-drawer-overlay ${state.groupDrawerOpen ? 'open' : ''}" id="groupDrawerOverlay"></div>
+      <aside class="group-drawer ${state.groupDrawerOpen ? 'open' : ''}" id="groupDrawer" aria-label="Create New Group Panel">
+        <div class="group-drawer-inner">
+          <button type="button" class="drawer-back-link" id="closeGroupDrawerBtn">← Back to Manage Groups</button>
+          <h2 class="group-drawer-title">Create New Group</h2>
+
+          <section class="group-drawer-card">
+            <div class="field-group">
+              <label for="drawerAccountName">Account Name<span class="required">*</span></label>
+              <select id="drawerAccountName" class="text-input">
+                <option>Select Account name</option>
+                <option>Broadridge</option>
+                <option>navtabvalidationaccount</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="drawerGroupName">Group Name<span class="required">*</span></label>
+              <input id="drawerGroupName" class="text-input" type="text" placeholder="Enter group name" />
+            </div>
+
+            <div class="field-group">
+              <label for="drawerInviteMembers">Invite Members to this group<span class="required">*</span></label>
+              <select id="drawerInviteMembers" class="text-input">
+                <option>Type email to search</option>
+              </select>
+            </div>
+
+            <div class="role-form-actions">
+              <button type="button" class="page-btn" id="cancelGroupDrawerBtn">Cancel</button>
+              <button type="button" class="page-btn primary" id="saveGroupDrawerBtn">Save</button>
+            </div>
+          </section>
+
+          <section class="group-drawer-tips">
+            <h3>Tips for Setting Up Your Group</h3>
+            <ul>
+              <li><strong>Group Name is required.</strong><br><span>Please enter a name to identify this group.</span></li>
+              <li><strong>Group Name must be unique.</strong><br><span>The group name can not be one that's already in use.</span></li>
+              <li><strong>Use a descriptive name to make it easy to identify.</strong><br><span>For example: "West Coast Advisors" or "Email Review Team".</span></li>
+              <li><strong>Group Name must be 3-50 characters.</strong><br><span>Keep your group name concise but descriptive.</span></li>
+              <li><strong>Only letters, numbers, spaces, hyphens and underscores are allowed</strong><br><span>Special characters (eg: %, $, &, +, <, >) are not allowed</span></li>
+            </ul>
+          </section>
+        </div>
+      </aside>
     `;
 
     wireUsersSubnav(container);
+
+    container.querySelector('#newGroupBtn')?.addEventListener('click', () => {
+      state.groupDrawerOpen = true;
+      renderUsersView();
+    });
+
+    const closeDrawer = () => {
+      state.groupDrawerOpen = false;
+      renderUsersView();
+    };
+
+    container.querySelector('#closeGroupDrawerBtn')?.addEventListener('click', closeDrawer);
+    container.querySelector('#cancelGroupDrawerBtn')?.addEventListener('click', closeDrawer);
+    container.querySelector('#groupDrawerOverlay')?.addEventListener('click', closeDrawer);
   }
 
   function renderCreateRole(container) {
