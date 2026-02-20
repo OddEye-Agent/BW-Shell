@@ -1121,3 +1121,16 @@ tbody tr:hover {
 .admin-tools-table.tab-bas-roles th:nth-child(4) {
   text-align: center !important;
 }
+
+/* BAS tables visual tuning */
+.admin-tools-table.tab-bas-roles thead th,
+.admin-tools-table.tab-bas-users thead th,
+.admin-tools-table.tab-bas-accounts thead th {
+  background: #e9edf3;
+}
+
+.admin-tools-table.tab-bas-roles tbody td,
+.admin-tools-table.tab-bas-users tbody td,
+.admin-tools-table.tab-bas-accounts tbody td {
+  background: #ffffff;
+}
