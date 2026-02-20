@@ -224,7 +224,8 @@
   function renderCreateRole(container) {
     const role = state.editingRole;
     container.innerHTML = `
-      <div class="users-header-row"><h1 class="page-title">${role ? 'Edit Role' : 'New Role'}</h1></div>
+      <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <a href="#" id="backToRoles">Roles</a> <span>›</span> <span>${role ? 'Edit Role' : 'Create Role'}</span></div>
+      <div class="users-header-row users-header-spaced"><h1 class="page-title">${role ? 'Edit Role' : 'New Role'}</h1></div>
       <section class="create-role-layout">
         <div class="role-form-col">
           <h2>Role Details</h2>
@@ -248,6 +249,13 @@
         </div>
       </section>
     `;
+
+
+    container.querySelector('#backToRoles')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      state.mode = 'list';
+      renderUsersView();
+    });
 
     wireCreateEvents(container);
   }
