@@ -120,7 +120,7 @@ const accountRows = [
         columns: [
           { key: 'roleName', label: 'Role Name' },
           { key: 'description', label: 'Description', width: '32%' },
-          { key: 'usersAssigned', label: 'Users Assigned' },
+          { key: 'usersAssigned', label: 'Users' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
         rows: [
