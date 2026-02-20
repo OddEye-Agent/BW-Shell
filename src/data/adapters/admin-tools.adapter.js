@@ -1,4 +1,5 @@
-// PR1 scaffold: admin tools data adapter placeholder.
+// PR3: admin tools data adapter now points to extracted mock constants.
 export async function getAdminToolTabData() {
+  if (typeof adminToolsTabs !== 'undefined') return adminToolsTabs;
   return [];
 }
