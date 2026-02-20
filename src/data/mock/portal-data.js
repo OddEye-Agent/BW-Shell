@@ -460,3 +460,15 @@ const accountRows = [
         diff_json: '{"hero":"updated cta spacing"}'
       }
     ];
+
+Object.assign(globalThis, {
+  accountRows,
+  placeholderSections,
+  pageHeaderTitles,
+  complianceTabs,
+  defaultComplianceTab,
+  adminToolsTabs,
+  adminToolsTables: adminToolsTabs,
+  defaultAdminToolsTab,
+  complianceArchiveRows
+});

@@ -44,7 +44,7 @@
     <section id="pageContainer" class="page-shell"></section>
   </main>
 
-  <script src="src/data/mock/portal-data.js?v=20260220-1745"></script>
+  <script src="src/data/mock/portal-data.js?v=20260220-2248"></script>
   <script src="src/data/mock/roles-permissions.js?v=20260220-1745"></script>
   <script src="src/state/store.js?v=20260220-1745"></script>
   <script src="src/views/accounts/accounts.view.js?v=20260220-1745"></script>
@@ -167,7 +167,9 @@
       const query = queryInput.value.trim().toLowerCase();
       const selectedStatus = statusFilter.value;
 
-      const filteredRows = complianceArchiveRows
+      const archiveRows = Array.isArray(globalThis.complianceArchiveRows) ? globalThis.complianceArchiveRows : [];
+
+      const filteredRows = archiveRows
         .filter((row) => {
           const matchesQuery =
             !query ||
@@ -187,7 +189,7 @@
         ? renderArchiveTableRows(filteredRows)
         : '<tr><td colspan="12">No archive records match your filters.</td></tr>';
 
-      resultsSummary.textContent = `Showing ${filteredRows.length} of ${complianceArchiveRows.length} compliance archive records`;
+      resultsSummary.textContent = `Showing ${filteredRows.length} of ${archiveRows.length} compliance archive records`;
     }
 
     function attachArchiveFilterEvents() {
