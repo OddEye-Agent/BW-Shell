@@ -1026,3 +1026,10 @@ tbody tr:hover {
   padding-left: 0.6rem;
   padding-right: 0.6rem;
 }
+
+.admin-tools-table.tab-bas-roles th:first-child,
+.admin-tools-table.tab-bas-roles td:first-child {
+  width: 16%;
+  max-width: 190px;
+  white-space: normal;
+}
