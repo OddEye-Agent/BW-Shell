@@ -1,4 +1,4 @@
-export const adminToolsTabs = ['BAS Roles', 'BAS Users', 'BAS Accounts', 'Wix Websites', 'Wix Roles', 'Wix Folders', 'Calculators'];
+export const adminToolsTabs = ['BAS Roles', 'BAS Users', 'BAS Accounts'];
 
 export const basRolesRows = [
   { roleName: 'Financial Advisor', roleKey: 'FIN_ADVISOR', usersAssigned: 22, updatedOn: '2026-02-08' },
@@ -19,34 +19,4 @@ export const basAccountsRows = [
   { accountId: 'BAS-ACCT-1180', accountName: 'Blue Harbor Dev Seed', owner: 'Automation Team', linkedUsers: 7, environment: 'DEV', health: 'Needs Cleanup', updatedOn: '2026-02-03' },
   { accountId: 'BAS-ACCT-9008', accountName: 'Evergreen UAT Replay', owner: 'Support Tools', linkedUsers: 2, environment: 'UAT', health: 'Archived', updatedOn: '2026-01-28' },
   { accountId: 'BAS-ACCT-7774', accountName: 'Summit Regression QA', owner: 'QA Automation', linkedUsers: 19, environment: 'QA', health: 'Needs Cleanup', updatedOn: '2026-02-05' }
-];
-
-export const wixWebsitesRows = [
-  { name: 'west-coast-primary', displayName: 'West Coast Primary', published: 'Yes', isPremium: 'Yes', blocked: 'No', editorType: 'Studio', ownerAccountId: 'A7H29K...' },
-  { name: 'east-hub-site', displayName: 'East Hub Website', published: 'No', isPremium: 'No', blocked: 'No', editorType: 'Editor', ownerAccountId: 'D2M67R...' },
-  { name: 'midwest-service-portal', displayName: 'Midwest Service Portal', published: 'Yes', isPremium: 'Yes', blocked: 'Yes', editorType: 'Studio', ownerAccountId: 'H4P39V...' }
-];
-
-export const wixRolesPredefined = [
-  { roleName: 'Owner', permissions: 'No Restrictions' },
-  { roleName: 'Account Admin', permissions: 'Account' },
-  { roleName: 'Website Manager', permissions: 'Site' }
-];
-
-export const wixRolesCustom = [
-  { roleName: 'Financial Advisor', permissions: 'Site' },
-  { roleName: 'Program Admin', permissions: 'Account' },
-  { roleName: 'Marketing Support', permissions: 'Site' }
-];
-
-export const wixFoldersRows = [
-  { folderName: 'BAS Marketing', path: '\\BAS Marketing', siteCount: 14 },
-  { folderName: 'Enterprise Demo Sites', path: '\\Enterprise Demo Sites', siteCount: 8 },
-  { folderName: 'CFP Websites', path: '\\CFP Websites', siteCount: 31 }
-];
-
-export const calculatorsRows = [
-  { status: 'Deployed', description: 'Annuity Calculator', publishDate: '2026-02-05', expiryDate: '2026-03-10' },
-  { status: 'Redeployed', description: 'Mortgage Calculator', publishDate: '2026-02-06', expiryDate: '2026-03-11' },
-  { status: 'Deployed', description: 'Tax Calculator', publishDate: '2026-02-08', expiryDate: '2026-03-14' }
 ];
