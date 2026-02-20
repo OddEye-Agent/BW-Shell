@@ -57,6 +57,7 @@
     const userDropdown = document.getElementById('userDropdown');
     const uiVersion = 'compliance-v2';
     const store = window.bwShellStore;
+    const sampleArchivePdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
 
     document.body.setAttribute('data-ui-version', uiVersion);
 
@@ -88,6 +89,44 @@
         });
       });
     }
+    function setPdfModalOpen(isOpen, pdfUrl = sampleArchivePdfUrl, title = 'Compliance Archive PDF') {
+      const modal = document.getElementById('archivePdfModal');
+      if (!modal) return;
+      const frame = document.getElementById('archivePdfFrame');
+      const titleEl = document.getElementById('archivePdfTitle');
+      const openLink = document.getElementById('archivePdfOpenTab');
+      if (isOpen) {
+        if (titleEl) titleEl.textContent = title;
+        if (frame) frame.src = pdfUrl;
+        if (openLink) openLink.href = pdfUrl;
+        modal.hidden = false;
+      } else {
+        modal.hidden = true;
+        if (frame) frame.src = '';
+      }
+    }
+
+    function attachPdfViewerEvents() {
+      document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const pdfUrl = btn.dataset.pdfUrl || sampleArchivePdfUrl;
+          setPdfModalOpen(true, pdfUrl, 'Compliance Archive PDF');
+        });
+      });
+
+      document.getElementById('archivePdfCloseBtn')?.addEventListener('click', () => setPdfModalOpen(false));
+      document.getElementById('archivePdfBackdrop')?.addEventListener('click', () => setPdfModalOpen(false));
+
+      if (!document.body.dataset.archivePdfEscBound) {
+        document.body.dataset.archivePdfEscBound = 'true';
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            setPdfModalOpen(false);
+          }
+        });
+      }
+    }
+
     function renderArchiveTableRows(filteredRows) {
       return filteredRows
         .map((row) => {
@@ -108,7 +147,7 @@
                 <td>${row.wix_account_id}</td>
                 <td>${row.site_id}</td>
                 <td>${row.revision}</td>
-                <td>${row.file_type || '—'}</td>
+                <td>${row.file_type === 'PDF' ? `<button type="button" class="pdf-view-btn" data-pdf-url="${sampleArchivePdfUrl}">View PDF</button>` : (row.file_type || '—')}</td>
                 <td>${revisionUrlCell}</td>
                 <td>${diffCell}</td>
               </tr>
@@ -218,10 +257,27 @@
               <tbody id="archiveTableBody"></tbody>
             </table>
           </div>
+
+          <div class="pdf-modal" id="archivePdfModal" hidden>
+            <div class="pdf-modal-backdrop" id="archivePdfBackdrop"></div>
+            <div class="pdf-modal-dialog" role="dialog" aria-modal="true" aria-label="PDF Viewer">
+              <div class="pdf-modal-header">
+                <h3 id="archivePdfTitle">Compliance Archive PDF</h3>
+                <div class="pdf-modal-actions">
+                  <a id="archivePdfOpenTab" class="page-btn" href="#" target="_blank" rel="noopener noreferrer">Open in New Tab</a>
+                  <button id="archivePdfCloseBtn" type="button" class="page-btn">Close</button>
+                </div>
+              </div>
+              <div class="pdf-modal-body">
+                <iframe id="archivePdfFrame" title="Compliance PDF Viewer" loading="lazy"></iframe>
+              </div>
+            </div>
+          </div>
         `;
 
       attachArchiveFilterEvents();
       applyArchiveFilters();
+      attachPdfViewerEvents();
     }
 
     function renderCompliancePanel(tabName) {
