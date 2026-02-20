@@ -1111,3 +1111,7 @@ tbody tr:hover {
 #adminToolsPanel[data-active-admin-tools-tab="BAS Accounts"] #adminToolsSearchInput {
   max-width: 420px;
 }
+
+.admin-tools-table.tab-bas-roles .role-description-col {
+  text-align: left !important;
+}
