@@ -121,7 +121,6 @@ const accountRows = [
           { key: 'roleName', label: 'Role Name' },
           { key: 'description', label: 'Description', width: '32%' },
           { key: 'usersAssigned', label: 'Users' },
-          { key: 'permissionCount', label: 'Perms' },
           { key: 'staffFlag', label: 'Staff' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
