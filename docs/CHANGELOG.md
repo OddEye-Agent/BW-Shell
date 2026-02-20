@@ -2,7 +2,6 @@
 
 ## Unreleased
 
-- Migrated Compliance section to React (tab shell + functional Archive filtering table with status chips).
 - Pivoted frontend to React + Tailwind (Vite) while preserving GitHub Pages compatibility via static `dist` deploy.
 - Rebuilt app shell/nav and Accounts page as first migration slice with existing visual palette.
 - Introduced centralized global state store at `src/state/store.js` and wired runtime access in `index.html`.
