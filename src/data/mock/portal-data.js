@@ -125,6 +125,7 @@ const accountRows = [
           { key: 'updatedOn', label: 'Updated On' }
         ],
         rows: [
+          { roleName: 'Super Admin', roleKey: 'SUPER_ADMIN', description: 'Full administrative control across accounts, users, roles, compliance workflows, and platform operations.', usersAssigned: 5, staffFlag: true, assignmentBand: '0-10', updatedOn: '2026-02-09' },
           { roleName: 'Financial Advisor', roleKey: 'FIN_ADVISOR', description: 'Advisory workspace access for portfolio planning and client actions.', usersAssigned: 22, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-08' },
           { roleName: 'Staff Admin', roleKey: 'STAFF_ADMIN', description: 'Internal staff administration access for lower-environment data maintenance.', usersAssigned: 8, staffFlag: true, assignmentBand: '0-10', updatedOn: '2026-02-07' },
           { roleName: 'Compliance Reviewer', roleKey: 'COMPLIANCE_REVIEW', description: 'Can review queued compliance artifacts and submit approval decisions.', usersAssigned: 15, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-05' },
