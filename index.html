@@ -472,6 +472,7 @@
         roleKey: String(role.name || role.title || '').toUpperCase().replace(/[^A-Z0-9]+/g, '_'),
         description: deriveRoleDescriptionFromPermissions(role.permissions || []),
         usersAssigned: usersByRole[role.title || role.name] ?? Math.max(1, Math.min(99, (role.permissions || []).length)),
+        permissionCount: (role.permissions || []).length,
         staffFlag: staffRoles.has(role.title || role.name),
         assignmentBand: ((usersByRole[role.title || role.name] ?? 0) <= 10) ? '0-10' : ((usersByRole[role.title || role.name] ?? 0) <= 25 ? '11-25' : '26+'),
         updatedOn: '2026-02-20',
