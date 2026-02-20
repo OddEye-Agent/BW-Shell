@@ -110,7 +110,7 @@ body {
   background: transparent;
   color: var(--muted);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 400;
   padding: 0.95rem 0.85rem;
   cursor: pointer;
   border-bottom: 3px solid transparent;
@@ -667,6 +667,11 @@ tbody tr:hover {
   border-radius: 4px;
   background: #fafbfc;
   padding: 1rem;
+}
+.roles-panel-title {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0 0 0.85rem;
 }
 .role-card-list { background: #fff; border: 1px solid #e2e7ef; }
 .role-card {
