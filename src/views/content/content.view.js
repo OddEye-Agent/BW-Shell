@@ -106,6 +106,39 @@
     }
   ];
 
+  const newsletters = {
+    left: {
+      category: 'January 2026',
+      items: [
+        'Automation Test for update NEWSLETTER',
+        'Automation Test for NEWSLETTER',
+        'Automation Test for update NEWSLETTER (batch 2)',
+        'Automation Test for NEWSLETTER (batch 2)',
+        'Automation Test for update NEWSLETTER (batch 3)',
+        'Automation Test for update NEWSLETTER (batch 4)',
+        'Automation Test for NEWSLETTER (batch 3)',
+        'Automation Test for update NEWSLETTER (batch 5)',
+        'Retirement Milestones by Decade',
+        'Managing Cash Flow in Early Retirement'
+      ]
+    },
+    right: {
+      category: 'December 2025',
+      items: [
+        'Investing with Market Cap in Mind',
+        'Are You Prepared for the High Cost of Dying?',
+        'Grocery Games: Strategies to Help Stretch Your Food Budget',
+        'A Diamond May Not Be Forever: Insuring Personal Property',
+        'Accounts for Two: A Team Approach to Retirement Savings',
+        'Beneficiary Designations: Who Gets the Money?',
+        'Slip-Sliding on the Road: Tips for Winter Driving',
+        'Home Appliance Economics',
+        'Convertible Bonds Straddle the Line Between Fixed Income and Potential Growth',
+        'Small Business Year-End Tax Checklist'
+      ]
+    }
+  };
+
   const accordionItems = ['Research Articles', 'Videos', 'Newsletters', 'Calculators'];
 
   function renderResearchColumn(col, side) {
@@ -139,6 +172,75 @@
     const totalBadge = panel.querySelector('#researchSelectionBadge');
     const allItemCheckboxes = [...panel.querySelectorAll('.research-item-checkbox')];
     const colSelectAllBoxes = [...panel.querySelectorAll('.research-col-select-all')];
+
+    const updateState = () => {
+      const selected = allItemCheckboxes.filter((cb) => cb.checked).length;
+      const total = allItemCheckboxes.length;
+      totalBadge.textContent = `${selected} out of ${total} selected`;
+      globalSelectAll.checked = total > 0 && selected === total;
+      globalSelectAll.indeterminate = selected > 0 && selected < total;
+
+      colSelectAllBoxes.forEach((colCb) => {
+        const side = colCb.dataset.side;
+        const colItems = allItemCheckboxes.filter((itemCb) => itemCb.dataset.side === side);
+        const colSelected = colItems.filter((x) => x.checked).length;
+        colCb.checked = colItems.length > 0 && colSelected === colItems.length;
+        colCb.indeterminate = colSelected > 0 && colSelected < colItems.length;
+      });
+    };
+
+    globalSelectAll?.addEventListener('change', () => {
+      allItemCheckboxes.forEach((cb) => {
+        cb.checked = globalSelectAll.checked;
+      });
+      updateState();
+    });
+
+    colSelectAllBoxes.forEach((colCb) => {
+      colCb.addEventListener('change', () => {
+        const side = colCb.dataset.side;
+        allItemCheckboxes.forEach((itemCb) => {
+          if (itemCb.dataset.side === side) itemCb.checked = colCb.checked;
+        });
+        updateState();
+      });
+    });
+
+    allItemCheckboxes.forEach((cb) => cb.addEventListener('change', updateState));
+    updateState();
+  }
+
+  function renderNewsletterColumn(col, side) {
+    const itemHtml = col.items
+      .map(
+        (title, idx) => `
+          <label class="research-tile">
+            <input type="checkbox" class="newsletter-item-checkbox" data-side="${side}" data-item-index="${idx}" />
+            <span class="research-title">${title}</span>
+          </label>
+        `
+      )
+      .join('');
+
+    return `
+      <div class="research-col" data-side="${side}">
+        <div class="research-col-header">
+          <strong>${col.category}</strong>
+          <label class="research-select-all"><input type="checkbox" class="newsletter-col-select-all" data-side="${side}" /> Select All</label>
+        </div>
+        <div class="research-list">${itemHtml}</div>
+      </div>
+    `;
+  }
+
+  function wireNewsletterInteractions() {
+    const panel = pageContainer.querySelector('#newsletterPanel');
+    if (!panel) return;
+
+    const globalSelectAll = panel.querySelector('#newsletterSelectAll');
+    const totalBadge = panel.querySelector('#newsletterSelectionBadge');
+    const allItemCheckboxes = [...panel.querySelectorAll('.newsletter-item-checkbox')];
+    const colSelectAllBoxes = [...panel.querySelectorAll('.newsletter-col-select-all')];
 
     const updateState = () => {
       const selected = allItemCheckboxes.filter((cb) => cb.checked).length;
@@ -255,6 +357,25 @@
     `;
   }
 
+  function renderNewslettersAccordionBody() {
+    return `
+      <div id="newsletterPanel" class="research-panel newsletter-panel">
+        <div class="research-banner-row">
+          <div class="research-banner-text">Choose whether to allow all content, or select specific categories or items.</div>
+          <div class="research-banner-actions">
+            <label class="research-select-all"><input id="newsletterSelectAll" type="checkbox" /> Select All</label>
+            <span id="newsletterSelectionBadge" class="research-selected-badge">0 out of ${newsletters.left.items.length + newsletters.right.items.length} selected</span>
+          </div>
+        </div>
+
+        <div class="research-columns">
+          ${renderNewsletterColumn(newsletters.left, 'left')}
+          ${renderNewsletterColumn(newsletters.right, 'right')}
+        </div>
+      </div>
+    `;
+  }
+
   window.renderContentView = function renderContentView() {
     pageContainer.innerHTML = `
       <div class="page-header content-page-header">
@@ -270,15 +391,17 @@
           .map((label, idx) => {
             const isResearch = idx === 0;
             const isVideo = idx === 1;
+            const isNewsletter = idx === 2;
             return `
               <details class="content-accordion-item" ${isResearch ? 'open' : ''}>
                 <summary>
                   <span class="content-accordion-caret" aria-hidden="true">▸</span>
                   <span>${label}</span>
                 </summary>
-                <div class="content-accordion-body ${isResearch || isVideo ? 'has-body' : ''}">
+                <div class="content-accordion-body ${isResearch || isVideo || isNewsletter ? 'has-body' : ''}">
                   ${isResearch ? renderResearchAccordionBody() : ''}
                   ${isVideo ? renderVideosAccordionBody() : ''}
+                  ${isNewsletter ? renderNewslettersAccordionBody() : ''}
                 </div>
               </details>
             `;
@@ -294,5 +417,6 @@
 
     wireResearchInteractions();
     wireVideoInteractions();
+    wireNewsletterInteractions();
   };
 })();
