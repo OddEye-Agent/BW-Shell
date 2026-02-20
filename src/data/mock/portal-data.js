@@ -32,6 +32,22 @@ const accountRows = [
         userCount: 44,
         ownerEmail: 'support@evergreenacademy.edu',
         createdOn: '2024-04-10'
+      },
+      {
+        accountName: 'Harborview Advisors',
+        parentAccount: 'Broadridge',
+        subAccounts: 1,
+        userCount: 12,
+        ownerEmail: 'ops@harborviewadvisors.com',
+        createdOn: '2026-02-19'
+      },
+      {
+        accountName: 'Pinecrest Financial',
+        parentAccount: 'Broadridge',
+        subAccounts: 0,
+        userCount: 6,
+        ownerEmail: 'admin@pinecrestfinancial.com',
+        createdOn: '2026-02-20'
       }
     ];
 

@@ -72,7 +72,7 @@ function renderAccountsView() {
             <option>10</option>
           </select>
         </div>
-        <span>1 to 6 of 6</span>
+        <span>1 to 8 of 8</span>
         <span>Page 1 of 1</span>
       </div>
     `;
