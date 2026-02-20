@@ -1671,3 +1671,34 @@ tbody tr:hover {
     width: 94vw;
   }
 }
+
+/* Calculators accordion */
+.calculator-panel .research-banner-row {
+  align-items: center;
+}
+
+.calculator-banner-text {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.calculator-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #9be4c8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.calculator-list {
+  max-height: 520px;
+}
+
+.calculator-tile {
+  min-height: 40px;
+  align-items: center;
+}

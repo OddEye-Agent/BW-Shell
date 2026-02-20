@@ -139,6 +139,48 @@
     }
   };
 
+
+
+  const calculators = {
+    left: {
+      category: 'API Testing',
+      items: [
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for update CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR',
+        'Automation Test for CALCULATOR'
+      ]
+    },
+    right: {
+      category: 'Others',
+      items: [
+        'Loan Payoff',
+        'Home Affordability - TEST_KAPIL',
+        'Loan-Interest-Calculator-Test',
+        'calculator -New-Test1-Swati',
+        'calculator -New-Test1-Swati',
+        'calculator -TestSwa',
+        'ushpa-test',
+        'calculator -New-Test-Swati',
+        'calculator -New-Test-Swati',
+        'calculator - TEST_SUSHMA',
+        'ushpa-test',
+        'calculator -TestSwa-Deleted'
+      ]
+    }
+  };
+
+  const calculatorSelectedSeed = new Set(['left-0', 'left-1', 'left-2', 'right-0', 'right-1', 'right-2']);
+  const calculatorTotalCount = 276;
+
   const accordionItems = ['Research Articles', 'Videos', 'Newsletters', 'Calculators'];
 
   function renderResearchColumn(col, side) {
@@ -376,6 +418,101 @@
     `;
   }
 
+
+
+  function renderCalculatorColumn(col, side) {
+    const itemHtml = col.items
+      .map(
+        (title, idx) => `
+          <label class="research-tile calculator-tile">
+            <input
+              type="checkbox"
+              class="calculator-item-checkbox"
+              data-side="${side}"
+              data-item-index="${idx}"
+              ${calculatorSelectedSeed.has(`${side}-${idx}`) ? 'checked' : ''}
+            />
+            <span class="research-title">${title}</span>
+          </label>
+        `
+      )
+      .join('');
+
+    return `
+      <div class="research-col" data-side="${side}">
+        <div class="research-col-header">
+          <strong>${col.category}</strong>
+          <label class="research-select-all"><input type="checkbox" class="calculator-col-select-all" data-side="${side}" /> Select All</label>
+        </div>
+        <div class="research-list calculator-list">${itemHtml}</div>
+      </div>
+    `;
+  }
+
+  function renderCalculatorsAccordionBody() {
+    return `
+      <div id="calculatorPanel" class="research-panel calculator-panel">
+        <div class="research-banner-row">
+          <div class="research-banner-text calculator-banner-text"><span class="calculator-icon" aria-hidden="true">🧮</span>Choose whether to allow all content, or select specific categories or items.</div>
+          <div class="research-banner-actions">
+            <label class="research-select-all"><input id="calculatorSelectAll" type="checkbox" /> Select All</label>
+            <span id="calculatorSelectionBadge" class="research-selected-badge">6 out of ${calculatorTotalCount} selected</span>
+          </div>
+        </div>
+
+        <div class="research-columns">
+          ${renderCalculatorColumn(calculators.left, 'left')}
+          ${renderCalculatorColumn(calculators.right, 'right')}
+        </div>
+      </div>
+    `;
+  }
+
+  function wireCalculatorInteractions() {
+    const panel = pageContainer.querySelector('#calculatorPanel');
+    if (!panel) return;
+
+    const globalSelectAll = panel.querySelector('#calculatorSelectAll');
+    const totalBadge = panel.querySelector('#calculatorSelectionBadge');
+    const allItemCheckboxes = [...panel.querySelectorAll('.calculator-item-checkbox')];
+    const colSelectAllBoxes = [...panel.querySelectorAll('.calculator-col-select-all')];
+
+    const updateState = () => {
+      const selected = allItemCheckboxes.filter((cb) => cb.checked).length;
+      totalBadge.textContent = `${selected} out of ${calculatorTotalCount} selected`;
+      globalSelectAll.checked = allItemCheckboxes.length > 0 && selected === allItemCheckboxes.length;
+      globalSelectAll.indeterminate = selected > 0 && selected < allItemCheckboxes.length;
+
+      colSelectAllBoxes.forEach((colCb) => {
+        const side = colCb.dataset.side;
+        const colItems = allItemCheckboxes.filter((itemCb) => itemCb.dataset.side === side);
+        const colSelected = colItems.filter((x) => x.checked).length;
+        colCb.checked = colItems.length > 0 && colSelected === colItems.length;
+        colCb.indeterminate = colSelected > 0 && colSelected < colItems.length;
+      });
+    };
+
+    globalSelectAll?.addEventListener('change', () => {
+      allItemCheckboxes.forEach((cb) => {
+        cb.checked = globalSelectAll.checked;
+      });
+      updateState();
+    });
+
+    colSelectAllBoxes.forEach((colCb) => {
+      colCb.addEventListener('change', () => {
+        const side = colCb.dataset.side;
+        allItemCheckboxes.forEach((itemCb) => {
+          if (itemCb.dataset.side === side) itemCb.checked = colCb.checked;
+        });
+        updateState();
+      });
+    });
+
+    allItemCheckboxes.forEach((cb) => cb.addEventListener('change', updateState));
+    updateState();
+  }
+
   window.renderContentView = function renderContentView() {
     pageContainer.innerHTML = `
       <div class="page-header content-page-header">
@@ -392,16 +529,18 @@
             const isResearch = idx === 0;
             const isVideo = idx === 1;
             const isNewsletter = idx === 2;
+            const isCalculator = idx === 3;
             return `
               <details class="content-accordion-item" ${isResearch ? 'open' : ''}>
                 <summary>
                   <span class="content-accordion-caret" aria-hidden="true">▸</span>
                   <span>${label}</span>
                 </summary>
-                <div class="content-accordion-body ${isResearch || isVideo || isNewsletter ? 'has-body' : ''}">
+                <div class="content-accordion-body ${isResearch || isVideo || isNewsletter || isCalculator ? 'has-body' : ''}">
                   ${isResearch ? renderResearchAccordionBody() : ''}
                   ${isVideo ? renderVideosAccordionBody() : ''}
                   ${isNewsletter ? renderNewslettersAccordionBody() : ''}
+                  ${isCalculator ? renderCalculatorsAccordionBody() : ''}
                 </div>
               </details>
             `;
@@ -418,5 +557,6 @@
     wireResearchInteractions();
     wireVideoInteractions();
     wireNewsletterInteractions();
+    wireCalculatorInteractions();
   };
 })();
