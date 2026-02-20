@@ -663,7 +663,7 @@
       panel.innerHTML = `
           <h3>${selectedTab.name}</h3>
           <p>${selectedTab.description}</p>
-          <div class="admin-tools-toolbar" aria-label="${selectedTab.name} search and filters">
+          <div class="admin-tools-toolbar" aria-label="${selectedTab.name} search and filters" ${selectedTab.name === 'BAS Roles' ? 'style="display:none"' : ''}>
             <div class="field-group">
               <label for="adminToolsSearchInput">Search</label>
               <input id="adminToolsSearchInput" class="text-input" type="search" placeholder="${selectedTab.searchPlaceholder}" />
