@@ -5,7 +5,6 @@
     editingRole: null,
     selectedPermissions: new Set(),
     baselinePermissions: new Set(),
-    step: 1,
     activePermissionCategory: 'Account',
     permissionSearch: ''
   };
@@ -100,7 +99,6 @@
 
     container.querySelector('#newRoleBtn')?.addEventListener('click', () => {
       state.mode = 'create';
-      state.step = 1;
       state.editingRole = null;
       state.selectedPermissions = new Set();
       state.baselinePermissions = new Set();
@@ -114,8 +112,7 @@
         const idx = Number(btn.getAttribute('data-edit-role'));
         const role = data.rolePresets[idx];
         state.mode = 'create';
-        state.step = 1;
-        state.editingRole = role;
+          state.editingRole = role;
         state.selectedPermissions = new Set(role.permissions);
         state.baselinePermissions = new Set(role.permissions);
         state.activePermissionCategory = getData().categories[0]?.name || 'Account';
@@ -123,10 +120,6 @@
         renderUsersView();
       });
     });
-  }
-
-  function getStepClasses(step) {
-    return `role-step ${state.step === step ? 'active' : ''} ${state.step > step ? 'done' : ''}`;
   }
 
   function renderPermissionCategoryNav(categories) {
@@ -223,18 +216,7 @@
       });
     });
 
-    container.querySelector('#goToPermissionsBtn')?.addEventListener('click', () => {
-      const roleTitle = container.querySelector('#roleTitle')?.value.trim();
-      if (!roleTitle) {
-        alert('Role Title is required before moving to permissions.');
-        return;
-      }
-      state.step = 2;
-      renderUsersView();
-    });
-
     container.querySelector('#backToDetailsBtn')?.addEventListener('click', () => {
-      state.step = 1;
       renderUsersView();
     });
 
@@ -301,7 +283,6 @@
 
       state.mode = 'list';
       state.editingRole = null;
-      state.step = 1;
       renderUsersView();
     });
   }
@@ -314,12 +295,6 @@
     container.innerHTML = `
       <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <a href="#" id="backToRoles">Roles</a> <span>›</span> <span>${role ? 'Edit Role' : 'Create Role'}</span></div>
       <div class="users-header-row users-header-spaced"><h1 class="page-title">${role ? 'Edit Role' : 'New Role'}</h1></div>
-
-      <div class="role-stepper">
-        <button type="button" class="${getStepClasses(1)}" id="stepDetailsBtn">1. Role Details</button>
-        <button type="button" class="${getStepClasses(2)}" id="stepPermissionsBtn">2. Permissions</button>
-      </div>
-
       <section class="create-role-layout">
         <div class="role-form-col ${state.step === 1 ? '' : 'is-hidden'}">
           <h2>Role Details</h2>
@@ -334,7 +309,6 @@
           <textarea id="roleDescription" class="text-area" placeholder="What is the role used for?">${esc(role?.description || '')}</textarea>
           <div class="role-form-actions">
             <button type="button" class="page-btn" id="cancelRoleBtnDetails">Cancel</button>
-            <button type="button" class="page-btn primary" id="goToPermissionsBtn">Continue to Permissions</button>
           </div>
         </div>
 
@@ -371,7 +345,6 @@
           </div>
 
           <div class="role-form-actions">
-            <button type="button" class="page-btn" id="backToDetailsBtn">Back to Details</button>
             <button type="button" class="page-btn" id="cancelRoleBtnPermissions">Cancel</button>
             <button type="button" class="page-btn primary" id="saveRoleBtn">Save Role</button>
           </div>
@@ -386,12 +359,6 @@
     });
 
     container.querySelector('#stepDetailsBtn')?.addEventListener('click', () => {
-      state.step = 1;
-      renderUsersView();
-    });
-
-    container.querySelector('#stepPermissionsBtn')?.addEventListener('click', () => {
-      state.step = 2;
       renderUsersView();
     });
 

@@ -813,36 +813,6 @@ tbody tr:hover {
   margin-bottom: 0.85rem;
 }
 
-.role-stepper {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.9rem;
-}
-
-.role-step {
-  border: 1px solid #cfd8e6;
-  background: #fff;
-  color: #5c6f87;
-  border-radius: 4px;
-  padding: 0.45rem 0.65rem;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.role-step.active {
-  border-color: #1f57d6;
-  color: #1f57d6;
-  font-weight: 600;
-}
-
-.role-step.done {
-  background: #f2f6ff;
-}
-
-.is-hidden {
-  display: none;
-}
-
 .role-perms-header-row {
   display: flex;
   justify-content: space-between;
