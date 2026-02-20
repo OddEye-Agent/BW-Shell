@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pivoted frontend to React + Tailwind (Vite) while preserving GitHub Pages compatibility via static `dist` deploy.
+- Rebuilt app shell/nav and Accounts page as first migration slice with existing visual palette.
 - Introduced centralized global state store at `src/state/store.js` and wired runtime access in `index.html`.
 - Migrated top-level active page and user-menu open state updates to store-backed flow.
 - Extracted `renderAccountsView` and `renderPlaceholderView` from `index.html` into dedicated view modules.

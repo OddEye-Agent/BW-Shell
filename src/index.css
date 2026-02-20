@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply m-0 bg-panel text-text font-sans;
+}
+
+.nav-item {
+  @apply border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-muted;
+}
+
+.nav-item.active {
+  @apply border-accent text-accent;
+}
+
+.table-wrap {
+  @apply overflow-x-auto rounded-xl border border-line;
+}
