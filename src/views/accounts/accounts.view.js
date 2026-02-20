@@ -72,8 +72,8 @@ function renderAccountsView() {
             <option>10</option>
           </select>
         </div>
-        <span>1 to 10 of 2,323</span>
-        <span>Page 1 of 233</span>
+        <span>1 to 6 of 6</span>
+        <span>Page 1 of 1</span>
       </div>
     `;
 
