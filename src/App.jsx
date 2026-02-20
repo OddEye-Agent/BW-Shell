@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import TopBar from './components/TopBar';
 import AccountsPage from './components/AccountsPage';
+import CompliancePage from './components/CompliancePage';
+import SectionPlaceholder from './components/SectionPlaceholder';
 
 const navItems = ['Accounts', 'Users', 'Compliance', 'Content', 'Websites', 'Locator', 'Video', 'Admin Tools'];
 
@@ -19,7 +21,7 @@ export default function App() {
         ))}
       </nav>
 
-      <main>{active === 'Accounts' ? <AccountsPage /> : <section className="bg-white p-6"><h1 className="text-2xl font-semibold">{active}</h1><p className="mt-1 text-sm text-muted">Section migration in progress.</p></section>}</main>
+      <main>{active === 'Accounts' ? <AccountsPage /> : active === 'Compliance' ? <CompliancePage /> : <SectionPlaceholder title={active} />}</main>
     </div>
   );
 }
