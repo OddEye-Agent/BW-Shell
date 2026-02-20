@@ -1134,3 +1134,107 @@ tbody tr:hover {
 .admin-tools-table.tab-bas-accounts tbody td {
   background: #ffffff;
 }
+
+/* Accounts page parity tuning */
+.account-page-header {
+  margin-bottom: 0.7rem;
+}
+
+.accounts-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.accounts-filter-group label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #44566f;
+}
+
+.accounts-filter-row {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.select-like-wrap {
+  min-width: 240px;
+}
+
+.select-like {
+  appearance: auto;
+}
+
+.search-like-wrap {
+  position: relative;
+  min-width: 280px;
+}
+
+.search-like-wrap .text-input {
+  padding-right: 2rem;
+}
+
+.search-icon {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7890;
+  font-size: 14px;
+}
+
+.new-account-btn {
+  border: none;
+  background: #1f57d6;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+}
+
+.accounts-table-wrap {
+  border-color: #d6dde8;
+}
+
+.accounts-table {
+  min-width: 0;
+}
+
+.accounts-table thead th {
+  background: #eef2f7;
+}
+
+.numeric-cell {
+  text-align: left;
+  width: 80px;
+}
+
+.account-actions-cell {
+  width: 56px;
+  text-align: center;
+}
+
+.accounts-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.65rem 0.1rem 0;
+  color: #4f5e76;
+}
+
+.page-size-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.page-size-select {
+  width: 72px;
+  padding: 0.25rem 0.45rem;
+}
