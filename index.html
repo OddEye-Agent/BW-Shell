@@ -368,7 +368,7 @@
 
     function renderAdminToolsTableRows(tabConfig, rows) {
       const showCrud = tabConfig.enableCrud !== false;
-      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users';
+      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users' || tabConfig.name === 'BAS Accounts';
       const showCreateReadActions = showCrud && !hideCreateReadActions;
       return rows
         .map((row, rowIndex) => {
@@ -425,7 +425,7 @@
       const selectedTabName = panel.dataset.activeAdminToolsTab;
       const tabConfig = adminToolsTabs.find((tab) => tab.name === selectedTabName) || adminToolsTabs[0];
       const showCrud = tabConfig.enableCrud !== false;
-      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users';
+      const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users' || tabConfig.name === 'BAS Accounts';
       const showCreateReadActions = showCrud && !hideCreateReadActions;
       const actionColumnCount = !showCrud ? 0 : tabConfig.name === 'BAS Users' ? 3 : showCreateReadActions ? 4 : 2;
       const searchInput = document.getElementById('adminToolsSearchInput');
@@ -652,7 +652,7 @@
         .map((column) => `<th scope="col">${column.label}</th>`)
         .join('');
       const showCrud = selectedTab.enableCrud !== false;
-      const hideCreateReadActions = selectedTab.name === 'BAS Roles' || selectedTab.name === 'BAS Users';
+      const hideCreateReadActions = selectedTab.name === 'BAS Roles' || selectedTab.name === 'BAS Users' || selectedTab.name === 'BAS Accounts';
       const showCreateReadActions = showCrud && !hideCreateReadActions;
 
       panel.dataset.activeAdminToolsTab = selectedTab.name;
