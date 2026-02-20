@@ -43,6 +43,69 @@
     }
   };
 
+  const videoItems = [
+    {
+      title: 'Should You Sell When the Market Drops?',
+      desc: 'The stock market sometimes takes investors on a wild ride — should you sell your stocks...?'
+    },
+    {
+      title: '3 Potential Benefits of Dollar Cost Averaging',
+      desc: 'Why phased investing can reduce timing pressure for long-term investors.'
+    },
+    {
+      title: 'Automation Test for update VIDEO',
+      desc: 'Update Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for VIDEO',
+      desc: 'Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for update VIDEO (batch 2)',
+      desc: 'Update Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for VIDEO (batch 2)',
+      desc: 'Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for update VIDEO (batch 3)',
+      desc: 'Update Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for VIDEO (batch 3)',
+      desc: 'Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for update VIDEO (batch 4)',
+      desc: 'Update Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for VIDEO (batch 4)',
+      desc: 'Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Automation Test for update VIDEO (batch 5)',
+      desc: 'Update Automated test validation for content type VIDEO created on 2026-02-...'
+    },
+    {
+      title: 'Handling Market Volatility',
+      desc: 'Practical investor behavior tactics during periods of sharp market swings.'
+    },
+    {
+      title: 'Retirement Planning: 5 Common Gaps',
+      desc: 'A quick review of common planning blind spots and how to address them.'
+    },
+    {
+      title: 'Understanding Bond Duration in Plain English',
+      desc: 'A simple breakdown of duration risk and rate sensitivity.'
+    },
+    {
+      title: 'Insurance Planning for Growing Families',
+      desc: 'How to approach coverage priorities as your household evolves.'
+    }
+  ];
+
   const accordionItems = ['Research Articles', 'Videos', 'Newsletters', 'Calculators'];
 
   function renderResearchColumn(col, side) {
@@ -114,6 +177,33 @@
     updateState();
   }
 
+  function wireVideoInteractions() {
+    const panel = pageContainer.querySelector('#videoPanel');
+    if (!panel) return;
+
+    const globalSelectAll = panel.querySelector('#videoSelectAll');
+    const totalBadge = panel.querySelector('#videoSelectionBadge');
+    const allItemCheckboxes = [...panel.querySelectorAll('.video-item-checkbox')];
+
+    const updateState = () => {
+      const selected = allItemCheckboxes.filter((cb) => cb.checked).length;
+      const total = allItemCheckboxes.length;
+      totalBadge.textContent = `${selected} out of ${total} selected`;
+      globalSelectAll.checked = total > 0 && selected === total;
+      globalSelectAll.indeterminate = selected > 0 && selected < total;
+    };
+
+    globalSelectAll?.addEventListener('change', () => {
+      allItemCheckboxes.forEach((cb) => {
+        cb.checked = globalSelectAll.checked;
+      });
+      updateState();
+    });
+
+    allItemCheckboxes.forEach((cb) => cb.addEventListener('change', updateState));
+    updateState();
+  }
+
   function renderResearchAccordionBody() {
     return `
       <div id="researchPanel" class="research-panel">
@@ -133,6 +223,38 @@
     `;
   }
 
+  function renderVideosAccordionBody() {
+    return `
+      <div id="videoPanel" class="research-panel video-panel">
+        <div class="research-banner-row">
+          <div class="research-banner-text">Choose whether to allow all content, or select specific categories or items.</div>
+          <div class="research-banner-actions">
+            <label class="research-select-all"><input id="videoSelectAll" type="checkbox" /> Select All</label>
+            <span id="videoSelectionBadge" class="research-selected-badge">0 out of ${videoItems.length} selected</span>
+          </div>
+        </div>
+
+        <div class="video-section-label">Latest videos</div>
+
+        <div class="video-grid">
+          ${videoItems
+            .map(
+              (item, idx) => `
+                <label class="video-tile">
+                  <input type="checkbox" class="video-item-checkbox" data-video-index="${idx}" />
+                  <div class="video-copy">
+                    <div class="video-title">${item.title}</div>
+                    <div class="video-desc">${item.desc}</div>
+                  </div>
+                </label>
+              `
+            )
+            .join('')}
+        </div>
+      </div>
+    `;
+  }
+
   window.renderContentView = function renderContentView() {
     pageContainer.innerHTML = `
       <div class="page-header content-page-header">
@@ -147,14 +269,16 @@
         ${accordionItems
           .map((label, idx) => {
             const isResearch = idx === 0;
+            const isVideo = idx === 1;
             return `
               <details class="content-accordion-item" ${isResearch ? 'open' : ''}>
                 <summary>
                   <span class="content-accordion-caret" aria-hidden="true">▸</span>
                   <span>${label}</span>
                 </summary>
-                <div class="content-accordion-body ${isResearch ? 'has-body' : ''}">
+                <div class="content-accordion-body ${isResearch || isVideo ? 'has-body' : ''}">
                   ${isResearch ? renderResearchAccordionBody() : ''}
+                  ${isVideo ? renderVideosAccordionBody() : ''}
                 </div>
               </details>
             `;
@@ -169,5 +293,6 @@
     `;
 
     wireResearchInteractions();
+    wireVideoInteractions();
   };
 })();
