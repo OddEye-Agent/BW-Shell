@@ -4,7 +4,6 @@
     mode: 'list', // list | create
     editingRole: null,
     selectedPermissions: new Set(),
-    openCategories: new Set(['Account'])
   };
 
   const getData = () => window.rolePermissionData || { roles: [], categories: [], rolePresets: [] };
@@ -99,7 +98,6 @@
       state.mode = 'create';
       state.editingRole = null;
       state.selectedPermissions = new Set();
-      state.openCategories = new Set(['Account']);
       renderUsersView();
     });
 
@@ -110,7 +108,6 @@
         state.mode = 'create';
         state.editingRole = role;
         state.selectedPermissions = new Set(role.permissions);
-        state.openCategories = new Set([data.categories[0]?.name || 'Account']);
         renderUsersView();
       });
     });
@@ -119,8 +116,7 @@
   function renderPermissionsAccordion() {
     const data = getData();
     return data.categories
-      .map((category, idx) => {
-        const isOpen = state.openCategories.has(category.name);
+      .map((category) => {
         const perms = category.permissions
           .map((perm) => {
             const checked = state.selectedPermissions.has(perm.name) ? 'checked' : '';
@@ -138,14 +134,13 @@
 
         return `
           <section class="perm-category" data-category="${esc(category.name)}">
-            <button type="button" class="perm-category-header" data-toggle-category="${esc(category.name)}">
+            <div class="perm-category-header static">
               <span>${esc(category.name)}</span>
-              <span>${isOpen ? '⌄' : '›'}</span>
-            </button>
-            <div class="perm-category-body ${isOpen ? 'open' : ''}">
+            </div>
+            <div class="perm-category-body open">
               <label class="perm-row select-all">
                 <input type="checkbox" class="perm-select-all" data-select-all="${esc(category.name)}" />
-                <span>Select All</span>
+                <span class="perm-copy"><span class="perm-name">Select All</span></span>
               </label>
               ${perms}
             </div>
@@ -159,15 +154,6 @@
     container.querySelector('#cancelRoleBtn')?.addEventListener('click', () => {
       state.mode = 'list';
       renderUsersView();
-    });
-
-    container.querySelectorAll('[data-toggle-category]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const c = btn.getAttribute('data-toggle-category');
-        if (state.openCategories.has(c)) state.openCategories.delete(c);
-        else state.openCategories.add(c);
-        renderUsersView();
-      });
     });
 
     container.querySelectorAll('.perm-checkbox').forEach((input) => {
@@ -248,6 +234,7 @@
         </div>
         <div class="role-perms-col">
           <h2>Permissions<span class="required">*</span></h2>
+          <p class="perm-selection-summary"><strong>${state.selectedPermissions.size}</strong> permissions selected</p>
           <div class="perm-accordion">${renderPermissionsAccordion()}</div>
         </div>
       </section>

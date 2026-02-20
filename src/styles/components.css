@@ -737,6 +737,15 @@ tbody tr:hover {
   cursor: pointer;
 }
 .perm-category-body { display: none; padding: 0.5rem 0.75rem 0.8rem; }
+
+.perm-category-header.static {
+  cursor: default;
+}
+
+.perm-selection-summary {
+  margin: 0 0 0.65rem;
+  color: #4e5f77;
+}
 .perm-category-body.open { display: block; }
 .perm-row {
   display: flex;
