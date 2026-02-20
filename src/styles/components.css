@@ -66,7 +66,7 @@ body {
   background: var(--white);
   color: var(--text);
   min-width: 200px;
-  border-radius: 12px;
+  border-radius: 4px;
   box-shadow: 0 12px 40px rgba(10, 23, 50, 0.18);
   border: 1px solid var(--line);
   overflow: hidden;
@@ -173,14 +173,14 @@ main {
 .text-input {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 0.68rem 0.75rem;
   font-size: 0.95rem;
 }
 
 .table-wrap {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
   overflow-x: auto;
 }
 
@@ -227,7 +227,7 @@ tbody tr:hover {
 .row-action-button {
   border: 1px solid #d5deec;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   width: 34px;
   height: 32px;
   cursor: pointer;
@@ -243,7 +243,7 @@ tbody tr:hover {
   min-width: 220px;
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 12px 30px rgba(10, 23, 50, 0.15);
   overflow: hidden;
   z-index: 12;
@@ -286,7 +286,7 @@ tbody tr:hover {
 .page-btn {
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.45rem 0.65rem;
   cursor: pointer;
 }
@@ -330,7 +330,7 @@ tbody tr:hover {
 
 .compliance-panel {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
   background: #f8fbff;
   padding: 1rem;
 }
@@ -413,7 +413,7 @@ tbody tr:hover {
 .json-payload-btn {
   border: 1px solid #d5deec;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.35rem 0.6rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -458,7 +458,7 @@ tbody tr:hover {
 
 .admin-tools-panel {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
   background: #f8fbff;
   padding: 1rem;
 }
@@ -504,7 +504,7 @@ tbody tr:hover {
 .crud-action-btn {
   border: 1px solid #d5deec;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.3rem 0.55rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -550,7 +550,7 @@ tbody tr:hover {
 
 .calculators-table-wrap {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
   overflow-x: auto;
   background: #fff;
 }
@@ -588,7 +588,7 @@ tbody tr:hover {
 
 .placeholder-card {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 0.9rem;
   background: #f8faff;
 }
@@ -657,14 +657,14 @@ tbody tr:hover {
   border: none;
   background: #1f57d6;
   color: #fff;
-  border-radius: 6px;
+  border-radius: 4px;
   font-weight: 600;
   padding: 0.6rem 0.95rem;
   cursor: pointer;
 }
 .roles-panel {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
   background: #fafbfc;
   padding: 1rem;
 }
@@ -692,7 +692,7 @@ tbody tr:hover {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
   background: #fafbfc;
   padding: 1rem;
 }
