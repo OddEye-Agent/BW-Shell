@@ -1188,13 +1188,20 @@ tbody tr:hover {
 }
 
 .new-account-btn {
-  border: none;
+  border: 1px solid #1f57d6;
   background: #1f57d6;
   color: #fff;
   border-radius: 4px;
   font-weight: 600;
   padding: 0.55rem 0.95rem;
   cursor: pointer;
+  min-width: 116px;
+}
+
+.new-account-btn:hover,
+.new-account-btn:focus-visible {
+  background: #1848b8;
+  border-color: #1848b8;
 }
 
 .accounts-table-wrap {
@@ -1237,6 +1244,28 @@ tbody tr:hover {
 .page-size-select {
   width: 72px;
   padding: 0.25rem 0.45rem;
+}
+
+/* Create Account page */
+.create-account-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7f9fc;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.create-account-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 400px));
+  gap: 1rem 1.2rem;
+  align-items: end;
+}
+
+@media (max-width: 980px) {
+  .create-account-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Create User page */

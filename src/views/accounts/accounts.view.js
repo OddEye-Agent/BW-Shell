@@ -1,9 +1,13 @@
 // Accounts view renderer
+(function () {
+  const state = {
+    mode: 'list' // list | create-account
+  };
 
-function renderAccountsView() {
-  const tableRows = accountRows
-    .map(
-      (row) => `
+  function renderAccountsList() {
+    const tableRows = accountRows
+      .map(
+        (row) => `
           <tr>
             <td><a class="account-link" href="#">${row.accountName}</a></td>
             <td>${row.parentAccount || 'Broadridge'}</td>
@@ -22,10 +26,10 @@ function renderAccountsView() {
             </td>
           </tr>
         `
-    )
-    .join('');
+      )
+      .join('');
 
-  pageContainer.innerHTML = `
+    pageContainer.innerHTML = `
       <div class="page-header account-page-header">
         <h1 class="page-title">Account Management</h1>
       </div>
@@ -45,7 +49,7 @@ function renderAccountsView() {
             </div>
           </div>
         </div>
-        <button class="new-account-btn" type="button">New Account</button>
+        <button class="new-account-btn" id="newAccountBtn" type="button">New Account</button>
       </div>
 
       <div class="table-wrap accounts-table-wrap">
@@ -77,5 +81,71 @@ function renderAccountsView() {
       </div>
     `;
 
-  attachRowMenuEvents();
-}
+    attachRowMenuEvents();
+    pageContainer.querySelector('#newAccountBtn')?.addEventListener('click', () => {
+      state.mode = 'create-account';
+      renderAccountsView();
+    });
+  }
+
+  function renderCreateAccount() {
+    pageContainer.innerHTML = `
+      <div class="users-breadcrumb"><a href="#" id="backToAccounts">Accounts</a> <span>›</span> <span>Create Account</span></div>
+      <div class="users-header-row users-header-spaced"><h1 class="page-title">Create Account</h1></div>
+
+      <section class="create-account-panel">
+        <div class="create-account-grid">
+          <div class="field-group">
+            <label for="newAccountName">Account Name<span class="required">*</span></label>
+            <input id="newAccountName" class="text-input" type="text" placeholder="Enter account name" />
+          </div>
+
+          <div class="field-group">
+            <label for="newAccountType">Account Type<span class="required">*</span></label>
+            <select id="newAccountType" class="text-input">
+              <option>Select account type</option>
+              <option>Home Office</option>
+              <option>Financial Advisor</option>
+              <option>Enterprise</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="newParentAccount">Parent account</label>
+            <select id="newParentAccount" class="text-input">
+              <option>Select parent account</option>
+              <option>Broadridge</option>
+              <option>mksDOnotuseswitchchanges</option>
+              <option>manasabinddonotuse</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div class="role-form-actions">
+        <button type="button" class="page-btn" id="cancelCreateAccountBtn">Cancel</button>
+        <button type="button" class="page-btn primary">Save</button>
+      </div>
+    `;
+
+    const back = () => {
+      state.mode = 'list';
+      renderAccountsView();
+    };
+
+    pageContainer.querySelector('#backToAccounts')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      back();
+    });
+
+    pageContainer.querySelector('#cancelCreateAccountBtn')?.addEventListener('click', back);
+  }
+
+  window.renderAccountsView = function renderAccountsView() {
+    if (state.mode === 'create-account') {
+      renderCreateAccount();
+      return;
+    }
+    renderAccountsList();
+  };
+})();
