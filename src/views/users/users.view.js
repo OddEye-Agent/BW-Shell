@@ -127,7 +127,10 @@
             return `
               <label class="perm-row">
                 <input type="checkbox" class="perm-checkbox" data-perm="${esc(perm.name)}" ${checked} />
-                <span>${esc(perm.name)}</span>
+                <span class="perm-copy">
+                  <span class="perm-name">${esc(perm.name)}</span>
+                  <span class="perm-desc">${esc(perm.description || '')}</span>
+                </span>
               </label>
             `;
           })
