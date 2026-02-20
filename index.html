@@ -411,7 +411,7 @@
                 ${showCreateReadActions ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>' : ''}
                 ${tabConfig.name !== 'BAS Users' && tabConfig.name !== 'BAS Accounts' && tabConfig.name !== 'BAS Roles' ? `<td class="crud-cell"><button class="crud-action-btn update-btn${isEditing ? ' editing' : ''}" type="button">Update</button></td>` : ''}
                 
-                <td class="crud-cell"><button class="crud-action-btn" type="button">Delete</button></td>
+                <td class="crud-cell">${tabConfig.name === 'BAS Roles' && String(row.roleName).toLowerCase() === 'super admin' ? '<span class="crud-disabled">System</span>' : '<button class="crud-action-btn" type="button">Delete</button>'}</td>
                 `
                   : ''}
               </tr>

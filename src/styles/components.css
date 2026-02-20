@@ -1095,3 +1095,11 @@ tbody tr:hover {
   font-size: 11px;
   padding: 0.08rem 0.35rem;
 }
+
+.crud-disabled {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6f7e93;
+  padding: 0.2rem 0.35rem;
+}
