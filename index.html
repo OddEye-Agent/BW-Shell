@@ -420,6 +420,65 @@
         .join('');
     }
 
+    function deriveRoleDescriptionFromPermissions(permissions) {
+      const perms = permissions || [];
+      const has = (token) => perms.some((p) => String(p).toLowerCase().includes(token));
+
+      const canManageUsers = has('create a new user') || has('update user details') || has('disable a user');
+      const canManageAccounts = has('create a new account') || has('update an account') || has('delete an account');
+      const canManageCompliance = has('compliance') || has('workflow');
+      const canManageBilling = has('billing') || has('subscription');
+      const canManageRoles = has('create roles') || has('edit roles') || has('delete roles');
+
+      if (canManageAccounts && canManageUsers && canManageCompliance && canManageRoles) {
+        return 'Full-spectrum operational role with account administration, user controls, compliance workflow management, and role governance.';
+      }
+      if (canManageAccounts && canManageUsers && canManageRoles) {
+        return 'Operations-focused role for managing accounts, user lifecycle actions, and role assignments across the platform.';
+      }
+      if (canManageCompliance) {
+        return 'Compliance-focused role for monitoring review queues, workflows, and policy-driven approval operations.';
+      }
+      if (canManageUsers) {
+        return 'User management role for onboarding, maintaining, and supporting users with controlled access operations.';
+      }
+      if (canManageBilling) {
+        return 'Commercial operations role for handling billing visibility and subscription-related account updates.';
+      }
+      return 'Business support role with scoped permissions for daily platform operations.';
+    }
+
+    function getBasRolesRowsFromRoleDataset(fallbackRows) {
+      const roleData = window.rolePermissionData;
+      if (!roleData || !Array.isArray(roleData.rolePresets)) {
+        return fallbackRows;
+      }
+
+      const usersByRole = {
+        'Super Admin': 5,
+        'Development': 8,
+        'Service': 15,
+        'Sales': 12,
+        'Financial Advisor': 22,
+        'Program Admin': 12,
+        'Complaince Admin': 6,
+        'Compliance Reviewer': 15
+      };
+
+      const staffRoles = new Set(['Super Admin', 'Development', 'Service', 'Sales']);
+
+      return roleData.rolePresets.map((role) => ({
+        roleName: role.title || role.name,
+        roleKey: String(role.name || role.title || '').toUpperCase().replace(/[^A-Z0-9]+/g, '_'),
+        description: deriveRoleDescriptionFromPermissions(role.permissions || []),
+        usersAssigned: usersByRole[role.title || role.name] ?? Math.max(1, Math.min(99, (role.permissions || []).length)),
+        staffFlag: staffRoles.has(role.title || role.name),
+        assignmentBand: ((usersByRole[role.title || role.name] ?? 0) <= 10) ? '0-10' : ((usersByRole[role.title || role.name] ?? 0) <= 25 ? '11-25' : '26+'),
+        updatedOn: '2026-02-20',
+        permissions: role.permissions || []
+      }));
+    }
+
     function applyAdminToolsFilters() {
       const panel = document.getElementById('adminToolsPanel');
       if (!panel) {
@@ -447,10 +506,14 @@
         return accumulator;
       }, {});
 
-      const filteredRows = tabConfig.rows.filter((row) => {
+      const sourceRows = tabConfig.name === 'BAS Roles'
+        ? getBasRolesRowsFromRoleDataset(tabConfig.rows)
+        : tabConfig.rows;
+
+      const filteredRows = sourceRows.filter((row) => {
         const matchesQuery =
           !query ||
-          tabConfig.searchFields.some((fieldName) => String(row[fieldName]).toLowerCase().includes(query));
+          tabConfig.searchFields.some((fieldName) => String(row[fieldName] ?? '').toLowerCase().includes(query));
 
         const matchesAllFilters = tabConfig.filters.every((filter) => {
           const selectedValue = filterSelections[filter.id];
@@ -468,7 +531,7 @@
         attachAdminToolsCrudEvents(tabConfig);
       }
 
-      resultsSummary.textContent = `Showing ${filteredRows.length} of ${tabConfig.rows.length} ${tabConfig.name.toLowerCase()} records`;
+      resultsSummary.textContent = `Showing ${filteredRows.length} of ${sourceRows.length} ${tabConfig.name.toLowerCase()} records`;
     }
 
     function attachAdminToolsFilterEvents(tabConfig) {
