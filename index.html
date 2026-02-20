@@ -456,7 +456,7 @@
 
       const usersByRole = {
         'Super Admin': 5,
-        'Development': 8,
+        'Broadridge Manager': 8,
         'Service': 15,
         'Sales': 12,
         'Financial Advisor': 22,
@@ -465,7 +465,7 @@
         'Compliance Reviewer': 15
       };
 
-      const staffRoles = new Set(['Super Admin', 'Development', 'Service', 'Sales']);
+      const staffRoles = new Set(['Super Admin', 'Broadridge Manager', 'Service', 'Sales']);
 
       return roleData.rolePresets.map((role) => ({
         roleName: role.title || role.name,

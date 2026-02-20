@@ -2,7 +2,7 @@
 window.rolePermissionData = {
   "roles": [
     "Super Admin",
-    "Development",
+    "Broadridge Manager",
     "Service",
     "Sales",
     "Financial Advisor",
@@ -469,9 +469,9 @@ window.rolePermissionData = {
       ]
     },
     {
-      "name": "Development",
-      "title": "Development",
-      "description": "Auto-generated from MVP matrix for Development.",
+      "name": "Broadridge Manager",
+      "title": "Broadridge Manager",
+      "description": "Auto-generated from MVP matrix for Broadridge Manager.",
       "permissions": [
         "Create a new account",
         "Update an account",

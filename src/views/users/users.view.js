@@ -20,7 +20,7 @@
       .replaceAll("'", '&#39;');
   }
 
-  const staffRoles = new Set(['Super Admin', 'Development', 'Service', 'Sales']);
+  const staffRoles = new Set(['Super Admin', 'Broadridge Manager', 'Service', 'Sales']);
 
   function isStaffRole(role) {
     const name = (role?.title || role?.name || '').trim();
