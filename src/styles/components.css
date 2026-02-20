@@ -1246,6 +1246,79 @@ tbody tr:hover {
   padding: 0.25rem 0.45rem;
 }
 
+/* Content page */
+.content-page-header {
+  margin-bottom: 0.7rem;
+}
+
+.content-info-panel {
+  border: 1px solid #d6dde8;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.content-info-panel p {
+  margin: 0;
+  color: #394a62;
+}
+
+.content-accordion-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.content-accordion-item {
+  border: 1px solid #d3dae4;
+  border-radius: 2px;
+  background: #dbe2e8;
+}
+
+.content-accordion-item > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #1f2a3a;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.content-accordion-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.content-accordion-caret {
+  display: inline-block;
+  transition: transform 0.2s ease;
+  color: #4f5e76;
+}
+
+.content-accordion-item[open] .content-accordion-caret {
+  transform: rotate(90deg);
+}
+
+.content-accordion-body {
+  border-top: 1px solid #c9d2dd;
+  background: #f8fafc;
+  min-height: 18px;
+}
+
+.content-actions {
+  margin-top: 1.6rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.content-save-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 /* Create Account page */
 .create-account-panel {
   border: 1px solid var(--line);
