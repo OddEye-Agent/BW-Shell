@@ -15,9 +15,19 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+button,
+input,
+select,
+textarea,
+th,
+td {
+  font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
   background: var(--panel);
   color: var(--text);
 }
