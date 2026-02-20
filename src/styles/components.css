@@ -1103,3 +1103,11 @@ tbody tr:hover {
   color: #6f7e93;
   padding: 0.2rem 0.35rem;
 }
+
+#adminToolsPanel[data-active-admin-tools-tab="BAS Accounts"] .admin-tools-toolbar {
+  grid-template-columns: minmax(320px, 420px);
+}
+
+#adminToolsPanel[data-active-admin-tools-tab="BAS Accounts"] #adminToolsSearchInput {
+  max-width: 420px;
+}

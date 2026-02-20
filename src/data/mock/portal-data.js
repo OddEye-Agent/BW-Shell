@@ -141,12 +141,6 @@ const accountRows = [
         searchFields: ['userId', 'name', 'email'],
         filters: [
           {
-            id: 'environment',
-            label: 'Environment',
-            allLabel: 'All environments',
-            options: ['DEV', 'QA', 'UAT']
-          },
-          {
             id: 'state',
             label: 'Status',
             allLabel: 'All statuses',
