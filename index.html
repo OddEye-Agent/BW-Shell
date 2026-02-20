@@ -44,6 +44,7 @@
   </main>
 
   <script src="src/data/mock/portal-data.js"></script>
+  <script src="src/state/store.js"></script>
   <script src="src/views/accounts/accounts.view.js"></script>
   <script src="src/views/placeholders/placeholders.view.js"></script>
 
@@ -53,12 +54,14 @@
     const userMenuButton = document.getElementById('userMenuButton');
     const userDropdown = document.getElementById('userDropdown');
     const uiVersion = 'compliance-v2';
+    const store = window.bwShellStore;
 
     document.body.setAttribute('data-ui-version', uiVersion);
 
     // Data/constants extracted to src/data/mock/portal-data.js (PR3).
 
     function setUserMenuOpen(isOpen) {
+      store.set({ userMenuOpen: isOpen });
       userDropdown.classList.toggle('open', isOpen);
       userDropdown.hidden = !isOpen;
       userMenuButton.setAttribute('aria-expanded', String(isOpen));
@@ -668,6 +671,7 @@
     }
 
     function renderSection(sectionName) {
+      store.set({ activePage: sectionName });
       closeAllRowMenus();
       if (sectionName === 'Accounts') {
         renderAccountsView();
@@ -686,9 +690,9 @@
 
     navItems.forEach((button) => {
       button.addEventListener('click', () => {
-        navItems.forEach((item) => item.classList.remove('active'));
-        button.classList.add('active');
-        renderSection(button.dataset.page);
+        const selectedPage = button.dataset.page;
+        navItems.forEach((item) => item.classList.toggle('active', item === button));
+        renderSection(selectedPage);
       });
     });
 
@@ -716,7 +720,9 @@
       }
     });
 
-    renderSection('Accounts');
+    const initialPage = store.state.activePage || 'Accounts';
+    navItems.forEach((item) => item.classList.toggle('active', item.dataset.page === initialPage));
+    renderSection(initialPage);
   </script>
 </body>
 
