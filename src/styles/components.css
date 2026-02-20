@@ -747,3 +747,20 @@ tbody tr:hover {
 .perm-row:last-child { border-bottom: none; }
 .perm-row input[type='checkbox'] { width: 18px; height: 18px; }
 @media (max-width: 1100px) { .create-role-layout { grid-template-columns: 1fr; } }
+
+.role-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.4rem;
+}
+
+.staff-flag {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f57d6;
+  border: 1px solid #1f57d6;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  line-height: 1.2;
+}

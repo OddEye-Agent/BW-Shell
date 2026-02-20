@@ -18,6 +18,41 @@
       .replaceAll("'", '&#39;');
   }
 
+
+  const staffRoles = new Set(['Super Admin', 'Development', 'Service', 'Sales']);
+
+  function isStaffRole(role) {
+    const name = (role?.title || role?.name || '').trim();
+    return staffRoles.has(name);
+  }
+
+  function humanRoleDescription(role) {
+    const perms = role.permissions || [];
+    const has = (token) => perms.some((p) => p.toLowerCase().includes(token));
+
+    const canManageUsers = has('create a new user') || has('update user details') || has('disable a user');
+    const canManageAccounts = has('create a new account') || has('update an account') || has('delete an account');
+    const canManageCompliance = has('compliance') || has('workflow');
+    const canManageBilling = has('billing') || has('subscription');
+    const canManageRoles = has('create roles') || has('edit roles') || has('delete roles');
+
+    if (canManageAccounts && canManageUsers && canManageCompliance && canManageRoles) {
+      return 'Full-spectrum operational role with account administration, user controls, compliance workflow management, and role governance.';
+    }
+    if (canManageAccounts && canManageUsers && canManageRoles) {
+      return 'Operations-focused role for managing accounts, user lifecycle actions, and role assignments across the platform.';
+    }
+    if (canManageCompliance) {
+      return 'Compliance-focused role for monitoring review queues, workflows, and policy-driven approval operations.';
+    }
+    if (canManageUsers) {
+      return 'User management role for onboarding, maintaining, and supporting users with controlled access operations.';
+    }
+    if (canManageBilling) {
+      return 'Commercial operations role for handling billing visibility and subscription-related account updates.';
+    }
+    return 'Business support role with scoped permissions for daily platform operations.';
+  }
   function roleSummary(role) {
     const sample = role.permissions.slice(0, 8).join(', ');
     const overflow = role.permissions.length > 8 ? `, +${role.permissions.length - 8} more` : '';
@@ -31,8 +66,11 @@
         (role, idx) => `
         <article class="role-card" data-role-index="${idx}">
           <div class="role-card-main">
-            <h3>${esc(role.title)}</h3>
-            <p>${esc(role.description)}</p>
+            <div class="role-title-row">
+              <h3>${esc(role.title)}</h3>
+              ${isStaffRole(role) ? '<span class="staff-flag">Staff Role</span>' : ''}
+            </div>
+            <p><strong>Description:</strong> ${esc(humanRoleDescription(role))}</p>
             <p><strong>Permissions:</strong> ${esc(roleSummary(role))}</p>
           </div>
           <button class="role-edit-btn" type="button" aria-label="Edit ${esc(role.title)}" data-edit-role="${idx}">✎</button>
@@ -210,12 +248,6 @@
         </div>
       </section>
     `;
-
-    container.querySelector('#backToRoles')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      state.mode = 'list';
-      renderUsersView();
-    });
 
     wireCreateEvents(container);
   }
