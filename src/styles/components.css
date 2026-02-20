@@ -1297,3 +1297,21 @@ tbody tr:hover {
     grid-template-columns: repeat(2, minmax(220px, 1fr));
   }
 }
+
+.groups-table th:last-child,
+.groups-table td:last-child {
+  width: 120px;
+  white-space: nowrap;
+}
+
+.group-actions-cell {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.group-actions-cell .row-action-button {
+  width: 30px;
+  height: 28px;
+  font-size: 0.9rem;
+}

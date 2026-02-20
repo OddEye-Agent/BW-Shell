@@ -23,6 +23,20 @@
     { name: 'Anitha sssssUpd', email: 'anitha_ssssss@gmail.com', role: 'Financial Advisor', account: 'ActivitylogCheckAccupdATED', createdOn: '02-20-2026', status: 'Active' }
   ];
 
+  const groupsRows = [
+    { accountName: 'Broadridge', groupName: 'Automation_GroupryFec', members: 1 },
+    { accountName: 'Broadridge', groupName: 'Automation_GroupKNAqR', members: 1 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_6DEKCR', members: 2 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_sMLc_c', members: 2 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_BRsX0A', members: 2 },
+    { accountName: 'navtabvalidationaccount', groupName: 'Demo', members: 1 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_A3jIl9qJtlmy2WJVhR', members: 2 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_1uITGH', members: 2 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_8gK6q0', members: 2 },
+    { accountName: 'Broadridge', groupName: 'Automation_Reviver_group-123---_QK9zvA', members: 2 }
+  ];
+
+
   const getData = () => window.rolePermissionData || { roles: [], categories: [], rolePresets: [] };
   const staffRoles = new Set(['Super Admin', 'Broadridge Manager', 'Service', 'Sales']);
 
@@ -41,7 +55,7 @@
         <button class="users-subnav-item ${state.activeTab === 'Users' ? 'active' : ''}" type="button" data-users-tab="Users">Users</button>
         <button class="users-subnav-item ${state.activeTab === 'Manage Roles' ? 'active' : ''}" type="button" data-users-tab="Manage Roles">Manage Roles</button>
         <button class="users-subnav-item ${state.activeTab === 'Groups' ? 'active' : ''}" type="button" data-users-tab="Groups">Groups</button>
-        ${state.activeTab === 'Manage Roles' ? '<button class="new-role-btn" id="newRoleBtn" type="button">New Role</button>' : state.activeTab === 'Users' ? '<button class="new-role-btn" id="newUserBtn" type="button">New User</button>' : ''}
+        ${state.activeTab === 'Manage Roles' ? '<button class=\"new-role-btn\" id=\"newRoleBtn\" type=\"button\">New Role</button>' : state.activeTab === 'Users' ? '<button class=\"new-role-btn\" id=\"newUserBtn\" type=\"button\">New User</button>' : state.activeTab === 'Groups' ? '<button class=\"new-role-btn\" type=\"button\">New Group</button>' : ''}
       </div>
     `;
   }
@@ -263,14 +277,51 @@
   }
 
   function renderGroupsPlaceholder(container) {
+    const rows = groupsRows
+      .map((row) => `
+        <tr>
+          <td>${esc(row.accountName)}</td>
+          <td>${esc(row.groupName)}</td>
+          <td><a class="account-link" href="#">${row.members}</a></td>
+          <td class="group-actions-cell">
+            <button class="row-action-button" aria-label="Edit group">✎</button>
+            <button class="row-action-button" aria-label="Add member">◔</button>
+            <button class="row-action-button" aria-label="Delete group">🗑</button>
+          </td>
+        </tr>
+      `)
+      .join('');
+
     container.innerHTML = `
-      <div class="users-header-row"><h1 class="page-title">User Management</h1></div>
+      <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <span>Groups</span></div>
+      <div class="users-header-row"><h1 class="page-title">Group Management</h1></div>
       ${renderUsersSubnav()}
-      <section class="roles-panel">
-        <h2 class="roles-panel-title">Groups</h2>
-        <p>Groups view is queued for parity implementation next.</p>
-      </section>
+
+      <div class="accounts-toolbar">
+        <div class="accounts-filter-group">
+          <label>Account Name</label>
+          <div class="accounts-filter-row">
+            <div class="select-like-wrap"><select class="text-input select-like"><option>Search by account</option></select></div>
+            <div class="search-like-wrap"><input class="text-input" type="text" placeholder="Search by group name" /><span class="search-icon">⌕</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap users-table-wrap">
+        <table class="users-table groups-table">
+          <thead>
+            <tr>
+              <th>Account Name</th>
+              <th>Group Name</th>
+              <th>Group Members</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
     `;
+
     wireUsersSubnav(container);
   }
 
