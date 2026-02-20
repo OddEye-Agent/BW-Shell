@@ -119,9 +119,9 @@ const accountRows = [
         ],
         columns: [
           { key: 'roleName', label: 'Role Name' },
+          { key: 'staffFlag', label: 'Staff' },
           { key: 'description', label: 'Description', width: '32%' },
           { key: 'usersAssigned', label: 'Users' },
-          { key: 'staffFlag', label: 'Staff' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
         rows: [

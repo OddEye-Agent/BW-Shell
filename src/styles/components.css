@@ -1047,8 +1047,8 @@ tbody tr:hover {
 }
 
 .admin-tools-table.tab-bas-roles .role-description-col,
-.admin-tools-table.tab-bas-roles th:nth-child(2),
-.admin-tools-table.tab-bas-roles td:nth-child(2) {
+.admin-tools-table.tab-bas-roles th:nth-child(5),
+.admin-tools-table.tab-bas-roles td:nth-child(5) {
   width: auto !important;
   max-width: 360px;
   white-space: normal;
@@ -1076,7 +1076,7 @@ tbody tr:hover {
   white-space: normal;
 }
 
-.admin-tools-table.tab-bas-roles th:nth-child(5),
+.admin-tools-table.tab-bas-roles th:nth-child(2),
 .admin-tools-table.tab-bas-roles td.bas-staff-col {
   width: 96px;
   max-width: 96px;
