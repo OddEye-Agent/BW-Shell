@@ -1238,3 +1238,62 @@ tbody tr:hover {
   width: 72px;
   padding: 0.25rem 0.45rem;
 }
+
+/* Create User page */
+.create-user-panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fafbfc;
+  padding: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.create-user-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
+  gap: 0.55rem;
+}
+
+.create-user-status-wrap {
+  margin-top: 1rem;
+}
+
+.create-user-status-wrap > label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #3d4f67;
+}
+
+.create-user-roles-panel {
+  margin-bottom: 0.8rem;
+}
+
+.create-user-role-list {
+  border: 1px solid #e2e7ef;
+  background: #fff;
+}
+
+.create-user-role-item {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid #e8edf4;
+}
+
+.create-user-role-item:last-child {
+  border-bottom: none;
+}
+
+.create-user-role-item input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 1200px) {
+  .create-user-grid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
