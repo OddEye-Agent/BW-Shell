@@ -531,7 +531,7 @@
             const isNewsletter = idx === 2;
             const isCalculator = idx === 3;
             return `
-              <details class="content-accordion-item" ${isResearch ? 'open' : ''}>
+              <details class="content-accordion-item">
                 <summary>
                   <span class="content-accordion-caret" aria-hidden="true">▸</span>
                   <span>${label}</span>
