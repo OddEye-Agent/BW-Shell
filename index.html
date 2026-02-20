@@ -390,6 +390,10 @@
                 return `<td class="${tdClasses}" data-column-key="${column.key}"${widthStyle}><span class="status-pill ${stateClass}">${value}</span></td>`;
               }
 
+              if (column.key === 'staffFlag' && tabConfig.name === 'BAS Roles') {
+                return `<td class="${tdClasses} bas-staff-col" data-column-key="${column.key}"${widthStyle}>${value ? '<span class="staff-flag">Staff Role</span>' : '--'}</td>`;
+              }
+
               if (isEditing) {
                 return `<td class="${tdClasses}" contenteditable="true" data-column-key="${column.key}"${widthStyle}>${value}</td>`;
               }

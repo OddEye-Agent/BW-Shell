@@ -121,15 +121,16 @@ const accountRows = [
           { key: 'roleName', label: 'Role Name' },
           { key: 'description', label: 'Description', width: '32%' },
           { key: 'usersAssigned', label: 'Users' },
+          { key: 'staffFlag', label: 'Staff' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
         rows: [
-          { roleName: 'Financial Advisor', roleKey: 'FIN_ADVISOR', description: 'Advisory workspace access for portfolio planning and client actions.', usersAssigned: 22, assignmentBand: '11-25', updatedOn: '2026-02-08' },
-          { roleName: 'Staff Admin', roleKey: 'STAFF_ADMIN', description: 'Internal staff administration access for lower-environment data maintenance.', usersAssigned: 8, assignmentBand: '0-10', updatedOn: '2026-02-07' },
-          { roleName: 'Compliance Reviewer', roleKey: 'COMPLIANCE_REVIEW', description: 'Can review queued compliance artifacts and submit approval decisions.', usersAssigned: 15, assignmentBand: '11-25', updatedOn: '2026-02-05' },
-          { roleName: 'Compliance Admin', roleKey: 'COMPLIANCE_ADMIN', description: 'Manages compliance configuration, escalations, and remediation routing.', usersAssigned: 6, assignmentBand: '0-10', updatedOn: '2026-02-04' },
-          { roleName: 'Program Admin', roleKey: 'PROGRAM_ADMIN', description: 'Configures program-level metadata and onboarding defaults for testing.', usersAssigned: 12, assignmentBand: '11-25', updatedOn: '2026-02-03' },
-          { roleName: 'Developer', roleKey: 'DEVELOPER', description: 'Engineering access for integration validation and sandbox troubleshooting.', usersAssigned: 31, assignmentBand: '26+', updatedOn: '2026-02-01' }
+          { roleName: 'Financial Advisor', roleKey: 'FIN_ADVISOR', description: 'Advisory workspace access for portfolio planning and client actions.', usersAssigned: 22, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-08' },
+          { roleName: 'Staff Admin', roleKey: 'STAFF_ADMIN', description: 'Internal staff administration access for lower-environment data maintenance.', usersAssigned: 8, staffFlag: true, assignmentBand: '0-10', updatedOn: '2026-02-07' },
+          { roleName: 'Compliance Reviewer', roleKey: 'COMPLIANCE_REVIEW', description: 'Can review queued compliance artifacts and submit approval decisions.', usersAssigned: 15, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-05' },
+          { roleName: 'Compliance Admin', roleKey: 'COMPLIANCE_ADMIN', description: 'Manages compliance configuration, escalations, and remediation routing.', usersAssigned: 6, staffFlag: false, assignmentBand: '0-10', updatedOn: '2026-02-04' },
+          { roleName: 'Program Admin', roleKey: 'PROGRAM_ADMIN', description: 'Configures program-level metadata and onboarding defaults for testing.', usersAssigned: 12, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-03' },
+          { roleName: 'Developer', roleKey: 'DEVELOPER', description: 'Engineering access for integration validation and sandbox troubleshooting.', usersAssigned: 31, staffFlag: true, assignmentBand: '26+', updatedOn: '2026-02-01' }
         ]
       },
       {

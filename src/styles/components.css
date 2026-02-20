@@ -1075,3 +1075,23 @@ tbody tr:hover {
   max-width: 50px;
   white-space: normal;
 }
+
+.admin-tools-table.tab-bas-roles th:nth-child(4),
+.admin-tools-table.tab-bas-roles td.bas-staff-col {
+  width: 96px;
+  max-width: 96px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-tools-table.tab-bas-roles th:nth-child(5),
+.admin-tools-table.tab-bas-roles td:nth-child(5) {
+  width: 84px;
+  max-width: 84px;
+  white-space: nowrap;
+}
+
+.admin-tools-table .bas-staff-col .staff-flag {
+  font-size: 11px;
+  padding: 0.08rem 0.35rem;
+}
