@@ -405,7 +405,7 @@
                   ? `
                 ${showCreateReadActions ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Create</button></td>' : ''}
                 ${showCreateReadActions ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Read</button></td>' : ''}
-                ${tabConfig.name !== 'BAS Users' ? `<td class="crud-cell"><button class="crud-action-btn update-btn${isEditing ? ' editing' : ''}" type="button">Update</button></td>` : ''}
+                ${tabConfig.name !== 'BAS Users' && tabConfig.name !== 'BAS Accounts' ? `<td class="crud-cell"><button class="crud-action-btn update-btn${isEditing ? ' editing' : ''}" type="button">Update</button></td>` : ''}
                 ${tabConfig.name === 'BAS Users' ? '<td class="crud-cell"><button class="crud-action-btn" type="button">Disable</button></td>' : ''}
                 <td class="crud-cell"><button class="crud-action-btn" type="button">Delete</button></td>
                 `
@@ -427,7 +427,7 @@
       const showCrud = tabConfig.enableCrud !== false;
       const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users' || tabConfig.name === 'BAS Accounts';
       const showCreateReadActions = showCrud && !hideCreateReadActions;
-      const actionColumnCount = !showCrud ? 0 : tabConfig.name === 'BAS Users' ? 2 : showCreateReadActions ? 4 : 2;
+      const actionColumnCount = !showCrud ? 0 : tabConfig.name === 'BAS Users' ? 2 : tabConfig.name === 'BAS Accounts' ? 1 : showCreateReadActions ? 4 : 2;
       const searchInput = document.getElementById('adminToolsSearchInput');
       const tableBody = document.getElementById('adminToolsTableBody');
       const resultsSummary = document.getElementById('adminToolsResultsSummary');
@@ -676,7 +676,7 @@
                     ? `
                   ${showCreateReadActions ? '<th scope="col" class="action-col">Create</th>' : ''}
                   ${showCreateReadActions ? '<th scope="col" class="action-col">Read</th>' : ''}
-                  ${selectedTab.name !== 'BAS Users' ? '<th scope="col" class="action-col">Update</th>' : ''}
+                  ${selectedTab.name !== 'BAS Users' && selectedTab.name !== 'BAS Accounts' ? '<th scope="col" class="action-col">Update</th>' : ''}
                   ${selectedTab.name === 'BAS Users' ? '<th scope="col" class="action-col">Disable</th>' : ''}
                   <th scope="col" class="action-col">Delete</th>
                   `
