@@ -4,7 +4,7 @@ const accountRows = [
       {
         accountName: 'Northwind Retail Group',
         parentAccount: 'Global Commerce Holdings',
-        subAccounts: 4,
+        subAccounts: 0,
         userCount: 58,
         ownerEmail: 'owner@northwind.com',
         createdOn: '2024-01-17'
@@ -20,7 +20,7 @@ const accountRows = [
       {
         accountName: 'Blue Harbor Logistics',
         parentAccount: 'Blue Harbor Group',
-        subAccounts: 7,
+        subAccounts: 0,
         userCount: 102,
         ownerEmail: 'ops@blueharbor.io',
         createdOn: '2022-11-28'
@@ -28,7 +28,7 @@ const accountRows = [
       {
         accountName: 'Evergreen Academy',
         parentAccount: 'Evergreen Education Network',
-        subAccounts: 3,
+        subAccounts: 0,
         userCount: 44,
         ownerEmail: 'support@evergreenacademy.edu',
         createdOn: '2024-04-10'
