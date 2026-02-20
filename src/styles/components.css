@@ -1060,3 +1060,9 @@ tbody tr:hover {
   text-align: center;
   white-space: nowrap;
 }
+
+.admin-tools-table.tab-bas-roles .role-description-col {
+  width: auto !important;
+  max-width: 240px;
+  white-space: normal;
+}
