@@ -107,8 +107,8 @@ const accountRows = [
       {
         name: 'BAS Roles',
         description: 'Manage BAS role records for lower-environment testing and quick permission cleanup.',
-        searchPlaceholder: 'Search role name, key, or description',
-        searchFields: ['roleName', 'roleKey', 'description'],
+        searchPlaceholder: 'Search role name or description',
+        searchFields: ['roleName', 'description'],
         filters: [
           {
             id: 'assignmentBand',
@@ -119,8 +119,7 @@ const accountRows = [
         ],
         columns: [
           { key: 'roleName', label: 'Role Name' },
-          { key: 'roleKey', label: 'Role Key' },
-          { key: 'description', label: 'Description' },
+          { key: 'description', label: 'Description', width: '32%' },
           { key: 'usersAssigned', label: 'Users Assigned' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
@@ -172,34 +171,19 @@ const accountRows = [
         description: 'Review and maintain BAS account test data used by staff across lower environments.',
         searchPlaceholder: 'Search account id, account name, or owner',
         searchFields: ['accountId', 'accountName', 'owner'],
-        filters: [
-          {
-            id: 'environment',
-            label: 'Environment',
-            allLabel: 'All environments',
-            options: ['DEV', 'QA', 'UAT']
-          },
-          {
-            id: 'health',
-            label: 'Health',
-            allLabel: 'All health states',
-            options: ['Healthy', 'Needs Cleanup', 'Archived']
-          }
-        ],
+        filters: [],
         columns: [
           { key: 'accountId', label: 'Account ID' },
           { key: 'accountName', label: 'Account Name' },
-          { key: 'owner', label: 'Owner' },
-          { key: 'linkedUsers', label: 'Linked Users' },
-          { key: 'environment', label: 'Environment' },
-          { key: 'health', label: 'Health' },
+          { key: 'owner', label: 'Owner Email' },
+          { key: 'linkedUsers', label: 'Users' },
           { key: 'updatedOn', label: 'Updated On' }
         ],
         rows: [
-          { accountId: 'BAS-ACCT-4421', accountName: 'Northwind QA Sandbox', owner: 'Identity Ops', linkedUsers: 14, environment: 'QA', health: 'Healthy', updatedOn: '2026-02-07' },
-          { accountId: 'BAS-ACCT-1180', accountName: 'Blue Harbor Dev Seed', owner: 'Automation Team', linkedUsers: 7, environment: 'DEV', health: 'Needs Cleanup', updatedOn: '2026-02-03' },
-          { accountId: 'BAS-ACCT-9008', accountName: 'Evergreen UAT Replay', owner: 'Support Tools', linkedUsers: 2, environment: 'UAT', health: 'Archived', updatedOn: '2026-01-28' },
-          { accountId: 'BAS-ACCT-7774', accountName: 'Summit Regression QA', owner: 'QA Automation', linkedUsers: 19, environment: 'QA', health: 'Needs Cleanup', updatedOn: '2026-02-05' }
+          { accountId: 'BAS-ACCT-4421', accountName: 'Northwind QA Sandbox', owner: 'identity.ops@bwshell.internal', linkedUsers: 14, updatedOn: '2026-02-07' },
+          { accountId: 'BAS-ACCT-1180', accountName: 'Blue Harbor Dev Seed', owner: 'automation.team@bwshell.internal', linkedUsers: 7, updatedOn: '2026-02-03' },
+          { accountId: 'BAS-ACCT-9008', accountName: 'Evergreen UAT Replay', owner: 'support.tools@bwshell.internal', linkedUsers: 2, updatedOn: '2026-01-28' },
+          { accountId: 'BAS-ACCT-7774', accountName: 'Summit Regression QA', owner: 'qa.automation@bwshell.internal', linkedUsers: 19, updatedOn: '2026-02-05' }
         ]
       },
       {

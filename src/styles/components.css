@@ -981,3 +981,48 @@ tbody tr:hover {
   border: none;
 }
 
+
+/* Admin tools table tuning */
+.admin-tools-table .action-col,
+.admin-tools-table .crud-cell {
+  width: 1%;
+  white-space: nowrap;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+}
+
+.admin-tools-table .crud-action-btn {
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+}
+
+.admin-tools-table .numeric-col {
+  width: 70px;
+  text-align: right;
+}
+
+.admin-tools-table .role-description-col {
+  width: 32%;
+  max-width: 420px;
+  white-space: normal;
+}
+
+.admin-tools-table.tab-bas-users {
+  min-width: 980px;
+}
+
+.admin-tools-table.tab-bas-users th,
+.admin-tools-table.tab-bas-users td {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+.admin-tools-table.tab-bas-accounts {
+  min-width: 940px;
+}
+
+.admin-tools-table.tab-bas-accounts th,
+.admin-tools-table.tab-bas-accounts td {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}

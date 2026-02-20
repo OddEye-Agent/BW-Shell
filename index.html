@@ -361,6 +361,11 @@
       return `${tabConfig.name}-${index}`;
     }
 
+    function getAdminToolsTableClass(tabName) {
+      const key = String(tabName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `admin-tools-table tab-${key}`;
+    }
+
     function renderAdminToolsTableRows(tabConfig, rows) {
       const showCrud = tabConfig.enableCrud !== false;
       const hideCreateReadActions = tabConfig.name === 'BAS Roles' || tabConfig.name === 'BAS Users';
@@ -373,20 +378,23 @@
           const valueCells = tabConfig.columns
             .map((column) => {
               const value = row[column.key];
+              const tdClasses = [typeof value === 'number' ? 'numeric-col' : '', column.key === 'description' && tabConfig.name === 'BAS Roles' ? 'role-description-col' : ''].filter(Boolean).join(' ');
+              const widthStyle = column.width ? ` style="width:${column.width};max-width:${column.width};"` : '';
+
               if (column.key === 'viewUrl' && value) {
-                return `<td><a href="${value}" class="archive-link" target="_blank" rel="noopener noreferrer">${value}</a></td>`;
+                return `<td class="${tdClasses}"${widthStyle}><a href="${value}" class="archive-link" target="_blank" rel="noopener noreferrer">${value}</a></td>`;
               }
 
               if (!isEditing && column.key === 'state' && tabConfig.name === 'BAS Users') {
                 const stateClass = String(value).toLowerCase() === 'active' ? 'active' : '';
-                return `<td data-column-key="${column.key}"><span class="status-pill ${stateClass}">${value}</span></td>`;
+                return `<td class="${tdClasses}" data-column-key="${column.key}"${widthStyle}><span class="status-pill ${stateClass}">${value}</span></td>`;
               }
 
               if (isEditing) {
-                return `<td contenteditable="true" data-column-key="${column.key}">${value}</td>`;
+                return `<td class="${tdClasses}" contenteditable="true" data-column-key="${column.key}"${widthStyle}>${value}</td>`;
               }
 
-              return `<td data-column-key="${column.key}">${value}</td>`;
+              return `<td class="${tdClasses}" data-column-key="${column.key}"${widthStyle}>${value}</td>`;
             })
             .join('');
 
@@ -660,17 +668,17 @@
           </div>
           <p class="admin-tools-summary" id="adminToolsResultsSummary"></p>
           <div class="table-wrap">
-            <table class="admin-tools-table">
+            <table class="${getAdminToolsTableClass(selectedTab.name)}">
               <thead>
                 <tr>
                   ${headerCells}
                   ${showCrud
                     ? `
-                  ${showCreateReadActions ? '<th scope="col">Create</th>' : ''}
-                  ${showCreateReadActions ? '<th scope="col">Read</th>' : ''}
-                  <th scope="col">Update</th>
-                  ${selectedTab.name === 'BAS Users' ? '<th scope="col">Disable</th>' : ''}
-                  <th scope="col">Delete</th>
+                  ${showCreateReadActions ? '<th scope="col" class="action-col">Create</th>' : ''}
+                  ${showCreateReadActions ? '<th scope="col" class="action-col">Read</th>' : ''}
+                  <th scope="col" class="action-col">Update</th>
+                  ${selectedTab.name === 'BAS Users' ? '<th scope="col" class="action-col">Disable</th>' : ''}
+                  <th scope="col" class="action-col">Delete</th>
                   `
                     : ''}
                 </tr>
