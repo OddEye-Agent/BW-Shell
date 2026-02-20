@@ -389,6 +389,11 @@
       background: #fde7eb;
     }
 
+    .archive-pill.submitted {
+      color: #6b4b00;
+      background: #fff1cc;
+    }
+
     .archive-link {
       color: var(--accent);
       text-decoration: none;
@@ -397,6 +402,26 @@
 
     .archive-link:hover {
       text-decoration: underline;
+    }
+
+    .archive-website-id {
+      font-weight: 700;
+    }
+
+    .json-payload-btn {
+      border: 1px solid #d5deec;
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #33435e;
+      cursor: pointer;
+    }
+
+    .json-payload-btn:hover {
+      background: #eef4ff;
+      border-color: #bed0f6;
     }
 
     .admin-tools-subnav {
@@ -959,74 +984,144 @@
 
     const complianceArchiveRows = [
       {
+        event_date: '2026-01-16',
         status: 'Approved',
         file_type: 'PDF',
-        submitter_id: 'Ariana.Holt',
+        submitter_id: 'ariana.holt@westwindcapital.com',
         approver_id: 'Derek.Mills',
-        published_date: '2026-01-12',
-        bas_account_id: 'BAS-West-114',
-        wix_account_id: 'wix-91142',
-        site_id: 'site-west-coast',
+        bas_account_id: 'WestWind Capital',
+        wix_account_id: 'A9K3P2-B7Q4-M5R8T1',
+        site_id: 'A7F2-9KLM-4Q8P-T2X',
         website_id: 'West Coast Primary',
-        revision: 'REV-4821',
+        revision: 'Rev 1',
         revision_url: 'https://example.com/revision/4821',
         diff_json: '{"header":"updated","hero":"copy-change"}'
       },
       {
-        status: 'Rejected',
-        file_type: '',
-        submitter_id: 'Jordan.Kim',
-        approver_id: 'Celine.Brooks',
-        published_date: '2026-01-10',
-        bas_account_id: 'BAS-East-332',
-        wix_account_id: 'wix-22184',
-        site_id: 'site-east-main',
-        website_id: 'East Hub Website',
-        revision: '',
-        revision_url: '',
-        diff_json: ''
+        event_date: '2026-01-14',
+        status: 'Submitted',
+        file_type: 'PDF',
+        submitter_id: 'ariana.holt@westwindcapital.com',
+        approver_id: 'Derek.Mills',
+        bas_account_id: 'WestWind Capital',
+        wix_account_id: 'A9K3P2-B7Q4-M5R8T1',
+        site_id: 'A7F2-9KLM-4Q8P-T2X',
+        website_id: 'West Coast Primary',
+        revision: 'Rev 1',
+        revision_url: 'https://example.com/revision/4821',
+        diff_json: '{"header":"updated","hero":"copy-change"}'
       },
       {
+        event_date: '2026-01-13',
+        status: 'Rejected',
+        file_type: 'PDF',
+        submitter_id: 'jordan.kim@easthubadvisors.com',
+        approver_id: 'Celine.Brooks',
+        bas_account_id: 'EastHub Advisors',
+        wix_account_id: 'J4M8N2-C1R7-P9T5V3',
+        site_id: 'Q3W8-R2TY-7PLM-K9V',
+        website_id: 'East Hub Website',
+        revision: 'Rev 2',
+        revision_url: 'https://example.com/revision/4833',
+        diff_json: '{"notes":"missing legal disclaimer"}'
+      },
+      {
+        event_date: '2026-01-11',
+        status: 'Submitted',
+        file_type: 'PDF',
+        submitter_id: 'jordan.kim@easthubadvisors.com',
+        approver_id: 'Celine.Brooks',
+        bas_account_id: 'EastHub Advisors',
+        wix_account_id: 'J4M8N2-C1R7-P9T5V3',
+        site_id: 'Q3W8-R2TY-7PLM-K9V',
+        website_id: 'East Hub Website',
+        revision: 'Rev 2',
+        revision_url: 'https://example.com/revision/4833',
+        diff_json: '{"notes":"missing legal disclaimer"}'
+      },
+      {
+        event_date: '2026-01-10',
         status: 'Approved',
         file_type: 'PDF',
-        submitter_id: 'Nia.Patel',
+        submitter_id: 'nia.patel@midwestservicegroup.com',
         approver_id: 'Marco.Sloan',
-        published_date: '2026-01-08',
-        bas_account_id: 'BAS-Midwest-201',
-        wix_account_id: 'wix-77109',
-        site_id: 'site-midwest-core',
+        bas_account_id: 'Midwest Service Group',
+        wix_account_id: 'R8L2C5-D3F7-H1J9K4',
+        site_id: 'M5N2-Z8XC-1VBP-D4R',
         website_id: 'Midwest Service Portal',
-        revision: 'REV-4794',
+        revision: 'Rev 3',
         revision_url: 'https://example.com/revision/4794',
         diff_json: '{"footer":"policy-link"}'
       },
       {
-        status: 'Rejected',
-        file_type: '',
-        submitter_id: 'Leo.Foster',
-        approver_id: 'Celine.Brooks',
-        published_date: '2026-01-06',
-        bas_account_id: 'BAS-South-090',
-        wix_account_id: 'wix-45002',
-        site_id: 'site-south-ops',
-        website_id: 'Southern Operations',
-        revision: '',
-        revision_url: '',
-        diff_json: '{"notes":"missing legal disclaimer"}'
+        event_date: '2026-01-08',
+        status: 'Submitted',
+        file_type: 'PDF',
+        submitter_id: 'nia.patel@midwestservicegroup.com',
+        approver_id: 'Marco.Sloan',
+        bas_account_id: 'Midwest Service Group',
+        wix_account_id: 'R8L2C5-D3F7-H1J9K4',
+        site_id: 'M5N2-Z8XC-1VBP-D4R',
+        website_id: 'Midwest Service Portal',
+        revision: 'Rev 3',
+        revision_url: 'https://example.com/revision/4794',
+        diff_json: '{"footer":"policy-link"}'
       },
       {
+        event_date: '2026-01-07',
+        status: 'Rejected',
+        file_type: 'PDF',
+        submitter_id: 'leo.foster@southernopsllc.com',
+        approver_id: 'Celine.Brooks',
+        bas_account_id: 'Southern Operations LLC',
+        wix_account_id: 'T6V3B1-N8M4-Q2W7E5',
+        site_id: 'B2NM-7QWE-5RTY-L8K',
+        website_id: 'Southern Operations',
+        revision: 'Rev 4',
+        revision_url: 'https://example.com/revision/4766',
+        diff_json: '{"compliance":"needs updated disclosures"}'
+      },
+      {
+        event_date: '2026-01-05',
+        status: 'Submitted',
+        file_type: 'PDF',
+        submitter_id: 'leo.foster@southernopsllc.com',
+        approver_id: 'Celine.Brooks',
+        bas_account_id: 'Southern Operations LLC',
+        wix_account_id: 'T6V3B1-N8M4-Q2W7E5',
+        site_id: 'B2NM-7QWE-5RTY-L8K',
+        website_id: 'Southern Operations',
+        revision: 'Rev 4',
+        revision_url: 'https://example.com/revision/4766',
+        diff_json: '{"compliance":"needs updated disclosures"}'
+      },
+      {
+        event_date: '2026-01-04',
         status: 'Approved',
         file_type: 'PDF',
-        submitter_id: 'Maya.Chen',
+        submitter_id: 'maya.chen@northdigitalpartners.com',
         approver_id: 'Derek.Mills',
-        published_date: '2026-01-04',
-        bas_account_id: 'BAS-North-512',
-        wix_account_id: 'wix-88371',
-        site_id: 'site-north-digital',
+        bas_account_id: 'North Digital Partners',
+        wix_account_id: 'P5S9D2-K4L1-Z7X3C8',
+        site_id: 'H9JK-2PLM-6QWE-N3T',
         website_id: 'Northern Digital HQ',
-        revision: 'REV-4702',
+        revision: 'Rev 5',
         revision_url: 'https://example.com/revision/4702',
-        diff_json: ''
+        diff_json: '{"hero":"updated cta spacing"}'
+      },
+      {
+        event_date: '2026-01-02',
+        status: 'Submitted',
+        file_type: 'PDF',
+        submitter_id: 'maya.chen@northdigitalpartners.com',
+        approver_id: 'Derek.Mills',
+        bas_account_id: 'North Digital Partners',
+        wix_account_id: 'P5S9D2-K4L1-Z7X3C8',
+        site_id: 'H9JK-2PLM-6QWE-N3T',
+        website_id: 'Northern Digital HQ',
+        revision: 'Rev 5',
+        revision_url: 'https://example.com/revision/4702',
+        diff_json: '{"hero":"updated cta spacing"}'
       }
     ];
 
@@ -1148,27 +1243,24 @@
     function renderArchiveTableRows(filteredRows) {
       return filteredRows
         .map((row) => {
-          const isApproved = row.status === 'Approved';
-          const statusClass = isApproved ? 'approved' : 'rejected';
-          const pdfCell = isApproved ? '<a href="#" class="archive-link">PDF</a>' : '—';
-          const revisionCell = isApproved ? row.revision : '—';
-          const revisionUrlCell = isApproved
+          const statusClass = row.status.toLowerCase();
+          const revisionUrlCell = row.revision_url
             ? `<a href="${row.revision_url}" class="archive-link" target="_blank" rel="noopener noreferrer">Revision Link</a>`
             : '—';
-          const diffCell = row.diff_json ? `<code>${row.diff_json}</code>` : '—';
+          const diffCell = row.diff_json ? '<button type="button" class="json-payload-btn">Open JSON</button>' : '—';
 
           return `
               <tr>
+                <td>${row.event_date}</td>
+                <td class="archive-website-id">${row.website_id}</td>
                 <td>${row.submitter_id}</td>
                 <td>${row.approver_id}</td>
-                <td>${row.published_date}</td>
                 <td><span class="archive-pill ${statusClass}">${row.status}</span></td>
-                <td>${row.website_id}</td>
-                <td>${pdfCell}</td>
                 <td>${row.bas_account_id}</td>
                 <td>${row.wix_account_id}</td>
                 <td>${row.site_id}</td>
-                <td>${revisionCell}</td>
+                <td>${row.revision}</td>
+                <td>${row.file_type || '—'}</td>
                 <td>${revisionUrlCell}</td>
                 <td>${diffCell}</td>
               </tr>
@@ -1188,7 +1280,8 @@
       const selectedStatus = statusFilter.value;
       const selectedFileType = fileTypeFilter.value;
 
-      const filteredRows = complianceArchiveRows.filter((row) => {
+      const filteredRows = complianceArchiveRows
+        .filter((row) => {
         const matchesQuery =
           !query ||
           row.submitter_id.toLowerCase().includes(query) ||
@@ -1198,11 +1291,12 @@
           row.wix_account_id.toLowerCase().includes(query) ||
           row.site_id.toLowerCase().includes(query);
 
-        const matchesStatus = !selectedStatus || row.status === selectedStatus;
-        const matchesFileType = !selectedFileType || row.file_type === selectedFileType;
+          const matchesStatus = !selectedStatus || row.status === selectedStatus;
+          const matchesFileType = !selectedFileType || row.file_type === selectedFileType;
 
-        return matchesQuery && matchesStatus && matchesFileType;
-      });
+          return matchesQuery && matchesStatus && matchesFileType;
+        })
+        .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
       tableBody.innerHTML = filteredRows.length
         ? renderArchiveTableRows(filteredRows)
@@ -1227,18 +1321,19 @@
       compliancePanel.innerHTML = `
           <div class="page-header">
             <h2 class="page-title">Compliance Archive</h2>
-            <p class="page-subtitle">Search approved and rejected compliance reviews. Approved records include richer publication metadata.</p>
+            <p class="page-subtitle">Search submitted, approved, and rejected compliance review events ordered newest to oldest.</p>
           </div>
 
           <div class="archive-toolbar" aria-label="Archive search and filters">
             <div class="field-group">
               <label for="archiveSearchInput">Search archive records</label>
-              <input id="archiveSearchInput" class="text-input" type="search" placeholder="Search submitter, approver, website, or account IDs" />
+              <input id="archiveSearchInput" class="text-input" type="search" placeholder="Search submitter email, approver, website, or account IDs" />
             </div>
             <div class="field-group">
               <label for="archiveStatusFilter">Status</label>
               <select id="archiveStatusFilter" class="text-input">
                 <option value="">All statuses</option>
+                <option value="Submitted">Submitted</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
               </select>
@@ -1258,18 +1353,18 @@
             <table>
               <thead>
                 <tr>
+                  <th>Event Date</th>
+                  <th>Website ID (Name)</th>
                   <th>Submitter ID</th>
                   <th>Approver ID</th>
-                  <th>Published Date</th>
                   <th>Status</th>
-                  <th>Website ID (Name)</th>
-                  <th>File Type</th>
                   <th>BAS Account ID</th>
                   <th>Wix Account ID</th>
-                  <th>Site ID</th>
+                  <th>Site MSID</th>
                   <th>Revision</th>
+                  <th>File Type</th>
                   <th>Revision URL</th>
-                  <th>Diff JSON (Optional)</th>
+                  <th>JSON Diff Data</th>
                 </tr>
               </thead>
               <tbody id="archiveTableBody"></tbody>
