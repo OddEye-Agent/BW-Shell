@@ -44,8 +44,10 @@
   </main>
 
   <script src="src/data/mock/portal-data.js"></script>
+  <script src="src/data/mock/roles-permissions.js"></script>
   <script src="src/state/store.js"></script>
   <script src="src/views/accounts/accounts.view.js"></script>
+  <script src="src/views/users/users.view.js"></script>
   <script src="src/views/placeholders/placeholders.view.js"></script>
 
   <script>
@@ -675,6 +677,10 @@
       closeAllRowMenus();
       if (sectionName === 'Accounts') {
         renderAccountsView();
+        return;
+      }
+      if (sectionName === 'Users') {
+        renderUsersView();
         return;
       }
       if (sectionName === 'Compliance') {
