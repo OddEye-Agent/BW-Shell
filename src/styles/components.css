@@ -1062,8 +1062,8 @@ tbody tr:hover {
 }
 
 .admin-tools-table.tab-bas-roles .role-description-col {
-  width: 100px !important;
-  min-width: 100px;
-  max-width: 100px;
+  width: 50px !important;
+  min-width: 50px;
+  max-width: 50px;
   white-space: normal;
 }
