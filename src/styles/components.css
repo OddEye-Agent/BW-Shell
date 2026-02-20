@@ -1028,29 +1028,30 @@ tbody tr:hover {
 }
 
 .admin-tools-table.tab-bas-roles {
-  min-width: 0;
-  width: 100%;
-  table-layout: fixed;
+  min-width: 0 !important;
+  width: 100% !important;
+  table-layout: auto;
 }
 
 .admin-tools-table.tab-bas-roles th,
 .admin-tools-table.tab-bas-roles td {
-  padding-left: 0.45rem;
-  padding-right: 0.45rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
 }
 
 .admin-tools-table.tab-bas-roles th:first-child,
 .admin-tools-table.tab-bas-roles td:first-child {
-  width: 8%;
-  max-width: 95px;
+  width: 14%;
+  max-width: 170px;
   white-space: normal;
 }
 
-.admin-tools-table.tab-bas-roles th:nth-child(4),
-.admin-tools-table.tab-bas-roles td:nth-child(4) {
-  width: 86px;
-  max-width: 86px;
-  white-space: nowrap;
+.admin-tools-table.tab-bas-roles .role-description-col,
+.admin-tools-table.tab-bas-roles th:nth-child(2),
+.admin-tools-table.tab-bas-roles td:nth-child(2) {
+  width: auto !important;
+  max-width: 360px;
+  white-space: normal;
 }
 
 .admin-tools-table.tab-bas-roles th:nth-child(3),
@@ -1058,6 +1059,13 @@ tbody tr:hover {
   width: 52px;
   max-width: 52px;
   text-align: center;
+  white-space: nowrap;
+}
+
+.admin-tools-table.tab-bas-roles th:nth-child(4),
+.admin-tools-table.tab-bas-roles td:nth-child(4) {
+  width: 84px;
+  max-width: 84px;
   white-space: nowrap;
 }
 
