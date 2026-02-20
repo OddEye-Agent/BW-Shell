@@ -635,16 +635,6 @@ tbody tr:hover {
 }
 
 /* Users / Roles module */
-.users-breadcrumb {
-  color: #6d7786;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.95rem;
-  margin-bottom: 0.9rem;
-}
-.users-breadcrumb a { color: var(--accent); text-decoration: none; }
-.users-breadcrumb a:hover { text-decoration: underline; }
 .users-header-row { display: flex; align-items: center; justify-content: space-between; }
 .users-subnav {
   display: flex;
