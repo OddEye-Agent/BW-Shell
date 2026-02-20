@@ -4,6 +4,10 @@
     mode: 'list', // list | create
     editingRole: null,
     selectedPermissions: new Set(),
+    baselinePermissions: new Set(),
+    step: 1,
+    activePermissionCategory: 'Account',
+    permissionSearch: ''
   };
 
   const getData = () => window.rolePermissionData || { roles: [], categories: [], rolePresets: [] };
@@ -16,7 +20,6 @@
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
   }
-
 
   const staffRoles = new Set(['Super Admin', 'Development', 'Service', 'Sales']);
 
@@ -52,6 +55,7 @@
     }
     return 'Business support role with scoped permissions for daily platform operations.';
   }
+
   function roleSummary(role) {
     const sample = role.permissions.slice(0, 8).join(', ');
     const overflow = role.permissions.length > 8 ? `, +${role.permissions.length - 8} more` : '';
@@ -96,8 +100,12 @@
 
     container.querySelector('#newRoleBtn')?.addEventListener('click', () => {
       state.mode = 'create';
+      state.step = 1;
       state.editingRole = null;
       state.selectedPermissions = new Set();
+      state.baselinePermissions = new Set();
+      state.activePermissionCategory = getData().categories[0]?.name || 'Account';
+      state.permissionSearch = '';
       renderUsersView();
     });
 
@@ -106,53 +114,139 @@
         const idx = Number(btn.getAttribute('data-edit-role'));
         const role = data.rolePresets[idx];
         state.mode = 'create';
+        state.step = 1;
         state.editingRole = role;
         state.selectedPermissions = new Set(role.permissions);
+        state.baselinePermissions = new Set(role.permissions);
+        state.activePermissionCategory = getData().categories[0]?.name || 'Account';
+        state.permissionSearch = '';
         renderUsersView();
       });
     });
   }
 
-  function renderPermissionsAccordion() {
-    const data = getData();
-    return data.categories
-      .map((category) => {
-        const perms = category.permissions
-          .map((perm) => {
-            const checked = state.selectedPermissions.has(perm.name) ? 'checked' : '';
-            return `
-              <label class="perm-row">
-                <input type="checkbox" class="perm-checkbox" data-perm="${esc(perm.name)}" ${checked} />
-                <span class="perm-copy">
-                  <span class="perm-name">${esc(perm.name)}</span>
-                  <span class="perm-desc">${esc(perm.description || '')}</span>
-                </span>
-              </label>
-            `;
-          })
-          .join('');
+  function getStepClasses(step) {
+    return `role-step ${state.step === step ? 'active' : ''} ${state.step > step ? 'done' : ''}`;
+  }
 
-        return `
-          <section class="perm-category" data-category="${esc(category.name)}">
-            <div class="perm-category-header static">
-              <span>${esc(category.name)}</span>
-            </div>
-            <div class="perm-category-body open">
-              <label class="perm-row select-all">
-                <input type="checkbox" class="perm-select-all" data-select-all="${esc(category.name)}" />
-                <span class="perm-copy"><span class="perm-name">Select All</span></span>
-              </label>
-              ${perms}
-            </div>
-          </section>
-        `;
-      })
+  function renderPermissionCategoryNav(categories) {
+    return categories
+      .map(
+        (category) => `
+          <button class="perm-category-nav-item ${state.activePermissionCategory === category.name ? 'active' : ''}" type="button" data-perm-nav="${esc(category.name)}">
+            ${esc(category.name)}
+          </button>
+        `
+      )
       .join('');
   }
 
+  function renderPermissionRows(category) {
+    const query = state.permissionSearch.trim().toLowerCase();
+    const filtered = category.permissions.filter((perm) => {
+      if (!query) return true;
+      return (
+        perm.name.toLowerCase().includes(query) ||
+        (perm.description || '').toLowerCase().includes(query)
+      );
+    });
+
+    const rows = filtered
+      .map((perm) => {
+        const checked = state.selectedPermissions.has(perm.name) ? 'checked' : '';
+        return `
+          <label class="perm-row">
+            <input type="checkbox" class="perm-checkbox" data-perm="${esc(perm.name)}" ${checked} />
+            <span class="perm-copy">
+              <span class="perm-name">${esc(perm.name)}</span>
+              <span class="perm-desc">${esc(perm.description || '')}</span>
+            </span>
+          </label>
+        `;
+      })
+      .join('');
+
+    return filtered.length
+      ? rows
+      : '<div class="perm-empty">No permissions match your search in this module.</div>';
+  }
+
+  function renderImpactPreview() {
+    const selected = [...state.selectedPermissions];
+    const has = (token) => selected.some((p) => p.toLowerCase().includes(token));
+    const modules = new Set();
+    const data = getData();
+    data.categories.forEach((category) => {
+      if (category.permissions.some((p) => state.selectedPermissions.has(p.name))) {
+        modules.add(category.name);
+      }
+    });
+
+    const capabilities = [];
+    if (has('create a new account') || has('update an account')) capabilities.push('Account administration');
+    if (has('create a new user') || has('disable a user')) capabilities.push('User lifecycle control');
+    if (has('workflow') || has('compliance')) capabilities.push('Compliance operations');
+    if (has('billing') || has('subscription')) capabilities.push('Billing and subscription access');
+    if (has('create roles') || has('edit roles') || has('delete roles')) capabilities.push('Role governance');
+
+    const highRisk = selected.filter((p) => /delete|revoke|disable/i.test(p));
+
+    return `
+      <aside class="impact-preview">
+        <h3>Role Impact Preview</h3>
+        <p><strong>${selected.length}</strong> permissions selected across <strong>${modules.size}</strong> modules.</p>
+        <p><strong>Capabilities:</strong> ${capabilities.length ? esc(capabilities.join(', ')) : 'Basic access scope only.'}</p>
+        <p><strong>High-risk actions:</strong> ${highRisk.length ? esc(highRisk.slice(0, 4).join(', ')) + (highRisk.length > 4 ? `, +${highRisk.length - 4} more` : '') : 'None detected'}</p>
+      </aside>
+    `;
+  }
+
+  function renderDiffSummary() {
+    if (!state.editingRole) return '';
+    const added = [...state.selectedPermissions].filter((p) => !state.baselinePermissions.has(p));
+    const removed = [...state.baselinePermissions].filter((p) => !state.selectedPermissions.has(p));
+
+    return `
+      <div class="perm-diff-summary">
+        <span>Changes in this edit:</span>
+        <span class="diff-added">+${added.length} added</span>
+        <span class="diff-removed">-${removed.length} removed</span>
+      </div>
+    `;
+  }
+
   function wireCreateEvents(container) {
-    container.querySelector('#cancelRoleBtn')?.addEventListener('click', () => {
-      state.mode = 'list';
+    container.querySelectorAll('#cancelRoleBtnDetails, #cancelRoleBtnPermissions').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.mode = 'list';
+        renderUsersView();
+      });
+    });
+
+    container.querySelector('#goToPermissionsBtn')?.addEventListener('click', () => {
+      const roleTitle = container.querySelector('#roleTitle')?.value.trim();
+      if (!roleTitle) {
+        alert('Role Title is required before moving to permissions.');
+        return;
+      }
+      state.step = 2;
+      renderUsersView();
+    });
+
+    container.querySelector('#backToDetailsBtn')?.addEventListener('click', () => {
+      state.step = 1;
+      renderUsersView();
+    });
+
+    container.querySelectorAll('[data-perm-nav]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.activePermissionCategory = btn.getAttribute('data-perm-nav');
+        renderUsersView();
+      });
+    });
+
+    container.querySelector('#permissionSearchInput')?.addEventListener('input', (e) => {
+      state.permissionSearch = e.target.value || '';
       renderUsersView();
     });
 
@@ -161,6 +255,7 @@
         const p = input.getAttribute('data-perm');
         if (input.checked) state.selectedPermissions.add(p);
         else state.selectedPermissions.delete(p);
+        renderUsersView();
       });
     });
 
@@ -206,17 +301,27 @@
 
       state.mode = 'list';
       state.editingRole = null;
+      state.step = 1;
       renderUsersView();
     });
   }
 
   function renderCreateRole(container) {
     const role = state.editingRole;
+    const categories = getData().categories;
+    const activeCategory = categories.find((c) => c.name === state.activePermissionCategory) || categories[0] || { name: 'Account', permissions: [] };
+
     container.innerHTML = `
       <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <a href="#" id="backToRoles">Roles</a> <span>›</span> <span>${role ? 'Edit Role' : 'Create Role'}</span></div>
       <div class="users-header-row users-header-spaced"><h1 class="page-title">${role ? 'Edit Role' : 'New Role'}</h1></div>
+
+      <div class="role-stepper">
+        <button type="button" class="${getStepClasses(1)}" id="stepDetailsBtn">1. Role Details</button>
+        <button type="button" class="${getStepClasses(2)}" id="stepPermissionsBtn">2. Permissions</button>
+      </div>
+
       <section class="create-role-layout">
-        <div class="role-form-col">
+        <div class="role-form-col ${state.step === 1 ? '' : 'is-hidden'}">
           <h2>Role Details</h2>
           <label>BAS Staff<span class="required">*</span></label>
           <div class="radio-row">
@@ -228,22 +333,65 @@
           <label for="roleDescription">Description<span class="required">*</span></label>
           <textarea id="roleDescription" class="text-area" placeholder="What is the role used for?">${esc(role?.description || '')}</textarea>
           <div class="role-form-actions">
-            <button type="button" class="page-btn" id="cancelRoleBtn">Cancel</button>
-            <button type="button" class="page-btn primary" id="saveRoleBtn">Save Role</button>
+            <button type="button" class="page-btn" id="cancelRoleBtnDetails">Cancel</button>
+            <button type="button" class="page-btn primary" id="goToPermissionsBtn">Continue to Permissions</button>
           </div>
         </div>
-        <div class="role-perms-col">
-          <h2>Permissions<span class="required">*</span></h2>
-          <p class="perm-selection-summary"><strong>${state.selectedPermissions.size}</strong> permissions selected</p>
-          <div class="perm-accordion">${renderPermissionsAccordion()}</div>
+
+        <div class="role-perms-col ${state.step === 2 ? '' : 'is-hidden'}">
+          <div class="role-perms-header-row">
+            <h2>Permissions<span class="required">*</span></h2>
+            <p class="perm-selection-summary"><strong>${state.selectedPermissions.size}</strong> permissions selected</p>
+          </div>
+
+          ${renderDiffSummary()}
+
+          <div class="permissions-workbench">
+            <div class="permissions-sidebar">
+              ${renderPermissionCategoryNav(categories)}
+            </div>
+            <div class="permissions-main">
+              <input id="permissionSearchInput" class="text-input" type="search" value="${esc(state.permissionSearch)}" placeholder="Search permissions in ${esc(activeCategory.name)}" />
+              <div class="perm-accordion">
+                <section class="perm-category" data-category="${esc(activeCategory.name)}">
+                  <div class="perm-category-header static">
+                    <span>${esc(activeCategory.name)}</span>
+                  </div>
+                  <div class="perm-category-body open">
+                    <label class="perm-row select-all">
+                      <input type="checkbox" class="perm-select-all" data-select-all="${esc(activeCategory.name)}" />
+                      <span class="perm-copy"><span class="perm-name">Select All</span></span>
+                    </label>
+                    ${renderPermissionRows(activeCategory)}
+                  </div>
+                </section>
+              </div>
+            </div>
+            ${renderImpactPreview()}
+          </div>
+
+          <div class="role-form-actions">
+            <button type="button" class="page-btn" id="backToDetailsBtn">Back to Details</button>
+            <button type="button" class="page-btn" id="cancelRoleBtnPermissions">Cancel</button>
+            <button type="button" class="page-btn primary" id="saveRoleBtn">Save Role</button>
+          </div>
         </div>
       </section>
     `;
 
-
     container.querySelector('#backToRoles')?.addEventListener('click', (e) => {
       e.preventDefault();
       state.mode = 'list';
+      renderUsersView();
+    });
+
+    container.querySelector('#stepDetailsBtn')?.addEventListener('click', () => {
+      state.step = 1;
+      renderUsersView();
+    });
+
+    container.querySelector('#stepPermissionsBtn')?.addEventListener('click', () => {
+      state.step = 2;
       renderUsersView();
     });
 
