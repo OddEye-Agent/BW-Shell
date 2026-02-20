@@ -1307,6 +1307,94 @@ tbody tr:hover {
   min-height: 18px;
 }
 
+.content-accordion-body.has-body {
+  padding: 0.8rem 0.8rem 1rem;
+}
+
+.research-panel {
+  border: 1px solid #d6dde8;
+  background: #fff;
+  padding: 0.75rem 0.85rem 0.9rem;
+}
+
+.research-banner-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  border-bottom: 1px solid #d7dde7;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.research-banner-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #283750;
+}
+
+.research-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.research-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #394a62;
+}
+
+.research-selected-badge {
+  border: 1px solid #d2a4a8;
+  color: #5e3f45;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+}
+
+.research-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.research-col-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.45rem;
+}
+
+.research-list {
+  display: grid;
+  gap: 0.28rem;
+  max-height: 420px;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.research-tile {
+  border: 1px solid #d8dce4;
+  background: #f8f9fb;
+  min-height: 44px;
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.research-tile input[type='checkbox'] {
+  margin-top: 0.2rem;
+}
+
+.research-title {
+  color: #2f3c50;
+  line-height: 1.25;
+}
+
 .content-actions {
   margin-top: 1.6rem;
   display: flex;
@@ -1317,6 +1405,12 @@ tbody tr:hover {
 .content-save-btn[disabled] {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+@media (max-width: 1080px) {
+  .research-columns {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Create Account page */
