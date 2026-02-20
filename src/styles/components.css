@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
 :root {
   --navy: #102a5c;
   --navy-dark: #0b1e43;
@@ -15,7 +17,7 @@
 
 body {
   margin: 0;
-  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
   background: var(--panel);
   color: var(--text);
 }
