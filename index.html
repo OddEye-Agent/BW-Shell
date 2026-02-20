@@ -160,13 +160,11 @@
     function applyArchiveFilters() {
       const queryInput = document.getElementById('archiveSearchInput');
       const statusFilter = document.getElementById('archiveStatusFilter');
-      const fileTypeFilter = document.getElementById('archiveFileTypeFilter');
       const tableBody = document.getElementById('archiveTableBody');
       const resultsSummary = document.getElementById('archiveResultsSummary');
 
       const query = queryInput.value.trim().toLowerCase();
       const selectedStatus = statusFilter.value;
-      const selectedFileType = fileTypeFilter.value;
 
       const filteredRows = complianceArchiveRows
         .filter((row) => {
@@ -180,9 +178,7 @@
           row.site_id.toLowerCase().includes(query);
 
           const matchesStatus = !selectedStatus || row.status === selectedStatus;
-          const matchesFileType = !selectedFileType || row.file_type === selectedFileType;
 
-          return matchesQuery && matchesStatus && matchesFileType;
         })
         .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
@@ -196,9 +192,8 @@
     function attachArchiveFilterEvents() {
       const queryInput = document.getElementById('archiveSearchInput');
       const statusFilter = document.getElementById('archiveStatusFilter');
-      const fileTypeFilter = document.getElementById('archiveFileTypeFilter');
 
-      [queryInput, statusFilter, fileTypeFilter].forEach((element) => {
+      [queryInput, statusFilter].forEach((element) => {
         element.addEventListener('input', applyArchiveFilters);
         element.addEventListener('change', applyArchiveFilters);
       });
@@ -224,13 +219,6 @@
                 <option value="Submitted">Submitted</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
-              </select>
-            </div>
-            <div class="field-group">
-              <label for="archiveFileTypeFilter">File type</label>
-              <select id="archiveFileTypeFilter" class="text-input">
-                <option value="">All file types</option>
-                <option value="PDF">PDF</option>
               </select>
             </div>
           </div>
