@@ -1115,3 +1115,9 @@ tbody tr:hover {
 .admin-tools-table.tab-bas-roles .role-description-col {
   text-align: left !important;
 }
+
+/* BAS Roles Users count alignment */
+.admin-tools-table.tab-bas-roles td:nth-child(4),
+.admin-tools-table.tab-bas-roles th:nth-child(4) {
+  text-align: center !important;
+}
