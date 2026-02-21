@@ -1702,3 +1702,54 @@ tbody tr:hover {
   min-height: 40px;
   align-items: center;
 }
+
+/* Experimental veterinarian calculator */
+.vet-calc-panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #f8fbff;
+  padding: 1rem;
+  max-width: 980px;
+}
+
+.vet-calc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.vet-calc-actions {
+  margin-top: 0.9rem;
+}
+
+.vet-calc-result {
+  margin-top: 0.8rem;
+  border: 1px solid #d8dfeb;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0.7rem 0.8rem;
+  color: #2b3b52;
+}
+
+.vet-calc-note,
+.vet-calc-warning {
+  margin-top: 0.65rem;
+  color: #5d6c82;
+  font-size: 0.92rem;
+}
+
+.vet-calc-warning {
+  color: #7a3d25;
+}
+
+@media (max-width: 980px) {
+  .vet-calc-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .vet-calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
