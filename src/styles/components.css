@@ -1753,3 +1753,76 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* Experimental tools tiles */
+.experimental-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+  gap: 0.85rem;
+}
+
+.exp-tool-tile {
+  border: 1px solid #d5deeb;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #f5f9ff, #eef6ff);
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(30, 67, 140, 0.08);
+}
+
+.exp-tool-tile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(30, 67, 140, 0.12);
+}
+
+.exp-tool-graphic {
+  font-size: 1.55rem;
+  margin-bottom: 0.4rem;
+}
+
+.exp-tool-title {
+  font-weight: 700;
+  color: #23344f;
+  margin-bottom: 0.25rem;
+}
+
+.exp-tool-desc {
+  color: #60718a;
+}
+
+.vet-calc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+}
+
+.vet-calc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 29, 51, 0.42);
+}
+
+.vet-calc-dialog {
+  position: relative;
+  width: min(960px, 94vw);
+  margin: 6vh auto;
+  background: #f3f8ff;
+  border: 1px solid #d3deef;
+  border-radius: 10px;
+  max-height: 88vh;
+  overflow: auto;
+}
+
+.vet-calc-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #d3deef;
+  background: #fff;
+}
+
+.vet-calc-dialog-header h2 {
+  margin: 0;
+}
