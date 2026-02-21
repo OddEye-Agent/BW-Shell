@@ -18,8 +18,57 @@ function wireVetCalculatorEvents() {
 
     const volumeMl = (weight * factor * (targetPcv - recipientPcv)) / donorPcv;
     const roundedMl = Math.round(volumeMl);
-
     resultEl.innerHTML = `Estimated transfusion volume: <strong>${roundedMl} mL</strong> <span class="muted">(exact: ${volumeMl.toFixed(1)} mL)</span>`;
+  });
+}
+
+function wireCriCalculatorEvents() {
+  const drugDefaults = {
+    dopamine: { min: 2, max: 20 },
+    fentanyl: { min: 1, max: 10 },
+    lidocaine: { min: 20, max: 80 },
+    insulin: { min: 0.02, max: 0.2 }
+  };
+
+  const resultEl = document.getElementById('criCalcResult');
+  const readNum = (id) => Number(document.getElementById(id)?.value || 0);
+
+  const recalc = () => {
+    const weight = readNum('criWeightKg');
+    const dose = readNum('criDose');
+    const concentration = readNum('criConcentrationMgMl');
+    const drug = document.getElementById('criDrug')?.value || 'dopamine';
+    const verifier = (document.getElementById('criVerifier')?.value || '').trim();
+
+    if (!weight || !dose || !concentration) {
+      resultEl.textContent = 'Enter weight, dose, and concentration to calculate pump rate.';
+      return;
+    }
+
+    const doseMgPerKgMin = dose / 1000;
+    const mgPerMin = doseMgPerKgMin * weight;
+    const mlPerMin = mgPerMin / concentration;
+    const mlPerHr = mlPerMin * 60;
+
+    const limits = drugDefaults[drug] || { min: 0, max: Infinity };
+    const warnings = [];
+    if (dose < limits.min || dose > limits.max) warnings.push(`Dose outside typical ${drug} range (${limits.min}-${limits.max} mcg/kg/min).`);
+    if (mlPerHr > 100) warnings.push('Pump rate looks unusually high; verify concentration/units.');
+    if (mlPerHr < 0.1) warnings.push('Pump rate looks very low; verify concentration/units.');
+    if (!verifier) warnings.push('Second verifier initials not entered.');
+
+    resultEl.innerHTML = `
+      <div><strong>Pump Rate:</strong> ${mlPerHr.toFixed(2)} mL/hr</div>
+      <div><strong>Drug delivery:</strong> ${mgPerMin.toFixed(3)} mg/min</div>
+      <div><strong>Rate basis:</strong> ${dose} mcg/kg/min at ${concentration} mg/mL</div>
+      ${warnings.length ? `<div class="cri-warning"><strong>Safety checks:</strong><ul>${warnings.map((w) => `<li>${w}</li>`).join('')}</ul></div>` : '<div class="cri-ok">Safety checks passed.</div>'}
+    `;
+  };
+
+  document.getElementById('criCalcBtn')?.addEventListener('click', recalc);
+  ['criWeightKg', 'criDose', 'criConcentrationMgMl', 'criDrug', 'criVerifier'].forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', recalc);
+    document.getElementById(id)?.addEventListener('change', recalc);
   });
 }
 
@@ -42,6 +91,7 @@ function wireExperimentalModals() {
 
   bindModal('openVetCalcTile', 'vetCalcModal', 'closeVetCalcModal', 'vetCalcBackdrop');
   bindModal('openIcuRoundingTile', 'icuRoundingModal', 'closeIcuRoundingModal', 'icuRoundingBackdrop');
+  bindModal('openCriCalcTile', 'criCalcModal', 'closeCriCalcModal', 'criCalcBackdrop');
 }
 
 function renderExperimentalVetCalculatorView() {
@@ -63,16 +113,18 @@ function renderExperimentalVetCalculatorView() {
         <div class="exp-tool-title">UCI Vet Rounding Sheet</div>
         <div class="exp-tool-desc">Capture critical ICU rounding information for veterinary technician handoffs.</div>
       </button>
+
+      <button class="exp-tool-tile" id="openCriCalcTile" type="button">
+        <div class="exp-tool-graphic" aria-hidden="true">💉⚙️</div>
+        <div class="exp-tool-title">CRI Safety Calculator</div>
+        <div class="exp-tool-desc">Standardized continuous rate infusion math with built-in safety checks.</div>
+      </button>
     </section>
 
     <div class="vet-calc-modal" id="vetCalcModal" hidden>
       <div class="vet-calc-backdrop" id="vetCalcBackdrop"></div>
       <section class="vet-calc-dialog" role="dialog" aria-modal="true" aria-label="Canine Transfusion Volume Calculator">
-        <div class="vet-calc-dialog-header">
-          <h2>Canine Transfusion Volume Calculator</h2>
-          <button type="button" class="page-btn" id="closeVetCalcModal">Close</button>
-        </div>
-
+        <div class="vet-calc-dialog-header"><h2>Canine Transfusion Volume Calculator</h2><button type="button" class="page-btn" id="closeVetCalcModal">Close</button></div>
         <div class="vet-calc-panel">
           <div class="vet-calc-grid">
             <div class="field-group"><label for="dogWeightKg">Dog Weight (kg)</label><input id="dogWeightKg" class="text-input" type="number" min="0" step="0.1" placeholder="e.g. 18.5" /></div>
@@ -81,11 +133,9 @@ function renderExperimentalVetCalculatorView() {
             <div class="field-group"><label for="donorPcv">Donor PCV / HCT (%)</label><input id="donorPcv" class="text-input" type="number" min="0" max="100" step="0.1" value="45" /></div>
             <div class="field-group"><label for="bloodVolumeFactor">Blood Volume Factor (mL/kg)</label><select id="bloodVolumeFactor" class="text-input"><option value="90" selected>90 mL/kg (typical canine)</option><option value="85">85 mL/kg (conservative)</option><option value="95">95 mL/kg (high estimate)</option></select></div>
           </div>
-
           <div class="vet-calc-actions"><button type="button" class="page-btn primary" id="calcVetVolumeBtn">Calculate Volume</button></div>
           <div class="vet-calc-result" id="vetCalcResult" aria-live="polite">Enter values and click Calculate.</div>
           <div class="vet-calc-note">Formula used: <code>Volume (mL) = Weight(kg) × Blood Volume (mL/kg) × (Target PCV − Recipient PCV) / Donor PCV</code></div>
-          <div class="vet-calc-warning">Experimental support tool only — not a substitute for veterinary clinical judgment, patient monitoring, or local protocol.</div>
         </div>
       </section>
     </div>
@@ -93,11 +143,7 @@ function renderExperimentalVetCalculatorView() {
     <div class="vet-calc-modal" id="icuRoundingModal" hidden>
       <div class="vet-calc-backdrop" id="icuRoundingBackdrop"></div>
       <section class="vet-calc-dialog" role="dialog" aria-modal="true" aria-label="UCI Vet Rounding Sheet">
-        <div class="vet-calc-dialog-header">
-          <h2>UCI Vet Rounding Sheet</h2>
-          <button type="button" class="page-btn" id="closeIcuRoundingModal">Close</button>
-        </div>
-
+        <div class="vet-calc-dialog-header"><h2>UCI Vet Rounding Sheet</h2><button type="button" class="page-btn" id="closeIcuRoundingModal">Close</button></div>
         <div class="vet-calc-panel">
           <div class="vet-calc-grid">
             <div class="field-group"><label>Patient Name</label><input class="text-input" type="text" placeholder="Patient name" /></div>
@@ -113,22 +159,34 @@ function renderExperimentalVetCalculatorView() {
             <div class="field-group"><label>Fluid Plan</label><input class="text-input" type="text" placeholder="e.g. LRS 3 mL/kg/hr" /></div>
             <div class="field-group"><label>Next Recheck Time</label><input class="text-input" type="time" /></div>
           </div>
+          <div class="field-group" style="margin-top:.8rem;"><label>Technician Notes / Handoff</label><textarea class="text-area" rows="5" placeholder="Enter monitoring notes, changes, and tasks for next round..."></textarea></div>
+          <div class="vet-calc-actions"><button type="button" class="page-btn">Save Draft</button><button type="button" class="page-btn primary">Complete Round</button></div>
+        </div>
+      </section>
+    </div>
 
-          <div class="field-group" style="margin-top:.8rem;">
-            <label>Technician Notes / Handoff</label>
-            <textarea class="text-area" rows="5" placeholder="Enter monitoring notes, changes, and tasks for next round..."></textarea>
+    <div class="vet-calc-modal" id="criCalcModal" hidden>
+      <div class="vet-calc-backdrop" id="criCalcBackdrop"></div>
+      <section class="vet-calc-dialog" role="dialog" aria-modal="true" aria-label="CRI Safety Calculator">
+        <div class="vet-calc-dialog-header"><h2>CRI Safety Calculator</h2><button type="button" class="page-btn" id="closeCriCalcModal">Close</button></div>
+        <div class="vet-calc-panel">
+          <div class="vet-calc-grid">
+            <div class="field-group"><label for="criDrug">Drug Template</label><select id="criDrug" class="text-input"><option value="dopamine">Dopamine</option><option value="fentanyl">Fentanyl</option><option value="lidocaine">Lidocaine</option><option value="insulin">Regular Insulin</option></select></div>
+            <div class="field-group"><label for="criWeightKg">Patient Weight (kg)</label><input id="criWeightKg" class="text-input" type="number" min="0" step="0.1" /></div>
+            <div class="field-group"><label for="criDose">Dose (mcg/kg/min)</label><input id="criDose" class="text-input" type="number" min="0" step="0.01" /></div>
+            <div class="field-group"><label for="criConcentrationMgMl">Final Concentration (mg/mL)</label><input id="criConcentrationMgMl" class="text-input" type="number" min="0" step="0.001" /></div>
+            <div class="field-group"><label for="criVerifier">2nd Verifier Initials</label><input id="criVerifier" class="text-input" type="text" placeholder="e.g. RS" /></div>
           </div>
-
-          <div class="vet-calc-actions">
-            <button type="button" class="page-btn">Save Draft</button>
-            <button type="button" class="page-btn primary">Complete Round</button>
-          </div>
+          <div class="vet-calc-actions"><button type="button" class="page-btn primary" id="criCalcBtn">Calculate CRI Rate</button></div>
+          <div class="vet-calc-result" id="criCalcResult" aria-live="polite">Enter CRI details to calculate infusion pump rate.</div>
+          <div class="vet-calc-note">Formula: mL/hr = ((mcg/kg/min ÷ 1000) × kg × 60) ÷ concentration(mg/mL)</div>
         </div>
       </section>
     </div>
   `;
 
   wireVetCalculatorEvents();
+  wireCriCalculatorEvents();
   wireExperimentalModals();
 }
 
