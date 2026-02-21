@@ -183,35 +183,6 @@
 
   const accordionItems = ['Research Articles', 'Videos', 'Newsletters', 'Calculators'];
 
-  function renderDrugCompatibilityRegistrySummary() {
-    const registry = globalThis.drugCompatibilityRegistry;
-    if (!registry || !Array.isArray(registry.drugs)) return '';
-
-    const legendEntries = Object.values(registry.legend || {});
-    const pairRoots = Object.keys(registry.pairs || {}).filter((key) => key !== '_schema');
-
-    return `
-      <section class="content-registry-panel" aria-label="Drug compatibility rule registry">
-        <div class="content-registry-header">
-          <strong>Drug compatibility rule registry</strong>
-          <span class="content-registry-version">v${registry.registryVersion || 'n/a'}</span>
-        </div>
-        <div class="content-registry-meta">${registry.drugs.length} canonical drugs · ${pairRoots.length} scaffolded pair roots</div>
-        <div class="content-registry-legend">
-          ${legendEntries
-            .map(
-              (entry) => `
-                <span class="legend-chip" data-color="${entry.uiColor}">
-                  ${entry.shortCode}: ${entry.code}
-                </span>
-              `
-            )
-            .join('')}
-        </div>
-      </section>
-    `;
-  }
-
   function renderResearchColumn(col, side) {
     const itemHtml = col.items
       .map(
@@ -551,8 +522,6 @@
       <section class="content-info-panel">
         <p>Choose whether to allow all content, or select specific categories or items.</p>
       </section>
-
-      ${renderDrugCompatibilityRegistrySummary()}
 
       <section class="content-accordion-list" aria-label="Content categories">
         ${accordionItems

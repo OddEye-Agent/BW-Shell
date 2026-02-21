@@ -1264,53 +1264,6 @@ tbody tr:hover {
   color: #394a62;
 }
 
-.content-registry-panel {
-  border: 1px solid #d6dde8;
-  border-radius: 4px;
-  background: #ffffff;
-  padding: 0.85rem 1rem;
-  margin-bottom: 1rem;
-}
-
-.content-registry-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.75rem;
-  color: #1f2a3a;
-}
-
-.content-registry-version {
-  font-size: 0.85rem;
-  color: #607089;
-}
-
-.content-registry-meta {
-  margin-top: 0.3rem;
-  color: #394a62;
-}
-
-.content-registry-legend {
-  margin-top: 0.55rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.legend-chip {
-  border: 1px solid #c9d2dd;
-  border-radius: 999px;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.84rem;
-  color: #2f3c50;
-  background: #f8fafc;
-}
-
-.legend-chip[data-color='green'] { border-color: #78c38f; }
-.legend-chip[data-color='red'] { border-color: #e29393; }
-.legend-chip[data-color='yellow'] { border-color: #d9c06e; }
-.legend-chip[data-color='light-blue'] { border-color: #8fb2e2; }
-
 .content-accordion-list {
   display: grid;
   gap: 0.75rem;
