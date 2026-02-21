@@ -81,6 +81,11 @@ const accountRows = [
         ['System Settings', 'Centralized admin-level configuration options.'],
         ['Job Scheduler', 'Control recurring maintenance automation.'],
         ['Permissions Matrix', 'Visualize and tune role-based access.']
+      ],
+      Experimental: [
+        ['Scratchpad', 'Drop temporary notes, copy, and draft ideas here during prototyping.'],
+        ['Parity Experiments', 'Try alternate UI components and interaction experiments before promoting to production flows.'],
+        ['Validation Queue', 'Capture ad hoc checks and one-off verification tasks.']
       ]
     };
 
@@ -94,7 +99,8 @@ const accountRows = [
       Websites: 'Website Management',
       Locator: 'Locator',
       Video: 'Video',
-      'Admin Tools': 'Admin Tools'
+      'Admin Tools': 'Admin Tools',
+      Experimental: 'Experimental'
     };
 
     const complianceTabs = [
