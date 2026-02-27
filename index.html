@@ -85,10 +85,15 @@
       userDropdown.innerHTML = `
         <div class="role-switch-group">${roleButtons}</div>
         <div class="dropdown-divider"></div>
-        <button type="button" role="menuitem">My Profile</button>
-        <button type="button" role="menuitem">Preferences</button>
+        <button type="button" role="menuitem" id="accountSettingsMenuItem">Account Settings</button>
         <button type="button" role="menuitem">Sign Out</button>
       `;
+
+      userDropdown.querySelector('#accountSettingsMenuItem')?.addEventListener('click', () => {
+        setUserMenuOpen(false);
+        navItems.forEach((item) => item.classList.remove('active'));
+        renderSection('Account Settings');
+      });
 
       userDropdown.querySelectorAll('[data-switch-role]').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -901,6 +906,48 @@
       });
     }
 
+    function renderAccountSettingsView() {
+      const tabs = (store.state.accountSettingsTab === 'social') ? 'social' : 'basic';
+      pageContainer.innerHTML = `
+        <div class="page-header"><h1 class="page-title">Profile Settings: siva kumar</h1></div>
+        <div class="account-settings-subnav">
+          <button class="users-subnav-item ${tabs === 'basic' ? 'active' : ''}" type="button" data-settings-tab="basic">Basic Info</button>
+          <button class="users-subnav-item ${tabs === 'social' ? 'active' : ''}" type="button" data-settings-tab="social">Social Network</button>
+        </div>
+        ${tabs === 'basic' ? `
+          <section class="account-settings-panel">
+            <p class="account-settings-copy">Basic information for this user account.</p>
+            <div class="account-settings-grid">
+              <div class="field-group"><label>First Name</label><input class="text-input" value="siva" /></div>
+              <div class="field-group"><label>Last Name</label><input class="text-input" value="kumar" /></div>
+              <div class="field-group account-email-readonly"><label>Email ID</label><input class="text-input" value="SivaKumar.NarasaiahGari@broadridge.com" readonly /></div>
+            </div>
+          </section>
+        ` : `
+          <section class="account-settings-panel">
+            <p class="account-settings-copy">Connect and manage your social media accounts. Control sharing permissions and streamline your content distribution across platforms.</p>
+            <div class="social-metrics">
+              <article><h4>Total Accounts</h4><p>0</p></article>
+              <article><h4>Connected Accounts</h4><p>0</p></article>
+              <article><h4>Sharing Enabled</h4><p>0</p></article>
+            </div>
+            <div class="social-card-list">
+              <article class="social-card"><div class="social-avatar">f</div><div><h4>Facebook <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Share content with your Facebook audience and manage your business page.</p></div><button class="page-btn primary">Connect</button></article>
+              <article class="social-card"><div class="social-avatar">◎</div><div><h4>Instagram <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Showcase your content on Instagram and connect with your followers.</p></div><button class="page-btn primary">Connect</button></article>
+              <article class="social-card"><div class="social-avatar">in</div><div><h4>LinkedIn <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Share content with your LinkedIn audience and manage your business page.</p></div><button class="page-btn primary">Connect</button></article>
+            </div>
+          </section>
+        `}
+      `;
+
+      pageContainer.querySelectorAll('[data-settings-tab]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          store.set({ accountSettingsTab: btn.getAttribute('data-settings-tab') });
+          renderAccountSettingsView();
+        });
+      });
+    }
+
     function renderAdminToolsView() {
       const subnavButtons = adminToolsTabs
         .map(
@@ -959,6 +1006,8 @@
         renderContentView();
       } else if (sectionName === 'Admin Tools') {
         renderAdminToolsView();
+      } else if (sectionName === 'Account Settings') {
+        renderAccountSettingsView();
       } else {
         renderPlaceholderView(sectionName);
       }
