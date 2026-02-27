@@ -326,10 +326,10 @@ const accountRows = [
         ],
         columns: [
           { key: 'eventId', label: 'Event ID' },
-          { key: 'eventDate', label: 'Date' },
+          { key: 'eventDate', label: 'Date', width: '150px' },
           { key: 'creationMode', label: 'Creation Mode' },
-          { key: 'fileName', label: 'CSV File' },
-          { key: 'status', label: 'Status' },
+          { key: 'fileName', label: 'CSV File', width: '190px' },
+          { key: 'status', label: 'Status', width: '150px' },
           { key: 'output', label: 'Output Data', width: '15%' },
           { key: 'downloadCsv', label: 'Download CSV' },
           { key: 'errorDetails', label: 'Details', width: '64px' }

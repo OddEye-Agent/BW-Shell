@@ -563,6 +563,20 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
+.admin-tools-table.tab-bulk-upload-events th:nth-child(2),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(2),
+.admin-tools-table.tab-bulk-upload-events th:nth-child(5),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(5) {
+  white-space: nowrap;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(4),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(4) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .bulk-errors-list {
   margin: 0;
   padding-left: 1.2rem;
