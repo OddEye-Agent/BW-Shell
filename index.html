@@ -19,13 +19,8 @@
   <header class="top-bar">
     <div class="brand">BW-Shell</div>
     <div class="user-menu">
-      <button class="user-menu-button" id="userMenuButton" aria-expanded="false" aria-haspopup="true">jdoe_admin
-        ▾</button>
-      <div class="dropdown" id="userDropdown" role="menu" aria-label="User menu" hidden>
-        <button type="button" role="menuitem">My Profile</button>
-        <button type="button" role="menuitem">Preferences</button>
-        <button type="button" role="menuitem">Sign Out</button>
-      </div>
+      <button class="user-menu-button" id="userMenuButton" aria-expanded="false" aria-haspopup="true">BAS Super Admin ▾</button>
+      <div class="dropdown role-dropdown" id="userDropdown" role="menu" aria-label="User menu" hidden></div>
     </div>
   </header>
 
@@ -61,10 +56,85 @@
     const uiVersion = 'compliance-v2';
     const store = window.bwShellStore;
     const archivePdfSamples = ['assets/pdfs/ArchiveSnapsnot2.pdf', 'assets/pdfs/archivingExample.pdf'];
+    const ROLE_PROFILES = {
+      'Super Admin': { label: 'BAS Super Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video','Admin Tools','Experimental'], readOnly: false },
+      'Program Admin': { label: 'BD Program Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video'], readOnly: false },
+      'Compliance Admin': { label: 'BD Compliance Admin', pages: ['Accounts','Users','Compliance','Content','Websites'], readOnly: false },
+      'Compliance Reviewer': { label: 'BD Compliance Reviewer', pages: ['Compliance','Content','Websites'], readOnly: true },
+      'Financial Advisor': { label: 'Financial Advisor', pages: ['Content','Websites','Locator','Video'], readOnly: true }
+    };
+    const ROLE_ORDER = ['Super Admin','Program Admin','Compliance Admin','Compliance Reviewer','Financial Advisor'];
 
     document.body.setAttribute('data-ui-version', uiVersion);
 
     // Data/constants extracted to src/data/mock/portal-data.js (PR3).
+
+    function getCurrentRole() {
+      return store.state.currentRole || 'Super Admin';
+    }
+
+    function renderUserDropdown() {
+      const currentRole = getCurrentRole();
+      const roleButtons = ROLE_ORDER.map((role) => {
+        const profile = ROLE_PROFILES[role];
+        const active = role === currentRole ? ' role-item-active' : '';
+        return `<button type="button" class="role-switch-item${active}" data-switch-role="${role}" role="menuitem">${profile.label}</button>`;
+      }).join('');
+
+      userDropdown.innerHTML = `
+        <div class="role-switch-group">${roleButtons}</div>
+        <div class="dropdown-divider"></div>
+        <button type="button" role="menuitem">My Profile</button>
+        <button type="button" role="menuitem">Preferences</button>
+        <button type="button" role="menuitem">Sign Out</button>
+      `;
+
+      userDropdown.querySelectorAll('[data-switch-role]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const nextRole = btn.getAttribute('data-switch-role');
+          setRole(nextRole);
+          setUserMenuOpen(false);
+        });
+      });
+    }
+
+    function setRole(role) {
+      const nextRole = ROLE_PROFILES[role] ? role : 'Super Admin';
+      store.set({ currentRole: nextRole });
+      userMenuButton.textContent = `${ROLE_PROFILES[nextRole].label} ▾`;
+      renderUserDropdown();
+      applyRoleExperience();
+    }
+
+    function applyRoleExperience() {
+      const role = getCurrentRole();
+      const profile = ROLE_PROFILES[role] || ROLE_PROFILES['Super Admin'];
+      navItems.forEach((item) => {
+        const allowed = profile.pages.includes(item.dataset.page);
+        item.hidden = !allowed;
+      });
+
+      const active = store.state.activePage;
+      if (!profile.pages.includes(active)) {
+        const fallback = profile.pages[0];
+        navItems.forEach((item) => item.classList.toggle('active', item.dataset.page === fallback));
+        renderSection(fallback);
+      } else {
+        enforceRoleActions();
+      }
+    }
+
+    function enforceRoleActions() {
+      const role = getCurrentRole();
+      const readOnly = ROLE_PROFILES[role]?.readOnly;
+      if (!readOnly) return;
+      document.querySelectorAll('.new-role-btn,.row-action-button,.crud-action-btn.update-btn,.crud-action-btn').forEach((el) => {
+        el.style.display = 'none';
+      });
+      document.querySelectorAll('.page-btn.primary').forEach((el) => {
+        if ((el.textContent || '').match(/Create|Save|Update/i)) el.style.display = 'none';
+      });
+    }
 
     function setUserMenuOpen(isOpen) {
       store.set({ userMenuOpen: isOpen });
@@ -802,25 +872,18 @@
       closeAllRowMenus();
       if (sectionName === 'Accounts') {
         renderAccountsView();
-        return;
-      }
-      if (sectionName === 'Users') {
+      } else if (sectionName === 'Users') {
         renderUsersView();
-        return;
-      }
-      if (sectionName === 'Compliance') {
+      } else if (sectionName === 'Compliance') {
         renderComplianceView();
-        return;
-      }
-      if (sectionName === 'Content') {
+      } else if (sectionName === 'Content') {
         renderContentView();
-        return;
-      }
-      if (sectionName === 'Admin Tools') {
+      } else if (sectionName === 'Admin Tools') {
         renderAdminToolsView();
-        return;
+      } else {
+        renderPlaceholderView(sectionName);
       }
-      renderPlaceholderView(sectionName);
+      enforceRoleActions();
     }
 
     navItems.forEach((button) => {
@@ -855,9 +918,14 @@
       }
     });
 
+    renderUserDropdown();
+    const initialRole = store.state.currentRole || 'Super Admin';
+    setRole(initialRole);
     const initialPage = store.state.activePage || 'Accounts';
-    navItems.forEach((item) => item.classList.toggle('active', item.dataset.page === initialPage));
-    renderSection(initialPage);
+    const initialAllowedPages = (ROLE_PROFILES[getCurrentRole()] || ROLE_PROFILES['Super Admin']).pages;
+    const firstPage = initialAllowedPages.includes(initialPage) ? initialPage : initialAllowedPages[0];
+    navItems.forEach((item) => item.classList.toggle('active', item.dataset.page === firstPage));
+    renderSection(firstPage);
   </script>
 </body>
 

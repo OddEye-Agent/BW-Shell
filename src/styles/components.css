@@ -107,6 +107,39 @@ body {
   background: #f0f4fa;
 }
 
+.role-dropdown {
+  min-width: 260px;
+}
+
+.role-switch-group {
+  padding: 0.35rem;
+  background: #f7f9fd;
+}
+
+.role-switch-item {
+  border: 1px solid #d3ddec !important;
+  border-radius: 6px;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: #15315d;
+  background: #edf3fb !important;
+}
+
+.role-switch-item:last-child {
+  margin-bottom: 0;
+}
+
+.role-switch-item.role-item-active {
+  border-color: #2a5fd6 !important;
+  background: #e3edfb !important;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 0.25rem 0;
+}
+
 .main-nav {
   background: var(--white);
   border-bottom: 1px solid var(--line);
