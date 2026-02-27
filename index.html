@@ -908,6 +908,8 @@
 
     function renderAccountSettingsView() {
       const tabs = (store.state.accountSettingsTab === 'social') ? 'social' : 'basic';
+      const linkedinConnected = !!store.state.linkedinConnected;
+      const linkedinSharingDisabled = !!store.state.linkedinSharingDisabled;
       pageContainer.innerHTML = `
         <div class="page-header"><h1 class="page-title">Profile Settings: siva kumar</h1></div>
         <div class="account-settings-subnav">
@@ -927,18 +929,61 @@
           <section class="account-settings-panel">
             <p class="account-settings-copy">Connect and manage your social media accounts. Control sharing permissions and streamline your content distribution across platforms.</p>
             <div class="social-metrics">
-              <article><h4>Total Accounts</h4><p>0</p></article>
-              <article><h4>Connected Accounts</h4><p>0</p></article>
-              <article><h4>Sharing Enabled</h4><p>0</p></article>
+              <article><h4>Total Accounts</h4><p>3</p></article>
+              <article><h4>Connected Accounts</h4><p>${linkedinConnected ? 1 : 0}</p></article>
+              <article><h4>Sharing Enabled</h4><p>${linkedinConnected && !linkedinSharingDisabled ? 1 : 0}</p></article>
             </div>
             <div class="social-card-list">
               <article class="social-card"><div class="social-avatar">f</div><div><h4>Facebook <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Share content with your Facebook audience and manage your business page.</p></div><button class="page-btn primary">Connect</button></article>
               <article class="social-card"><div class="social-avatar">◎</div><div><h4>Instagram <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Showcase your content on Instagram and connect with your followers.</p></div><button class="page-btn primary">Connect</button></article>
-              <article class="social-card"><div class="social-avatar">in</div><div><h4>LinkedIn <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Share content with your LinkedIn audience and manage your business page.</p></div><button class="page-btn primary">Connect</button></article>
+              <article class="social-card linkedin-card ${linkedinConnected ? 'connected' : ''}">
+                <div class="social-avatar">in</div>
+                <div>
+                  <h4>LinkedIn <span class="status-pill ${linkedinConnected ? 'status-completed' : 'status-failed-validation'}">${linkedinConnected ? 'Connected' : 'Not Connected'}</span></h4>
+                  <p>Share content with your LinkedIn audience and manage your business page.</p>
+                  ${linkedinConnected ? `<div class="linkedin-profile-box"><strong>Connected Profile</strong><div class="linkedin-profile-row"><span class="linkedin-avatar-mini"></span><span>siva kumar</span><label class="linkedin-toggle"><input type="checkbox" id="linkedinSharingToggle" ${linkedinSharingDisabled ? '' : 'checked'} /><span>Disable LinkedIn Sharing</span></label></div></div>` : ''}
+                </div>
+                <button class="page-btn ${linkedinConnected ? '' : 'primary'}" id="linkedinConnectBtn">${linkedinConnected ? 'Disconnect' : 'Connect'}</button>
+              </article>
             </div>
           </section>
+          <div class="oauth-modal" id="linkedinOauthModal" hidden>
+            <div class="oauth-backdrop" id="linkedinOauthBackdrop"></div>
+            <div class="oauth-dialog">
+              <h3>Authorize LinkedIn</h3>
+              <p>Allow BAS to access your LinkedIn profile and post permissions.</p>
+              <ul>
+                <li>Read basic profile (r_liteprofile)</li>
+                <li>Read email address (r_emailaddress)</li>
+                <li>Share content on your behalf (w_member_social)</li>
+              </ul>
+              <div class="role-form-actions"><button class="page-btn" id="linkedinOauthCancel" type="button">Cancel</button><button class="page-btn primary" id="linkedinOauthApprove" type="button">Authorize</button></div>
+            </div>
+          </div>
         `}
       `;
+
+      pageContainer.querySelector('#linkedinConnectBtn')?.addEventListener('click', () => {
+        if (linkedinConnected) {
+          store.set({ linkedinConnected: false, linkedinSharingDisabled: false });
+          renderAccountSettingsView();
+          return;
+        }
+        document.getElementById('linkedinOauthModal')?.removeAttribute('hidden');
+      });
+      pageContainer.querySelector('#linkedinOauthCancel')?.addEventListener('click', () => {
+        document.getElementById('linkedinOauthModal')?.setAttribute('hidden', 'hidden');
+      });
+      pageContainer.querySelector('#linkedinOauthBackdrop')?.addEventListener('click', () => {
+        document.getElementById('linkedinOauthModal')?.setAttribute('hidden', 'hidden');
+      });
+      pageContainer.querySelector('#linkedinOauthApprove')?.addEventListener('click', () => {
+        store.set({ linkedinConnected: true, linkedinSharingDisabled: false });
+        renderAccountSettingsView();
+      });
+      pageContainer.querySelector('#linkedinSharingToggle')?.addEventListener('change', (e) => {
+        store.set({ linkedinSharingDisabled: !e.target.checked });
+      });
 
       pageContainer.querySelectorAll('[data-settings-tab]').forEach((btn) => {
         btn.addEventListener('click', () => {

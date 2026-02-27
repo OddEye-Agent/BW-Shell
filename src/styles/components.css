@@ -645,6 +645,69 @@ tbody tr:hover {
 .social-card h4 { margin:0 0 .22rem; }
 .social-card p { margin:0; color:#5f6d82; }
 
+.linkedin-card.connected {
+  border-color: #d5e7d9;
+  background: #fbfffc;
+}
+
+.linkedin-profile-box {
+  margin-top: 0.6rem;
+  border: 1px solid #e2e8f1;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+.linkedin-profile-row {
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.linkedin-avatar-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #9ac7f8, #5e8ac0);
+  display: inline-block;
+}
+
+.linkedin-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #344861;
+  font-size: 0.9rem;
+}
+
+.oauth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+}
+
+.oauth-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.45);
+}
+
+.oauth-dialog {
+  position: relative;
+  max-width: 460px;
+  margin: 14vh auto 0;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #d5deec;
+  box-shadow: 0 18px 48px rgba(14, 24, 43, 0.24);
+  padding: 1rem 1.15rem;
+}
+
+.oauth-dialog h3 { margin: 0 0 0.5rem; }
+.oauth-dialog p { margin: 0 0 0.6rem; }
+.oauth-dialog ul { margin: 0; padding-left: 1.2rem; color: #43556f; }
+
 .admin-tools-subtable-title {
   margin: 1rem 0 0.55rem;
   font-size: 1rem;
