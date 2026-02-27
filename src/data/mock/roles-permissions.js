@@ -276,6 +276,10 @@ window.rolePermissionData = {
       ]
     },
     {
+      "name": "Admin",
+      "permissions": []
+    },
+    {
       "name": "General",
       "permissions": [
         {
