@@ -556,6 +556,13 @@ tbody tr:hover {
   background: #eef4ff;
 }
 
+.details-icon-col {
+  width: 64px;
+  max-width: 64px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .bulk-errors-list {
   margin: 0;
   padding-left: 1.2rem;

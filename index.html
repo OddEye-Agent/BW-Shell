@@ -459,7 +459,7 @@
           const valueCells = tabConfig.columns
             .map((column) => {
               const value = row[column.key];
-              const tdClasses = [typeof value === 'number' ? 'numeric-col' : '', column.key === 'description' && tabConfig.name === 'BAS Roles' ? 'role-description-col' : ''].filter(Boolean).join(' ');
+              const tdClasses = [typeof value === 'number' ? 'numeric-col' : '', column.key === 'description' && tabConfig.name === 'BAS Roles' ? 'role-description-col' : '', tabConfig.name === 'Bulk Upload Events' && column.key === 'errorDetails' ? 'details-icon-col' : ''].filter(Boolean).join(' ');
               const widthStyle = column.width ? ` style="width:${column.width};max-width:${column.width};"` : '';
 
               if (column.key === 'viewUrl' && value) {
