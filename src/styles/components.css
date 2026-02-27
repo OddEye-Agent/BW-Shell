@@ -563,11 +563,22 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
+.admin-tools-table.tab-bulk-upload-events th:nth-child(1),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(1),
 .admin-tools-table.tab-bulk-upload-events th:nth-child(2),
 .admin-tools-table.tab-bulk-upload-events td:nth-child(2),
+.admin-tools-table.tab-bulk-upload-events th:nth-child(3),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(3),
 .admin-tools-table.tab-bulk-upload-events th:nth-child(5),
 .admin-tools-table.tab-bulk-upload-events td:nth-child(5) {
   white-space: nowrap;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(1),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(1),
+.admin-tools-table.tab-bulk-upload-events th:nth-child(3),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(3) {
+  width: 1%;
 }
 
 .admin-tools-table.tab-bulk-upload-events {
