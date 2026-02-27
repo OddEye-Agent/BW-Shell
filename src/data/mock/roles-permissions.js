@@ -249,6 +249,15 @@ window.rolePermissionData = {
       "name": "Content",
       "permissions": [
         {
+          "name": "Select content",
+          "description": "Allows selecting content for actions or configuration"
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "permissions": [
+        {
           "name": "View billing information",
           "description": "Allows viewing of billing information"
         },
@@ -263,10 +272,6 @@ window.rolePermissionData = {
         {
           "name": "Manage subscription details",
           "description": "Allows management of subscription settings and details"
-        },
-        {
-          "name": "Select content",
-          "description": "Allows selecting content for actions or configuration"
         }
       ]
     },
@@ -383,7 +388,7 @@ window.rolePermissionData = {
     {
       "name": "Super Admin",
       "title": "Super Admin",
-      "description": "Auto-generated from MVP matrix for Super Admin.",
+      "description": "Full platform authority across account administration, role governance, compliance operations, and website platform controls.",
       "permissions": [
         "Create a new account",
         "Delete an account",
@@ -471,7 +476,7 @@ window.rolePermissionData = {
     {
       "name": "Broadridge Manager",
       "title": "Broadridge Manager",
-      "description": "Auto-generated from MVP matrix for Broadridge Manager.",
+      "description": "Internal leadership role for overseeing account operations, staff access, and program execution across assigned books of business.",
       "permissions": [
         "Create a new account",
         "Update an account",
@@ -579,7 +584,7 @@ window.rolePermissionData = {
     {
       "name": "Service",
       "title": "Service",
-      "description": "Auto-generated from MVP matrix for Service.",
+      "description": "Service operations role focused on day-to-day support, user/account maintenance, and guided website access actions.",
       "permissions": [
         "Create a new account",
         "Update an account",
@@ -629,7 +634,7 @@ window.rolePermissionData = {
     {
       "name": "Sales",
       "title": "Sales",
-      "description": "Auto-generated from MVP matrix for Sales.",
+      "description": "Sales enablement role with limited operational access for onboarding support, account visibility, and collaboration setup.",
       "permissions": [
         "Create a new account",
         "Update an account",
@@ -662,7 +667,7 @@ window.rolePermissionData = {
     {
       "name": "Financial Advisor",
       "title": "Financial Advisor",
-      "description": "Auto-generated from MVP matrix for Financial Advisor.",
+      "description": "Advisor role centered on website/content participation and advisor-facing digital experiences with limited administrative scope.",
       "permissions": [
         "Access Websites parent tab",
         "Read locator details",
@@ -677,7 +682,7 @@ window.rolePermissionData = {
     {
       "name": "Program Admin",
       "title": "Program Admin",
-      "description": "Auto-generated from MVP matrix for Program Admin.",
+      "description": "Client-side administration role for program setup, workflow configuration, user/group oversight, and scoped content controls.",
       "permissions": [
         "Create a new workflow definition",
         "Update a workflow definition",
@@ -710,7 +715,7 @@ window.rolePermissionData = {
     {
       "name": "Complaince Admin",
       "title": "Complaince Admin",
-      "description": "Auto-generated from MVP matrix for Complaince Admin.",
+      "description": "Compliance administration role for managing policies, workflow definitions, reviewer assignment, and compliance governance controls.",
       "permissions": [
         "Create a new workflow definition",
         "Update a workflow definition",
@@ -734,7 +739,7 @@ window.rolePermissionData = {
     {
       "name": "Compliance Reviewer",
       "title": "Compliance Reviewer",
-      "description": "Auto-generated from MVP matrix for Compliance Reviewer.",
+      "description": "Compliance review role for processing review queues, evaluating submissions, and recording policy decisions with audit integrity.",
       "permissions": [
         "Access the compliance review queue",
         "View compliance reports",
