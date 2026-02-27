@@ -11,7 +11,9 @@
     permissionSearch: '',
     groupDrawerOpen: false,
     bulkCreateDrawerOpen: false,
-    bulkCreateMethod: ''
+    bulkCreateMethod: '',
+    bulkStep: 'method',
+    bulkUploadStatus: 'none'
   };
 
   const usersRows = [
@@ -112,6 +114,40 @@
       `)
       .join('');
 
+
+    const isUploadStep = state.bulkStep === 'upload';
+    const uploadStatus = state.bulkUploadStatus;
+    const uploadZone = uploadStatus === 'none'
+      ? `<div class="bulk-upload-drop" id="bulkUploadDrop"><div class="bulk-upload-icon">⇪</div><p><button type="button" class="bulk-link-btn" id="bulkUploadInvalidBtn">Click to upload csv file</button> or drag and drop</p></div>`
+      : uploadStatus === 'error'
+        ? `<div class="bulk-upload-file error"><div><strong>Wrong website file.csv</strong><small>200 KB</small><p class="error-text">73 validation errors</p></div><button type="button" class="page-btn" id="bulkReplaceBtn">Replace</button></div>
+           <div class="bulk-result error"><div class="bulk-result-head"><strong>73 Records out of 250 Failed to Process</strong><button type="button" class="page-btn">Export Errors</button></div><p>Some records couldn't be processed. Fix the errors and re-upload the CSV.</p>
+           <div class="bulk-error-list"><div><strong>Row 83</strong> Headers — Missing required columns</div><div><strong>Row 111</strong> Advisor Name — must be at least 2 characters</div><div><strong>Row 126</strong> Website Name — is required</div></div></div>`
+        : `<div class="bulk-upload-file success"><div><strong>Correct website file.csv</strong><small>200 KB</small><p class="success-text">Successfully Processed 250 of 250 Records</p></div><button type="button" class="page-btn" id="bulkReplaceBtn">Replace</button></div>
+           <div class="bulk-result success"><strong>Successfully Created [x] Users</strong><p>Users have been created in BAS Portal and Wix with website assignments. Email notifications were suppressed.</p></div>
+           <div class="bulk-info"><strong>Where to Find Your Users</strong><p>Check Users page for BAS access and visit Wix folder for website assignments and contributor roles.</p></div>`;
+
+    const bulkDrawerMarkup = `
+      <div class="bulk-drawer-overlay${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawerOverlay"></div>
+      <aside class="bulk-drawer${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawer" aria-hidden="${state.bulkCreateDrawerOpen ? 'false' : 'true'}">
+        <div class="bulk-drawer-header"><h2>Bulk create</h2><button class="bulk-close" id="closeBulkDrawerBtn" type="button">×</button></div>
+        <div class="bulk-steps"><span class="${!isUploadStep ? 'active' : 'done'}">Method</span><span class="${isUploadStep ? 'active' : ''}">Upload</span></div>
+        ${!isUploadStep ? `
+          <label class="bulk-label">Select Creation Method <span class="required">*</span></label>
+          <label class="bulk-method-item"><input type="radio" name="bulkMethod" value="portal" ${state.bulkCreateMethod === 'portal' ? 'checked' : ''} /><span><strong>Create Users in the BAS Portal</strong><small>Users will have access to the BAS Portal only.</small></span></label>
+          <label class="bulk-method-item"><input type="radio" name="bulkMethod" value="wix" ${state.bulkCreateMethod === 'wix' ? 'checked' : ''} /><span><strong>Create Users in Wix & Assign to Websites</strong><small>Users will be created in Wix and assigned to their corresponding website(s).</small></span></label>
+          <label class="bulk-method-item"><input type="radio" name="bulkMethod" value="both" ${state.bulkCreateMethod === 'both' ? 'checked' : ''} /><span><strong>Create Users in BAS Portal, Wix & Assign to Websites</strong><small>Full user creation with both portal access and website assignments.</small></span></label>
+          <label class="bulk-warning"><input type="checkbox" /><span><strong>Suppress Email Notifications</strong><small>When enabled, advisors will not receive email notifications about their account creation. You can notify them manually later.</small></span></label>
+          <div class="bulk-info"><strong>What happens next?</strong><p>After selecting your creation method, you'll upload a CSV file containing user information. We'll validate the data and confirm the creation.</p></div>
+        ` : `
+          <div class="bulk-upload-header"><h3>CSV Template</h3><button type="button" class="page-btn">Download Template</button></div>
+          <div class="bulk-columns"><strong>Required CSV Columns</strong><ul><li>Advisor Name</li><li>Advisor Email</li><li>Role</li><li>User Created Date</li><li>Account Affiliation</li><li>User Status</li></ul><ul><li>Published (Yes/No)</li><li>Site ID</li><li>Owner Account ID</li><li>Date Created</li><li>Contributor Account IDs</li><li>Broadforce ID</li></ul></div>
+          <label class="bulk-label">Upload CSV File <span class="required">*</span></label>
+          ${uploadZone}
+        `}
+        <div class="bulk-actions"><button type="button" class="page-btn" id="${isUploadStep ? 'bulkBackBtn' : 'cancelBulkDrawerBtn'}">${isUploadStep ? 'Back' : 'Cancel'}</button><button type="button" class="page-btn primary" id="bulkNextBtn" ${(!isUploadStep && !state.bulkCreateMethod) ? 'disabled' : ''}>${uploadStatus === 'success' ? 'Done' : 'Next'}</button></div>
+      </aside>`;
+
     container.innerHTML = `
       <div class="users-header-row"><h1 class="page-title">User Management</h1></div>
       ${renderUsersSubnav()}
@@ -143,32 +179,7 @@
           <tbody>${rows}</tbody>
         </table>
       </div>
-
-      <div class="bulk-drawer-overlay${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawerOverlay"></div>
-      <aside class="bulk-drawer${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawer" aria-hidden="${state.bulkCreateDrawerOpen ? 'false' : 'true'}">
-        <div class="bulk-drawer-header">
-          <h2>Bulk create</h2>
-          <button class="bulk-close" id="closeBulkDrawerBtn" type="button">×</button>
-        </div>
-        <div class="bulk-steps"><span class="active">Method</span><span>Upload</span></div>
-        <label class="bulk-label">Select Creation Method <span class="required">*</span></label>
-        <label class="bulk-method-item">
-          <input type="radio" name="bulkMethod" value="portal" ${state.bulkCreateMethod === 'portal' ? 'checked' : ''} />
-          <span><strong>Create Users in the BAS Portal</strong><small>Users will have access to the BAS Portal only.</small></span>
-        </label>
-        <label class="bulk-method-item">
-          <input type="radio" name="bulkMethod" value="wix" ${state.bulkCreateMethod === 'wix' ? 'checked' : ''} />
-          <span><strong>Create Users in Wix & Assign to Websites</strong><small>Users will be created in Wix and assigned to their corresponding website(s).</small></span>
-        </label>
-        <label class="bulk-method-item">
-          <input type="radio" name="bulkMethod" value="both" ${state.bulkCreateMethod === 'both' ? 'checked' : ''} />
-          <span><strong>Create Users in BAS Portal, Wix & Assign to Websites</strong><small>Full user creation with both portal access and website assignments.</small></span>
-        </label>
-        <label class="bulk-warning"><input type="checkbox" /><span><strong>Suppress Email Notifications</strong><small>When enabled, advisors will not receive email notifications about their account creation. You can notify them manually later.</small></span></label>
-        <div class="bulk-info"><strong>What happens next?</strong><p>After selecting your creation method, you'll upload a CSV file containing user information. We'll validate the data and confirm the creation.</p></div>
-        <div class="bulk-actions"><button type="button" class="page-btn" id="cancelBulkDrawerBtn">Cancel</button><button type="button" class="page-btn primary" ${state.bulkCreateMethod ? '' : 'disabled'}>Next</button></div>
-      </aside>
-    `;
+${bulkDrawerMarkup}    `;
 
     wireUsersSubnav(container);
 
@@ -182,11 +193,15 @@
 
     const closeBulkDrawer = () => {
       state.bulkCreateDrawerOpen = false;
+      state.bulkStep = 'method';
+      state.bulkUploadStatus = 'none';
       renderUsersView();
     };
 
     container.querySelector('#bulkCreateBtn')?.addEventListener('click', () => {
       state.bulkCreateDrawerOpen = true;
+      state.bulkStep = 'method';
+      state.bulkUploadStatus = 'none';
       renderUsersView();
     });
     container.querySelector('#closeBulkDrawerBtn')?.addEventListener('click', closeBulkDrawer);
@@ -197,6 +212,32 @@
         state.bulkCreateMethod = radio.value;
         renderUsersView();
       });
+    });
+    container.querySelector('#bulkNextBtn')?.addEventListener('click', () => {
+      if (state.bulkStep === 'method') {
+        if (!state.bulkCreateMethod) return;
+        state.bulkStep = 'upload';
+      } else if (state.bulkUploadStatus === 'none') {
+        state.bulkUploadStatus = 'error';
+      } else if (state.bulkUploadStatus === 'error') {
+        state.bulkUploadStatus = 'success';
+      } else {
+        closeBulkDrawer();
+        return;
+      }
+      renderUsersView();
+    });
+    container.querySelector('#bulkBackBtn')?.addEventListener('click', () => {
+      state.bulkStep = 'method';
+      renderUsersView();
+    });
+    container.querySelector('#bulkUploadInvalidBtn')?.addEventListener('click', () => {
+      state.bulkUploadStatus = 'error';
+      renderUsersView();
+    });
+    container.querySelector('#bulkReplaceBtn')?.addEventListener('click', () => {
+      state.bulkUploadStatus = state.bulkUploadStatus === 'error' ? 'success' : 'error';
+      renderUsersView();
     });
 
     container.querySelectorAll('[data-edit-user]').forEach((btn) => {
