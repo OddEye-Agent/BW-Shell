@@ -570,11 +570,23 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
+.admin-tools-table.tab-bulk-upload-events {
+  min-width: 0;
+  width: 100%;
+  table-layout: auto;
+}
+
 .admin-tools-table.tab-bulk-upload-events th:nth-child(4),
 .admin-tools-table.tab-bulk-upload-events td:nth-child(4) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(7),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(7) {
+  width: 1%;
+  white-space: nowrap;
 }
 
 .bulk-errors-list {
@@ -809,6 +821,10 @@ tbody tr:hover {
 
 .admin-tools-table {
   min-width: 2100px;
+}
+
+.admin-tools-table.tab-bulk-upload-events {
+  min-width: 0 !important;
 }
 
 .calculators-table-wrap {
