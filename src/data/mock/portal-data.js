@@ -153,7 +153,9 @@ const accountRows = [
           { roleName: 'Compliance Reviewer', roleKey: 'COMPLIANCE_REVIEW', description: 'Can review queued compliance artifacts and submit approval decisions.', usersAssigned: 15, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-05' },
           { roleName: 'Compliance Admin', roleKey: 'COMPLIANCE_ADMIN', description: 'Manages compliance configuration, escalations, and remediation routing.', usersAssigned: 6, staffFlag: false, assignmentBand: '0-10', updatedOn: '2026-02-04' },
           { roleName: 'Program Admin', roleKey: 'PROGRAM_ADMIN', description: 'Configures program-level metadata and onboarding defaults for testing.', usersAssigned: 12, staffFlag: false, assignmentBand: '11-25', updatedOn: '2026-02-03' },
-          { roleName: 'Developer', roleKey: 'DEVELOPER', description: 'Engineering access for integration validation and sandbox troubleshooting.', usersAssigned: 31, staffFlag: true, assignmentBand: '26+', updatedOn: '2026-02-01' }
+          { roleName: 'Broadridge Manager', roleKey: 'BROADRIDGE_MANAGER', description: 'Oversees internal operations, user access hygiene, and cross-team execution across assigned accounts.', usersAssigned: 9, staffFlag: true, assignmentBand: '0-10', updatedOn: '2026-02-10' },
+          { roleName: 'Developer', roleKey: 'DEVELOPER', description: 'Engineering access for integration validation and sandbox troubleshooting.', usersAssigned: 31, staffFlag: true, assignmentBand: '26+', updatedOn: '2026-02-01' },
+          { roleName: 'Development', roleKey: 'DEVELOPMENT', description: 'Builds and validates new platform capabilities, integration hooks, and environment-safe release changes.', usersAssigned: 14, staffFlag: true, assignmentBand: '11-25', updatedOn: '2026-02-10' }
         ]
       },
       {
@@ -270,7 +272,9 @@ const accountRows = [
         customRoles: [
           { roleName: 'Fianancial Advisor', description: 'Supports advisor-specific content updates and review workflows for assigned web properties.', permissions: 'SIte' },
           { roleName: 'Program Admin', description: 'Coordinates program-level pages, release updates, and scoped collaborator permissions.', permissions: 'Account' },
+          { roleName: 'Broadridge Manager', description: 'Directs internal staff operations and approves scoped access decisions for enterprise account teams.', permissions: 'Account' },
           { roleName: 'Developer', description: 'Maintains technical implementations, integrations, and troubleshooting in lower environments.', permissions: 'NO Restricitons' },
+          { roleName: 'Development', description: 'Supports feature delivery, QA validation, and release hardening workflows in controlled environments.', permissions: 'NO Restricitons' },
           { roleName: 'Home Office Executive', description: 'Read/review access to executive dashboards and strategic website reporting areas.', permissions: 'Account' },
           { roleName: 'Content Editor', description: 'Creates and edits content blocks, media, and draft updates for designated sites.', permissions: 'SIte' },
           { roleName: 'Assistant', description: 'Supports operational updates and limited content edits under guided team oversight.', permissions: 'SIte' },

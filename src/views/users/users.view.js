@@ -1,9 +1,10 @@
 // Users module (Users / Manage Roles / Groups)
 (function () {
   const state = {
-    mode: 'list', // list | create-role | create-user
+    mode: 'list', // list | create-role | create-user | edit-user
     activeTab: 'Users',
     editingRole: null,
+    editingUserIndex: null,
     selectedPermissions: new Set(),
     baselinePermissions: new Set(),
     activePermissionCategory: 'Account',
@@ -39,7 +40,7 @@
 
 
   const getData = () => window.rolePermissionData || { roles: [], categories: [], rolePresets: [] };
-  const staffRoles = new Set(['Super Admin', 'Broadridge Manager', 'Service', 'Sales']);
+  const staffRoles = new Set(['Super Admin', 'Broadridge Manager', 'Service', 'Sales', 'Development', 'Developer']);
 
   function esc(text) {
     return String(text || '')
@@ -95,7 +96,7 @@
           <td>${esc(row.account)}</td>
           <td>${esc(row.createdOn)}</td>
           <td>${esc(row.status)}</td>
-          <td class="actions-cell"><button class="row-action-button" aria-label="Edit user">✎</button></td>
+          <td class="actions-cell"><button class="row-action-button" data-edit-user="${usersRows.indexOf(row)}" aria-label="Edit user">✎</button></td>
         </tr>
       `)
       .join('');
@@ -137,37 +138,64 @@
 
     container.querySelector('#newUserBtn')?.addEventListener('click', () => {
       state.mode = 'create-user';
+      state.editingUserIndex = null;
       state.activeTab = 'Users';
       renderUsersView();
+    });
+
+    container.querySelectorAll('[data-edit-user]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.mode = 'edit-user';
+        state.activeTab = 'Users';
+        state.editingUserIndex = Number(btn.getAttribute('data-edit-user'));
+        renderUsersView();
+      });
     });
   }
 
   function renderCreateUser(container) {
+    const data = getData();
+    const isEdit = state.mode === 'edit-user' && Number.isInteger(state.editingUserIndex);
+    const user = isEdit ? usersRows[state.editingUserIndex] : null;
+    const [firstName = '', ...restName] = String(user?.name || '').split(' ');
+    const lastName = restName.join(' ');
+    const roleItems = (data.rolePresets || [])
+      .map((role) => {
+        const roleName = role.title || role.name;
+        const checked = user?.role === roleName ? 'checked' : '';
+        const desc = role.description || humanRoleDescription(role);
+        return `<label class="create-user-role-item">
+            <input type="checkbox" data-role-name="${esc(roleName)}" ${checked} />
+            <span class="perm-copy"><span class="perm-name">${esc(roleName)}</span><span class="perm-desc">${esc(desc)}</span></span>
+          </label>`;
+      })
+      .join('');
+
     container.innerHTML = `
-      <div class="users-breadcrumb"><a href="#" id="backToUsers">Users</a> <span>›</span> <span>Create User</span></div>
-      <div class="users-header-row users-header-spaced"><h1 class="page-title">Create User</h1></div>
+      <div class="users-breadcrumb"><a href="#" id="backToUsers">Users</a> <span>›</span> <span>${isEdit ? 'Edit User' : 'Create User'}</span></div>
+      <div class="users-header-row users-header-spaced"><h1 class="page-title">${isEdit ? 'Edit User' : 'Create User'}</h1></div>
 
       <section class="create-user-panel">
         <div class="create-user-grid">
           <div class="field-group">
             <label for="newUserFirstName">First Name<span class="required">*</span></label>
-            <input id="newUserFirstName" class="text-input" type="text" placeholder="Enter first name" />
+            <input id="newUserFirstName" class="text-input" type="text" placeholder="Enter first name" value="${esc(firstName)}" />
           </div>
           <div class="field-group">
             <label for="newUserLastName">Last Name<span class="required">*</span></label>
-            <input id="newUserLastName" class="text-input" type="text" placeholder="Enter last name" />
+            <input id="newUserLastName" class="text-input" type="text" placeholder="Enter last name" value="${esc(lastName)}" />
           </div>
           <div class="field-group">
             <label for="newUserEmail">Email<span class="required">*</span></label>
-            <input id="newUserEmail" class="text-input" type="email" placeholder="Enter user's email address" />
+            <input id="newUserEmail" class="text-input" type="email" placeholder="Enter user's email address" value="${esc(user?.email || '')}" />
           </div>
           <div class="field-group">
             <label for="newUserAccount">Assign To Account<span class="required">*</span></label>
             <select id="newUserAccount" class="text-input">
-              <option>Select account</option>
-              <option>mksDOnotuseswitchchanges</option>
-              <option>manasabinddonotuse</option>
-              <option>pushabc</option>
+              <option ${!user?.account ? 'selected' : ''}>Select account</option>
+              <option ${user?.account === 'mksDOnotuseswitchchanges' ? 'selected' : ''}>mksDOnotuseswitchchanges</option>
+              <option ${user?.account === 'manasabinddonotuse' ? 'selected' : ''}>manasabinddonotuse</option>
+              <option ${user?.account === 'pushabc' ? 'selected' : ''}>pushabc</option>
             </select>
           </div>
         </div>
@@ -175,39 +203,27 @@
         <div class="create-user-status-wrap">
           <label>User Status</label>
           <div class="radio-row">
-            <label><input type="radio" name="newUserStatus" checked /> Active</label>
-            <label><input type="radio" name="newUserStatus" /> Disable</label>
+            <label><input type="radio" name="newUserStatus" ${user?.status !== 'Inactive' ? 'checked' : ''} /> Active</label>
+            <label><input type="radio" name="newUserStatus" ${user?.status === 'Inactive' ? 'checked' : ''} /> Disable</label>
           </div>
         </div>
       </section>
 
       <section class="roles-panel create-user-roles-panel">
         <h2 class="roles-panel-title">Roles & Permissions</h2>
-        <div class="create-user-role-list">
-          <label class="create-user-role-item">
-            <input type="checkbox" />
-            <span class="perm-copy"><span class="perm-name">Home Office Video</span><span class="perm-desc">Home Office user with video script management capabilities</span></span>
-          </label>
-          <label class="create-user-role-item">
-            <input type="checkbox" />
-            <span class="perm-copy"><span class="perm-name">Financial Advisor Video</span><span class="perm-desc">User that can manage videos, update content and media associations</span></span>
-          </label>
-          <label class="create-user-role-item">
-            <input type="checkbox" />
-            <span class="perm-copy"><span class="perm-name">gdf</span><span class="perm-desc">Sample role for parity prototype coverage</span></span>
-          </label>
-        </div>
+        <div class="create-user-role-list">${roleItems}</div>
       </section>
 
       <div class="role-form-actions">
         <button type="button" class="page-btn" id="cancelCreateUserBtn">Cancel</button>
-        <button type="button" class="page-btn primary">Create User</button>
+        <button type="button" class="page-btn primary">${isEdit ? 'Update User' : 'Create User'}</button>
       </div>
     `;
 
     const back = () => {
       state.mode = 'list';
       state.activeTab = 'Users';
+      state.editingUserIndex = null;
       renderUsersView();
     };
 
@@ -515,7 +531,7 @@
       return;
     }
 
-    if (state.mode === 'create-user') {
+    if (state.mode === 'create-user' || state.mode === 'edit-user') {
       renderCreateUser(container);
       return;
     }
