@@ -9,7 +9,9 @@
     baselinePermissions: new Set(),
     activePermissionCategory: 'Account',
     permissionSearch: '',
-    groupDrawerOpen: false
+    groupDrawerOpen: false,
+    bulkCreateDrawerOpen: false,
+    bulkCreateMethod: ''
   };
 
   const usersRows = [
@@ -52,12 +54,20 @@
   }
 
   function renderUsersSubnav() {
+    const actionButtons = state.activeTab === 'Manage Roles'
+      ? '<button class="new-role-btn" id="newRoleBtn" type="button">New Role</button>'
+      : state.activeTab === 'Users'
+        ? '<div class="users-actions"><button class="new-role-btn secondary" id="bulkCreateBtn" type="button">Bulk Create</button><button class="new-role-btn" id="newUserBtn" type="button">＋ New User</button></div>'
+        : state.activeTab === 'Groups'
+          ? '<button class="new-role-btn" id="newGroupBtn" type="button">New Group</button>'
+          : '';
+
     return `
       <div class="users-subnav">
         <button class="users-subnav-item ${state.activeTab === 'Users' ? 'active' : ''}" type="button" data-users-tab="Users">Users</button>
         <button class="users-subnav-item ${state.activeTab === 'Manage Roles' ? 'active' : ''}" type="button" data-users-tab="Manage Roles">Manage Roles</button>
         <button class="users-subnav-item ${state.activeTab === 'Groups' ? 'active' : ''}" type="button" data-users-tab="Groups">Groups</button>
-        ${state.activeTab === 'Manage Roles' ? '<button class=\"new-role-btn\" id=\"newRoleBtn\" type=\"button\">New Role</button>' : state.activeTab === 'Users' ? '<button class=\"new-role-btn\" id=\"newUserBtn\" type=\"button\">New User</button>' : state.activeTab === 'Groups' ? '<button class=\"new-role-btn\" id=\"newGroupBtn\" type=\"button\">New Group</button>' : ''}
+        ${actionButtons}
       </div>
     `;
   }
@@ -67,6 +77,7 @@
       btn.addEventListener('click', () => {
         state.activeTab = btn.getAttribute('data-users-tab');
         state.mode = 'list';
+        state.bulkCreateDrawerOpen = false;
         renderUsersView();
       });
     });
@@ -132,6 +143,31 @@
           <tbody>${rows}</tbody>
         </table>
       </div>
+
+      <div class="bulk-drawer-overlay${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawerOverlay"></div>
+      <aside class="bulk-drawer${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawer" aria-hidden="${state.bulkCreateDrawerOpen ? 'false' : 'true'}">
+        <div class="bulk-drawer-header">
+          <h2>Bulk create</h2>
+          <button class="bulk-close" id="closeBulkDrawerBtn" type="button">×</button>
+        </div>
+        <div class="bulk-steps"><span class="active">Method</span><span>Upload</span></div>
+        <label class="bulk-label">Select Creation Method <span class="required">*</span></label>
+        <label class="bulk-method-item">
+          <input type="radio" name="bulkMethod" value="portal" ${state.bulkCreateMethod === 'portal' ? 'checked' : ''} />
+          <span><strong>Create Users in the BAS Portal</strong><small>Users will have access to the BAS Portal only.</small></span>
+        </label>
+        <label class="bulk-method-item">
+          <input type="radio" name="bulkMethod" value="wix" ${state.bulkCreateMethod === 'wix' ? 'checked' : ''} />
+          <span><strong>Create Users in Wix & Assign to Websites</strong><small>Users will be created in Wix and assigned to their corresponding website(s).</small></span>
+        </label>
+        <label class="bulk-method-item">
+          <input type="radio" name="bulkMethod" value="both" ${state.bulkCreateMethod === 'both' ? 'checked' : ''} />
+          <span><strong>Create Users in BAS Portal, Wix & Assign to Websites</strong><small>Full user creation with both portal access and website assignments.</small></span>
+        </label>
+        <label class="bulk-warning"><input type="checkbox" /><span><strong>Suppress Email Notifications</strong><small>When enabled, advisors will not receive email notifications about their account creation. You can notify them manually later.</small></span></label>
+        <div class="bulk-info"><strong>What happens next?</strong><p>After selecting your creation method, you'll upload a CSV file containing user information. We'll validate the data and confirm the creation.</p></div>
+        <div class="bulk-actions"><button type="button" class="page-btn" id="cancelBulkDrawerBtn">Cancel</button><button type="button" class="page-btn primary" ${state.bulkCreateMethod ? '' : 'disabled'}>Next</button></div>
+      </aside>
     `;
 
     wireUsersSubnav(container);
@@ -139,14 +175,35 @@
     container.querySelector('#newUserBtn')?.addEventListener('click', () => {
       state.mode = 'create-user';
       state.editingUserIndex = null;
+      state.bulkCreateDrawerOpen = false;
       state.activeTab = 'Users';
       renderUsersView();
+    });
+
+    const closeBulkDrawer = () => {
+      state.bulkCreateDrawerOpen = false;
+      renderUsersView();
+    };
+
+    container.querySelector('#bulkCreateBtn')?.addEventListener('click', () => {
+      state.bulkCreateDrawerOpen = true;
+      renderUsersView();
+    });
+    container.querySelector('#closeBulkDrawerBtn')?.addEventListener('click', closeBulkDrawer);
+    container.querySelector('#cancelBulkDrawerBtn')?.addEventListener('click', closeBulkDrawer);
+    container.querySelector('#bulkDrawerOverlay')?.addEventListener('click', closeBulkDrawer);
+    container.querySelectorAll('input[name="bulkMethod"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        state.bulkCreateMethod = radio.value;
+        renderUsersView();
+      });
     });
 
     container.querySelectorAll('[data-edit-user]').forEach((btn) => {
       btn.addEventListener('click', () => {
         state.mode = 'edit-user';
         state.activeTab = 'Users';
+        state.bulkCreateDrawerOpen = false;
         state.editingUserIndex = Number(btn.getAttribute('data-edit-user'));
         renderUsersView();
       });
