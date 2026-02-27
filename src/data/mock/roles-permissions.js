@@ -280,19 +280,6 @@ window.rolePermissionData = {
       "permissions": []
     },
     {
-      "name": "General",
-      "permissions": [
-        {
-          "name": "Remove users from a group",
-          "description": ""
-        },
-        {
-          "name": "Yellow hihglight denotes additional clarification needed from internal teams.",
-          "description": ""
-        }
-      ]
-    },
-    {
       "name": "Website",
       "permissions": [
         {

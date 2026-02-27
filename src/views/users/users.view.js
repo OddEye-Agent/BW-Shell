@@ -419,8 +419,6 @@
       </label>
     `).join('');
 
-    const added = [...state.selectedPermissions].filter((p) => !state.baselinePermissions.has(p)).length;
-    const removed = [...state.baselinePermissions].filter((p) => !state.selectedPermissions.has(p)).length;
 
     container.innerHTML = `
       <div class="users-breadcrumb"><a href="#">Users</a> <span>›</span> <a href="#" id="backToRoles">Roles</a> <span>›</span> <span>${role ? 'Edit Role' : 'Create Role'}</span></div>
@@ -437,8 +435,7 @@
           <div class="role-form-actions"><button type="button" class="page-btn" id="cancelRoleBtn">Cancel</button></div>
         </div>
         <div class="role-perms-col">
-          <div class="role-perms-header-row"><h2>Permissions<span class="required">*</span></h2><p class="perm-selection-summary"><strong>${state.selectedPermissions.size}</strong> permissions selected</p></div>
-          ${state.editingRole ? `<div class="perm-diff-summary"><span>Changes in this edit:</span><span class="diff-added">+${added} added</span><span class="diff-removed">-${removed} removed</span></div>` : ''}
+          <div class="role-perms-header-row"><h2>Permissions<span class="required">*</span></h2></div>
           <div class="permissions-workbench">
             <div class="permissions-sidebar">${categoryNav}</div>
             <div class="permissions-main">
@@ -453,7 +450,7 @@
                 </section>
               </div>
             </div>
-            <aside class="impact-preview"><h3>Role Impact Preview</h3><p><strong>${state.selectedPermissions.size}</strong> permissions selected.</p></aside>
+            <aside class="impact-preview"><h3>Role Permission Summary</h3><p><strong>${state.selectedPermissions.size}</strong> permissions selected.</p></aside>
           </div>
           <div class="role-form-actions"><button type="button" class="page-btn" id="cancelRoleBtn2">Cancel</button><button type="button" class="page-btn primary" id="saveRoleBtn">Save Role</button></div>
         </div>
