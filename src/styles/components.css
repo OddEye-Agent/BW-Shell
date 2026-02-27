@@ -625,6 +625,26 @@ tbody tr:hover {
   color: #1f6b3a;
 }
 
+.status-pill.status-completed {
+  background: #def7e7;
+  color: #1f6b3a;
+}
+
+.status-pill.status-completed-with-errors {
+  background: #fff2df;
+  color: #9a5a11;
+}
+
+.status-pill.status-failed-validation {
+  background: #fde8e8;
+  color: #a12b2b;
+}
+
+.status-pill.status-processing {
+  background: #e7f0ff;
+  color: #1f57d6;
+}
+
 .admin-tools-table {
   min-width: 2100px;
 }

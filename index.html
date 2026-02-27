@@ -470,6 +470,11 @@
                 return `<td class="${tdClasses} bas-staff-col" data-column-key="${column.key}"${widthStyle}>${value ? '<span class="staff-flag">Staff Role</span>' : '--'}</td>`;
               }
 
+              if (!isEditing && tabConfig.name === 'Bulk Upload Events' && column.key === 'status') {
+                const key = String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                return `<td class="${tdClasses}" data-column-key="${column.key}"${widthStyle}><span class="status-pill status-${key}">${value}</span></td>`;
+              }
+
               if (tabConfig.name === 'Bulk Upload Events' && column.key === 'downloadCsv') {
                 return `<td class="${tdClasses}"${widthStyle}>${row.downloadCsv ? `<a class="archive-link" href="#" download>${row.downloadCsv}</a>` : '<span class="muted">—</span>'}</td>`;
               }
