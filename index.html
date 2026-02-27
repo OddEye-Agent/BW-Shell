@@ -180,6 +180,19 @@
       }
     }
 
+    function setBulkErrorsModalOpen(isOpen, lines = []) {
+      const modal = document.getElementById('bulkErrorsModal');
+      const list = document.getElementById('bulkErrorsList');
+      if (!modal || !list) return;
+      if (isOpen) {
+        list.innerHTML = (lines || []).map((line) => `<li>${line}</li>`).join('') || '<li>No row-level errors found.</li>';
+        modal.hidden = false;
+      } else {
+        modal.hidden = true;
+        list.innerHTML = '';
+      }
+    }
+
     function attachPdfViewerEvents() {
       document.querySelectorAll('.pdf-view-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -457,6 +470,16 @@
                 return `<td class="${tdClasses} bas-staff-col" data-column-key="${column.key}"${widthStyle}>${value ? '<span class="staff-flag">Staff Role</span>' : '--'}</td>`;
               }
 
+              if (tabConfig.name === 'Bulk Upload Events' && column.key === 'downloadCsv') {
+                return `<td class="${tdClasses}"${widthStyle}>${row.downloadCsv ? `<a class="archive-link" href="#" download>${row.downloadCsv}</a>` : '<span class="muted">—</span>'}</td>`;
+              }
+
+              if (tabConfig.name === 'Bulk Upload Events' && column.key === 'errorDetails') {
+                const hasErrors = Array.isArray(row.errorDetails) && row.errorDetails.length > 0;
+                const payload = hasErrors ? encodeURIComponent(JSON.stringify(row.errorDetails)) : '';
+                return `<td class="${tdClasses}"${widthStyle}>${hasErrors ? `<button type="button" class="detail-icon-btn" data-error-details="${payload}" title="View validation errors">📄</button>` : '<span class="muted">—</span>'}</td>`;
+              }
+
               if (isEditing) {
                 return `<td class="${tdClasses}" contenteditable="true" data-column-key="${column.key}"${widthStyle}>${value}</td>`;
               }
@@ -600,6 +623,20 @@
 
       if (showCrud) {
         attachAdminToolsCrudEvents(tabConfig);
+      }
+
+      if (tabConfig.name === 'Bulk Upload Events') {
+        tableBody.querySelectorAll('.detail-icon-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            let lines = [];
+            try {
+              lines = JSON.parse(decodeURIComponent(btn.getAttribute('data-error-details') || '[]'));
+            } catch (error) {
+              lines = [];
+            }
+            setBulkErrorsModalOpen(true, lines);
+          });
+        });
       }
 
       const pagination = document.getElementById('adminToolsPagination');
@@ -884,10 +921,24 @@
             ${subnavButtons}
           </div>
           <section class="admin-tools-panel" id="adminToolsPanel"></section>
+          <div class="pdf-modal" id="bulkErrorsModal" hidden>
+            <div class="pdf-modal-backdrop" id="bulkErrorsBackdrop"></div>
+            <div class="pdf-modal-dialog" style="max-width: 760px; height: auto;">
+              <div class="pdf-modal-header">
+                <h3>Bulk Upload Validation Errors</h3>
+                <button class="page-btn" type="button" id="bulkErrorsCloseBtn">Close</button>
+              </div>
+              <div class="pdf-modal-body" style="padding:1rem;max-height:60vh;overflow:auto;">
+                <ul id="bulkErrorsList" class="bulk-errors-list"></ul>
+              </div>
+            </div>
+          </div>
         `;
 
       renderAdminToolsPanel(defaultAdminToolsTab);
       attachAdminToolsTabEvents();
+      document.getElementById('bulkErrorsCloseBtn')?.addEventListener('click', () => setBulkErrorsModalOpen(false));
+      document.getElementById('bulkErrorsBackdrop')?.addEventListener('click', () => setBulkErrorsModalOpen(false));
     }
 
     function renderSection(sectionName) {

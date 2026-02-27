@@ -544,6 +544,29 @@ tbody tr:hover {
   font-size: 0.85rem;
 }
 
+.detail-icon-btn {
+  border: 1px solid #c9d5e9;
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+}
+
+.detail-icon-btn:hover {
+  background: #eef4ff;
+}
+
+.bulk-errors-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #30445f;
+  line-height: 1.45;
+}
+
+.bulk-errors-list li {
+  margin-bottom: 0.4rem;
+}
+
 .admin-tools-subtable-title {
   margin: 1rem 0 0.55rem;
   font-size: 1rem;
