@@ -412,9 +412,10 @@
     const categoryNav = categories.map((category) => `<button class="perm-category-nav-item ${state.activePermissionCategory === category.name ? 'active' : ''}" type="button" data-perm-nav="${esc(category.name)}">${esc(category.name)}</button>`).join('');
     const query = state.permissionSearch.trim().toLowerCase();
     const visiblePerms = (activeCategory.permissions || []).filter((perm) => !query || perm.name.toLowerCase().includes(query) || (perm.description || '').toLowerCase().includes(query));
+    const isBillingCategory = activeCategory.name === 'Billing';
     const permRows = visiblePerms.map((perm) => `
-      <label class="perm-row">
-        <input type="checkbox" class="perm-checkbox" data-perm="${esc(perm.name)}" ${state.selectedPermissions.has(perm.name) ? 'checked' : ''} />
+      <label class="perm-row ${isBillingCategory ? 'disabled' : ''}">
+        <input type="checkbox" class="perm-checkbox" data-perm="${esc(perm.name)}" ${state.selectedPermissions.has(perm.name) ? 'checked' : ''} ${isBillingCategory ? 'disabled' : ''} />
         <span class="perm-copy"><span class="perm-name">${esc(perm.name)}</span><span class="perm-desc">${esc(perm.description || '')}</span></span>
       </label>
     `).join('');
@@ -444,7 +445,7 @@
                 <section class="perm-category" data-category="${esc(activeCategory.name)}">
                   <div class="perm-category-header static"><span>${esc(activeCategory.name)}</span></div>
                   <div class="perm-category-body open">
-                    <label class="perm-row select-all"><input type="checkbox" class="perm-select-all" data-select-all="${esc(activeCategory.name)}" /><span class="perm-copy"><span class="perm-name">Select All</span></span></label>
+                    <label class="perm-row select-all ${isBillingCategory ? 'disabled' : ''}"><input type="checkbox" class="perm-select-all" data-select-all="${esc(activeCategory.name)}" ${isBillingCategory ? 'disabled' : ''} /><span class="perm-copy"><span class="perm-name">Select All</span></span></label>
                     ${permRows || '<div class="perm-empty">No permissions match your search in this module.</div>'}
                   </div>
                 </section>

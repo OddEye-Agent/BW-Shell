@@ -806,6 +806,16 @@ tbody tr:hover {
   color: #5b6b81;
 }
 .perm-row input[type='checkbox'] { width: 18px; height: 18px; }
+.perm-row.disabled {
+  opacity: 0.45;
+}
+.perm-row.disabled .perm-name,
+.perm-row.disabled .perm-desc {
+  color: #8f9bb0;
+}
+.perm-row.disabled input[type='checkbox'] {
+  cursor: not-allowed;
+}
 
 .role-title-row {
   display: flex;
