@@ -56,6 +56,7 @@
     const uiVersion = 'compliance-v2';
     const store = window.bwShellStore;
     const archivePdfSamples = ['assets/pdfs/ArchiveSnapsnot2.pdf', 'assets/pdfs/archivingExample.pdf'];
+    let adminToolsPage = 1;
     const ROLE_PROFILES = {
       'Super Admin': { label: 'BAS Super Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video','Admin Tools','Experimental'], readOnly: false },
       'Program Admin': { label: 'BD Program Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video'], readOnly: false },
@@ -586,15 +587,35 @@
         return matchesQuery && matchesAllFilters;
       });
 
-      tableBody.innerHTML = filteredRows.length
-        ? renderAdminToolsTableRows(tabConfig, filteredRows)
+      const pageSize = Number(tabConfig.paginationSize || 0);
+      const total = filteredRows.length;
+      const totalPages = pageSize > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 1;
+      if (adminToolsPage > totalPages) adminToolsPage = totalPages;
+      if (adminToolsPage < 1) adminToolsPage = 1;
+      const pagedRows = pageSize > 0 ? filteredRows.slice((adminToolsPage - 1) * pageSize, adminToolsPage * pageSize) : filteredRows;
+
+      tableBody.innerHTML = pagedRows.length
+        ? renderAdminToolsTableRows(tabConfig, pagedRows)
         : `<tr><td colspan="${tabConfig.columns.length + actionColumnCount}">No ${tabConfig.name.toLowerCase()} records match your filters.</td></tr>`;
 
       if (showCrud) {
         attachAdminToolsCrudEvents(tabConfig);
       }
 
-      resultsSummary.textContent = `Showing ${filteredRows.length} of ${sourceRows.length} ${tabConfig.name.toLowerCase()} records`;
+      const pagination = document.getElementById('adminToolsPagination');
+      if (pagination) {
+        if (pageSize > 0 && total > pageSize) {
+          pagination.innerHTML = `<button type="button" class="page-btn" id="adminToolsPrevPage" ${adminToolsPage <= 1 ? 'disabled' : ''}>Previous</button><span class="admin-tools-page-indicator">Page ${adminToolsPage} of ${totalPages}</span><button type="button" class="page-btn" id="adminToolsNextPage" ${adminToolsPage >= totalPages ? 'disabled' : ''}>Next</button>`;
+          document.getElementById('adminToolsPrevPage')?.addEventListener('click', () => { adminToolsPage = Math.max(1, adminToolsPage - 1); applyAdminToolsFilters(); });
+          document.getElementById('adminToolsNextPage')?.addEventListener('click', () => { adminToolsPage = Math.min(totalPages, adminToolsPage + 1); applyAdminToolsFilters(); });
+        } else {
+          pagination.innerHTML = '';
+        }
+      }
+
+      const start = total === 0 ? 0 : ((pageSize > 0 ? ((adminToolsPage - 1) * pageSize + 1) : 1));
+      const end = total === 0 ? 0 : (pageSize > 0 ? Math.min(adminToolsPage * pageSize, total) : total);
+      resultsSummary.textContent = `Showing ${start}-${end} of ${sourceRows.length} ${tabConfig.name.toLowerCase()} records`;
     }
 
     function attachAdminToolsFilterEvents(tabConfig) {
@@ -611,8 +632,8 @@
       ];
 
       elements.forEach((element) => {
-        element.addEventListener('input', applyAdminToolsFilters);
-        element.addEventListener('change', applyAdminToolsFilters);
+        element.addEventListener('input', () => { adminToolsPage = 1; applyAdminToolsFilters(); });
+        element.addEventListener('change', () => { adminToolsPage = 1; applyAdminToolsFilters(); });
       });
     }
 
@@ -797,6 +818,7 @@
             ${filterFields}
           </div>
           <p class="admin-tools-summary" id="adminToolsResultsSummary"></p>
+          <div class="admin-tools-pagination" id="adminToolsPagination"></div>
           <div class="table-wrap">
             <table class="${getAdminToolsTableClass(selectedTab.name)}">
               <thead>
@@ -831,6 +853,7 @@
             button.classList.toggle('active', button === item);
             button.setAttribute('aria-selected', String(button === item));
           });
+          adminToolsPage = 1;
           renderAdminToolsPanel(selectedTabName);
         });
       });

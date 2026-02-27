@@ -308,6 +308,45 @@ const accountRows = [
           { folderName: 'CFP Websites', dateCreated: '2025-07-21', lastUpdated: '2026-02-02', siteCount: 31, path: '\\CFP Websites', siteCountBand: '26+' }
         ]
       },
+
+      {
+        name: 'Bulk Upload Events',
+        description: 'Track bulk user upload jobs, validation outcomes, and processing results for follow-up review.',
+        enableCrud: false,
+        paginationSize: 10,
+        searchPlaceholder: 'Search by event id, file name, or status',
+        searchFields: ['eventId', 'fileName', 'status', 'creationMode'],
+        filters: [
+          {
+            id: 'status',
+            label: 'Status',
+            allLabel: 'All statuses',
+            options: ['Completed', 'Completed with Errors', 'Failed Validation', 'Processing']
+          }
+        ],
+        columns: [
+          { key: 'eventId', label: 'Event ID' },
+          { key: 'eventDate', label: 'Date' },
+          { key: 'creationMode', label: 'Creation Mode' },
+          { key: 'fileName', label: 'CSV File' },
+          { key: 'status', label: 'Status' },
+          { key: 'output', label: 'Output Data', width: '36%' }
+        ],
+        rows: [
+          { eventId: 'EVT-902110', eventDate: '2026-02-27 15:41', creationMode: 'BAS + Wix', fileName: 'advisor_batch_01.csv', status: 'Completed', output: '250/250 created. Notifications suppressed.' },
+          { eventId: 'EVT-902109', eventDate: '2026-02-27 14:12', creationMode: 'Wix Only', fileName: 'wix_assign_44.csv', status: 'Completed with Errors', output: '223/250 created, 27 failed website mapping.' },
+          { eventId: 'EVT-902108', eventDate: '2026-02-27 13:05', creationMode: 'BAS Portal', fileName: 'portal_seed_11.csv', status: 'Completed', output: '120/120 created in BAS portal.' },
+          { eventId: 'EVT-902107', eventDate: '2026-02-27 11:39', creationMode: 'BAS + Wix', fileName: 'enterprise_wave2.csv', status: 'Failed Validation', output: 'Pre-assessment failed: 73 invalid rows.' },
+          { eventId: 'EVT-902106', eventDate: '2026-02-27 10:18', creationMode: 'BAS + Wix', fileName: 'enterprise_wave1.csv', status: 'Completed', output: '500/500 created and assigned.' },
+          { eventId: 'EVT-902105', eventDate: '2026-02-26 18:52', creationMode: 'Wix Only', fileName: 'wix_fixup_07.csv', status: 'Completed with Errors', output: '186/200 created, 14 permission collisions.' },
+          { eventId: 'EVT-902104', eventDate: '2026-02-26 17:31', creationMode: 'BAS Portal', fileName: 'retail_batch_b.csv', status: 'Completed', output: '300/300 created in BAS portal.' },
+          { eventId: 'EVT-902103', eventDate: '2026-02-26 16:07', creationMode: 'BAS + Wix', fileName: 'retail_batch_a.csv', status: 'Processing', output: 'Batch accepted, processing in queue.' },
+          { eventId: 'EVT-902102', eventDate: '2026-02-26 14:44', creationMode: 'BAS + Wix', fileName: 'advisor_migration_9.csv', status: 'Completed', output: '249/249 created.' },
+          { eventId: 'EVT-902101', eventDate: '2026-02-26 13:19', creationMode: 'BAS Portal', fileName: 'program_admin_seed.csv', status: 'Completed', output: '42/42 created and role-bound.' },
+          { eventId: 'EVT-902100', eventDate: '2026-02-26 11:55', creationMode: 'Wix Only', fileName: 'wix_site_bindings.csv', status: 'Completed', output: '88/88 assigned to websites.' },
+          { eventId: 'EVT-902099', eventDate: '2026-02-26 10:10', creationMode: 'BAS + Wix', fileName: 'legacy_siteadmin_wave.csv', status: 'Completed with Errors', output: '467/500 processed, 33 account mismatches.' }
+        ]
+      },
       {
         name: 'Calculators',
         description: 'Functional table for automated calculator validation records in lower environments.',
