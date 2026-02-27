@@ -276,10 +276,6 @@ window.rolePermissionData = {
       ]
     },
     {
-      "name": "Admin",
-      "permissions": []
-    },
-    {
       "name": "Website",
       "permissions": [
         {
@@ -373,6 +369,10 @@ window.rolePermissionData = {
           "description": "Allows viewing of video scripts created by the current user"
         }
       ]
+    },
+    {
+      "name": "Admin Tools",
+      "permissions": []
     }
   ],
   "rolePresets": [
