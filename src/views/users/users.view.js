@@ -116,6 +116,27 @@
 
 
     const isUploadStep = state.bulkStep === 'upload';
+    const bulkMethodMeta = {
+      portal: {
+        title: 'Create Users in the BAS Portal',
+        colsA: ['Advisor Name','Advisor Email','Role','User Created Date','Account Affiliation','User Status'],
+        colsB: ['Employee ID','Account ID','Group IDs','Start Date','Status Reason','Source System'],
+        success: 'Users have been created in BAS Portal only. Email notifications were suppressed.'
+      },
+      wix: {
+        title: 'Create Users in Wix & Assign to Websites',
+        colsA: ['Advisor Name','Advisor Email','Role','Website Name','Site ID','Published (Yes/No)'],
+        colsB: ['Owner Account ID','Contributor Account IDs','Date Created','Broadforce ID','Wix Role','Website Folder'],
+        success: 'Users have been created in Wix and assigned to their corresponding websites.'
+      },
+      both: {
+        title: 'Create Users in BAS Portal, Wix & Assign to Websites',
+        colsA: ['Advisor Name','Advisor Email','Role','User Created Date','Account Affiliation','User Status'],
+        colsB: ['Published (Yes/No)','Site ID','Owner Account ID','Date Created','Contributor Account IDs','Broadforce ID'],
+        success: 'Users have been created in BAS Portal and Wix with website assignments.'
+      }
+    };
+    const selectedMeta = bulkMethodMeta[state.bulkCreateMethod || 'both'];
     const uploadStatus = state.bulkUploadStatus;
     const uploadZone = uploadStatus === 'none'
       ? `<div class="bulk-upload-drop" id="bulkUploadDrop"><div class="bulk-upload-icon">⇪</div><p><button type="button" class="bulk-link-btn" id="bulkUploadInvalidBtn">Click to upload csv file</button> or drag and drop</p></div>`
@@ -124,8 +145,8 @@
            <div class="bulk-result error"><div class="bulk-result-head"><strong>73 Records out of 250 Failed to Process</strong><button type="button" class="page-btn">Export Errors</button></div><p>Some records couldn't be processed. Fix the errors and re-upload the CSV.</p>
            <div class="bulk-error-list"><div><strong>Row 83</strong> Headers — Missing required columns</div><div><strong>Row 111</strong> Advisor Name — must be at least 2 characters</div><div><strong>Row 126</strong> Website Name — is required</div></div></div>`
         : `<div class="bulk-upload-file success"><div><strong>Correct website file.csv</strong><small>200 KB</small><p class="success-text">Successfully Processed 250 of 250 Records</p></div><button type="button" class="page-btn" id="bulkReplaceBtn">Replace</button></div>
-           <div class="bulk-result success"><strong>Successfully Created [x] Users</strong><p>Users have been created in BAS Portal and Wix with website assignments. Email notifications were suppressed.</p></div>
-           <div class="bulk-info"><strong>Where to Find Your Users</strong><p>Check Users page for BAS access and visit Wix folder for website assignments and contributor roles.</p></div>`;
+           <div class="bulk-result success"><strong>Successfully Created [x] Users</strong><p>${selectedMeta.success} Email notifications were suppressed.</p></div>
+           <div class="bulk-info"><strong>Where to Find Your Users</strong><p>${state.bulkCreateMethod === 'portal' ? 'Check the Users page to confirm BAS portal access and role assignments.' : 'Check the Users page for BAS access and visit Wix folder for website assignments and contributor roles.'}</p></div>`;
 
     const bulkDrawerMarkup = `
       <div class="bulk-drawer-overlay${state.bulkCreateDrawerOpen ? ' open' : ''}" id="bulkDrawerOverlay"></div>
@@ -141,7 +162,7 @@
           <div class="bulk-info"><strong>What happens next?</strong><p>After selecting your creation method, you'll upload a CSV file containing user information. We'll validate the data and confirm the creation.</p></div>
         ` : `
           <div class="bulk-upload-header"><h3>CSV Template</h3><button type="button" class="page-btn">Download Template</button></div>
-          <div class="bulk-columns"><strong>Required CSV Columns</strong><ul><li>Advisor Name</li><li>Advisor Email</li><li>Role</li><li>User Created Date</li><li>Account Affiliation</li><li>User Status</li></ul><ul><li>Published (Yes/No)</li><li>Site ID</li><li>Owner Account ID</li><li>Date Created</li><li>Contributor Account IDs</li><li>Broadforce ID</li></ul></div>
+          <div class="bulk-columns"><strong>Required CSV Columns</strong><ul>${selectedMeta.colsA.map((c) => `<li>${c}</li>`).join('')}</ul><ul>${selectedMeta.colsB.map((c) => `<li>${c}</li>`).join('')}</ul></div>
           <label class="bulk-label">Upload CSV File <span class="required">*</span></label>
           ${uploadZone}
         `}
