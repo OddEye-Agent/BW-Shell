@@ -910,6 +910,8 @@
       const tabs = (store.state.accountSettingsTab === 'social') ? 'social' : 'basic';
       const linkedinConnected = !!store.state.linkedinConnected;
       const linkedinSharingDisabled = !!store.state.linkedinSharingDisabled;
+      const facebookConnected = !!store.state.facebookConnected;
+      const instagramConnected = !!store.state.instagramConnected;
       pageContainer.innerHTML = `
         <div class="page-header"><h1 class="page-title">Profile Settings: siva kumar</h1></div>
         <div class="account-settings-subnav">
@@ -934,8 +936,8 @@
               <article><h4>Sharing Enabled</h4><p>${linkedinConnected && !linkedinSharingDisabled ? 1 : 0}</p></article>
             </div>
             <div class="social-card-list">
-              <article class="social-card"><div class="social-avatar">f</div><div><h4>Facebook <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Share content with your Facebook audience and manage your business page.</p></div><button class="page-btn primary">Connect</button></article>
-              <article class="social-card"><div class="social-avatar">◎</div><div><h4>Instagram <span class="status-pill status-failed-validation">Not Connected</span></h4><p>Showcase your content on Instagram and connect with your followers.</p></div><button class="page-btn primary">Connect</button></article>
+              <article class="social-card ${facebookConnected ? 'connected' : ''}"><div class="social-avatar">f</div><div><h4>Facebook <span class="status-pill ${facebookConnected ? 'status-completed' : 'status-failed-validation'}">${facebookConnected ? 'Connected' : 'Not Connected'}</span></h4><p>Share content with your Facebook audience and manage your business page.</p></div><button class="page-btn ${facebookConnected ? '' : 'primary'}" id="facebookConnectBtn">${facebookConnected ? 'Disconnect' : 'Connect'}</button></article>
+              <article class="social-card ${instagramConnected ? 'connected' : ''}"><div class="social-avatar">◎</div><div><h4>Instagram <span class="status-pill ${instagramConnected ? 'status-completed' : 'status-failed-validation'}">${instagramConnected ? 'Connected' : 'Not Connected'}</span></h4><p>Showcase your content on Instagram and connect with your followers.</p></div><button class="page-btn ${instagramConnected ? '' : 'primary'}" id="instagramConnectBtn">${instagramConnected ? 'Disconnect' : 'Connect'}</button></article>
               <article class="social-card linkedin-card ${linkedinConnected ? 'connected' : ''}">
                 <div class="social-avatar">in</div>
                 <div>
@@ -950,9 +952,9 @@
           <div class="oauth-modal" id="linkedinOauthModal" hidden>
             <div class="oauth-backdrop" id="linkedinOauthBackdrop"></div>
             <div class="oauth-dialog">
-              <h3>Authorize LinkedIn</h3>
-              <p>Allow BAS to access your LinkedIn profile and post permissions.</p>
-              <ul>
+              <h3 id="oauthDialogTitle">Authorize LinkedIn</h3>
+              <p id="oauthDialogDesc">Allow BAS to access your LinkedIn profile and post permissions.</p>
+              <ul id="oauthDialogScopes">
                 <li>Read basic profile (r_liteprofile)</li>
                 <li>Read email address (r_emailaddress)</li>
                 <li>Share content on your behalf (w_member_social)</li>
@@ -963,13 +965,44 @@
         `}
       `;
 
+      let oauthProvider = 'linkedin';
+      const oauthOpen = (provider) => {
+        oauthProvider = provider;
+        const cfg = {
+          linkedin: {
+            title: 'Authorize LinkedIn',
+            desc: 'Allow BAS to access your LinkedIn profile and post permissions.',
+            scopes: ['Read basic profile (r_liteprofile)','Read email address (r_emailaddress)','Share content on your behalf (w_member_social)']
+          },
+          facebook: {
+            title: 'Authorize Facebook',
+            desc: 'Allow BAS to connect to your Facebook Page and publishing permissions.',
+            scopes: ['Read profile data (public_profile)','Read email (email)','Manage pages (pages_manage_posts)']
+          },
+          instagram: {
+            title: 'Authorize Instagram',
+            desc: 'Allow BAS to connect your Instagram Business account for content sharing.',
+            scopes: ['Read profile data (user_profile)','Read media metadata (user_media)','Publish content (content_publish)']
+          }
+        }[provider];
+        const modal = document.getElementById('linkedinOauthModal');
+        document.getElementById('oauthDialogTitle').textContent = cfg.title;
+        document.getElementById('oauthDialogDesc').textContent = cfg.desc;
+        document.getElementById('oauthDialogScopes').innerHTML = cfg.scopes.map((x) => `<li>${x}</li>`).join('');
+        modal?.removeAttribute('hidden');
+      };
+
       pageContainer.querySelector('#linkedinConnectBtn')?.addEventListener('click', () => {
-        if (linkedinConnected) {
-          store.set({ linkedinConnected: false, linkedinSharingDisabled: false });
-          renderAccountSettingsView();
-          return;
-        }
-        document.getElementById('linkedinOauthModal')?.removeAttribute('hidden');
+        if (linkedinConnected) { store.set({ linkedinConnected: false, linkedinSharingDisabled: false }); renderAccountSettingsView(); return; }
+        oauthOpen('linkedin');
+      });
+      pageContainer.querySelector('#facebookConnectBtn')?.addEventListener('click', () => {
+        if (facebookConnected) { store.set({ facebookConnected: false }); renderAccountSettingsView(); return; }
+        oauthOpen('facebook');
+      });
+      pageContainer.querySelector('#instagramConnectBtn')?.addEventListener('click', () => {
+        if (instagramConnected) { store.set({ instagramConnected: false }); renderAccountSettingsView(); return; }
+        oauthOpen('instagram');
       });
       pageContainer.querySelector('#linkedinOauthCancel')?.addEventListener('click', () => {
         document.getElementById('linkedinOauthModal')?.setAttribute('hidden', 'hidden');
@@ -978,7 +1011,9 @@
         document.getElementById('linkedinOauthModal')?.setAttribute('hidden', 'hidden');
       });
       pageContainer.querySelector('#linkedinOauthApprove')?.addEventListener('click', () => {
-        store.set({ linkedinConnected: true, linkedinSharingDisabled: false });
+        if (oauthProvider === 'linkedin') store.set({ linkedinConnected: true, linkedinSharingDisabled: false });
+        if (oauthProvider === 'facebook') store.set({ facebookConnected: true });
+        if (oauthProvider === 'instagram') store.set({ instagramConnected: true });
         renderAccountSettingsView();
       });
       pageContainer.querySelector('#linkedinSharingToggle')?.addEventListener('change', (e) => {
