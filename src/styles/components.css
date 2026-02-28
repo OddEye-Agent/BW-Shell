@@ -696,6 +696,7 @@ tbody tr:hover {
 }
 
 .bind-site-card {
+  position: relative;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #fff;
@@ -718,10 +719,17 @@ tbody tr:hover {
   margin: 0.25rem 0 0.3rem;
 }
 
+.site-collab-wrap.top-right {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  margin: 0;
+}
+
 .site-collab-chip {
-  border: 1px solid #c8d5e8;
-  background: #f4f8ff;
-  color: #214f9c;
+  border: 1px solid #8bb5f6;
+  background: #eaf2ff;
+  color: #1f57d6;
   border-radius: 999px;
   padding: 0.12rem 0.45rem;
   font-size: 0.8rem;
