@@ -144,6 +144,15 @@
       </tr>
     `;
 
+    const activityRows = [
+      ['2026-02-04 · 2:34 PM', 'Sean Admin', 'sean.admin@abcinvestments.com', 'Site Bound to Account', 'superiorwealthmgmt.com', 'Website bound; collaborators synced.'],
+      ['2026-02-04 · 2:34 PM', 'Sean Admin', 'sean.admin@broadridge.com', 'Account Owner Changed', 'abc-investments.com', 'Owner moved from Jane Mitchell to Robert Godwin.'],
+      ['2026-02-04 · 2:34 PM', 'Greg Mallett', 'greg.mallett@broadridge.com', 'Collaborator Invited', 'abc-private-wealth.com', 'Invited Brad Donovan and Amy Peterson.'],
+      ['2026-02-04 · 2:34 PM', 'Bob Jones', 'bob.jones@abcinvestments.com', 'Bulk User Created', 'ABC Institutional', 'Imported 147 users; 20 validation warnings.'],
+      ['2026-02-04 · 2:34 PM', 'Sean Admin', 'sean.admin@abcinvestments.com', 'Sub-account Added', 'ABC Retail - West Region', 'Sub-account created with 20 users.'],
+      ['2026-02-04 · 2:34 PM', 'Sean Admin', 'sean.admin@abcinvestments.com', 'Website Added', 'ABC Investments Corp', 'Website added and linked to account.']
+    ].map((r) => `<tr><td>${r[0]}</td><td><strong>${r[1]}</strong><br/><span class="muted">${r[2]}</span></td><td><span class="status-pill">${r[3]}</span></td><td>${r[4]}</td><td>${r[5]}</td></tr>`).join('');
+
     const tabContent = state.accountTab === 'details'
       ? `
         <section class="create-account-panel">
@@ -181,58 +190,73 @@
             </table>
           </div>
         `
-        : `
-          <div style="display:grid; grid-template-columns: 1fr 180px; gap: 0.8rem; align-items:start;">
-            <div class="table-wrap users-table-wrap">
-              <table class="users-table">
-                <thead>
-                  <tr>
-                    <th>Created On</th><th>Website Name</th><th>Site Owner</th><th>Collaborators Info</th><th>Site Status</th><th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>${websitesRows}</tbody>
-              </table>
-            </div>
-            <section class="roles-panel" style="padding:0.85rem;">
-              <h3 style="margin:0 0 0.6rem; font-size:14px;">Quick Action</h3>
-              <button class="new-role-btn" id="bindNewSiteBtn" style="width:100%; margin-left:0;">🔗 Bind New Site</button>
-            </section>
-          </div>
-
-          <div class="pdf-modal" id="bindSiteModal" ${state.bindSiteModalOpen ? '' : 'hidden'}>
-            <div class="pdf-modal-backdrop" id="bindSiteBackdrop"></div>
-            <div class="pdf-modal-dialog" style="max-width: 1060px; height: auto;">
-              <div class="pdf-modal-header">
-                <h3>Bind New Site</h3>
-                <button class="page-btn" id="bindSiteCloseBtn" type="button">Close</button>
+        : state.accountTab === 'websites'
+          ? `
+            <div style="display:grid; grid-template-columns: 1fr 180px; gap: 0.8rem; align-items:start;">
+              <div class="table-wrap users-table-wrap">
+                <table class="users-table">
+                  <thead>
+                    <tr>
+                      <th>Created On</th><th>Website Name</th><th>Site Owner</th><th>Collaborators Info</th><th>Site Status</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>${websitesRows}</tbody>
+                </table>
               </div>
-              <div class="pdf-modal-body" style="padding:0.9rem; max-height:70vh; overflow:auto;">
-                <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
-                  <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search available site" /><span class="search-icon">⌕</span></div>
-                  <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
+              <section class="roles-panel" style="padding:0.85rem;">
+                <h3 style="margin:0 0 0.6rem; font-size:14px;">Quick Action</h3>
+                <button class="new-role-btn" id="bindNewSiteBtn" style="width:100%; margin-left:0;">🔗 Bind New Site</button>
+              </section>
+            </div>
+
+            <div class="pdf-modal" id="bindSiteModal" ${state.bindSiteModalOpen ? '' : 'hidden'}>
+              <div class="pdf-modal-backdrop" id="bindSiteBackdrop"></div>
+              <div class="pdf-modal-dialog" style="max-width: 1060px; height: auto;">
+                <div class="pdf-modal-header">
+                  <h3>Bind New Site</h3>
+                  <button class="page-btn" id="bindSiteCloseBtn" type="button">Close</button>
                 </div>
-                <div class="bind-site-grid">
-                  ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Created By: ${site.createdBy}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
-                </div>
-                <div class="accounts-pagination" style="margin-top:0.8rem;">
-                  <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
-                  <div style="display:flex; gap:0.45rem;">
-                    <button class="page-btn" id="bindSitePrevBtn" ${state.bindSitePage <= 1 ? 'disabled' : ''}>Previous</button>
-                    <button class="page-btn" id="bindSiteNextBtn" ${state.bindSitePage >= Math.ceil(availableSites.length / 8) ? 'disabled' : ''}>Next</button>
+                <div class="pdf-modal-body" style="padding:0.9rem; max-height:70vh; overflow:auto;">
+                  <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
+                    <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search available site" /><span class="search-icon">⌕</span></div>
+                    <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
+                  </div>
+                  <div class="bind-site-grid">
+                    ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Created By: ${site.createdBy}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                  </div>
+                  <div class="accounts-pagination" style="margin-top:0.8rem;">
+                    <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
+                    <div style="display:flex; gap:0.45rem;">
+                      <button class="page-btn" id="bindSitePrevBtn" ${state.bindSitePage <= 1 ? 'disabled' : ''}>Previous</button>
+                      <button class="page-btn" id="bindSiteNextBtn" ${state.bindSitePage >= Math.ceil(availableSites.length / 8) ? 'disabled' : ''}>Next</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        `;
+          `
+          : `
+            <div class="accounts-filter-row" style="margin-bottom:0.8rem; grid-template-columns: 1.5fr 1fr 1fr;">
+              <div class="search-like-wrap"><input class="text-input" placeholder="Search by email or name" /><span class="search-icon">⌕</span></div>
+              <div class="field-group"><input class="text-input" placeholder="MM/DD/YY" /></div>
+              <div class="field-group"><select class="text-input"><option>All Events</option><option>Site Bound to Account</option><option>Account Owner Changed</option></select></div>
+            </div>
+            <div class="table-wrap users-table-wrap">
+              <table class="users-table">
+                <thead><tr><th>Date/Time</th><th>Performed By</th><th>Event Type</th><th>Impacted Area</th><th>Details</th></tr></thead>
+                <tbody>${activityRows}</tbody>
+              </table>
+            </div>
+          `;
 
     pageContainer.innerHTML = `
-      <div class="users-breadcrumb"><a href="#" id="backToAccounts">Accounts</a> <span>›</span> <a href="#" id="accountCrumb">${accountName}</a> <span>›</span> <span>${state.accountTab === 'details' ? 'Account Details' : state.accountTab === 'users' ? 'Users' : 'Websites'}</span></div>
+      <div class="users-breadcrumb"><a href="#" id="backToAccounts">Accounts</a> <span>›</span> <a href="#" id="accountCrumb">${accountName}</a> <span>›</span> <span>${state.accountTab === 'details' ? 'Account Details' : state.accountTab === 'users' ? 'Users' : state.accountTab === 'websites' ? 'Websites' : 'Activity'}</span></div>
       <div class="users-header-row users-header-spaced"><h1 class="page-title">Account Details - ${accountName}</h1></div>
       <div class="users-subnav" style="margin-bottom:0.85rem;">
         <button class="users-subnav-item ${state.accountTab === 'details' ? 'active' : ''}" data-account-tab="details" type="button">Account Details</button>
         <button class="users-subnav-item ${state.accountTab === 'users' ? 'active' : ''}" data-account-tab="users" type="button">Users</button>
         <button class="users-subnav-item ${state.accountTab === 'websites' ? 'active' : ''}" data-account-tab="websites" type="button">Websites</button>
+        <button class="users-subnav-item ${state.accountTab === 'activity' ? 'active' : ''}" data-account-tab="activity" type="button">Activity</button>
       </div>
       ${tabContent}
     `;
