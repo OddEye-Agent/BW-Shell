@@ -222,19 +222,19 @@
                   <h3>Bind New Site</h3>
                   <button class="page-btn" id="bindSiteCloseBtn" type="button">Close</button>
                 </div>
-                <div class="pdf-modal-body" style="padding:0.9rem; max-height:78vh; overflow:hidden;">
+                <div class="pdf-modal-body" style="padding:0.9rem; max-height:88vh; overflow:hidden;">
                   <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
                     <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search available site" /><span class="search-icon">⌕</span></div>
                     <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
                   </div>
                   <div class="bind-site-grid">
-                    ${availableSites.slice((state.bindSitePage - 1) * 6, state.bindSitePage * 6).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><div class="site-collab-wrap"><button type="button" class="site-collab-chip" aria-label="Collaborators">👤 ${site.collaborators?.length || 0}</button><div class="site-collab-pop">${(site.collaborators||[]).map((c)=>`<div><strong>${c.name}</strong><br/><span>${c.email}</span></div>`).join('')}</div></div><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                    ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><div class="site-collab-wrap"><button type="button" class="site-collab-chip" aria-label="Collaborators">👤 ${site.collaborators?.length || 0}</button><div class="site-collab-pop">${(site.collaborators||[]).map((c)=>`<div><strong>${c.name}</strong><br/><span>${c.email}</span></div>`).join('')}</div></div><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
                   </div>
                   <div class="accounts-pagination" style="margin-top:0.8rem;">
-                    <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 6))}</span>
+                    <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
                     <div style="display:flex; gap:0.45rem;">
                       <button class="page-btn" id="bindSitePrevBtn" ${state.bindSitePage <= 1 ? 'disabled' : ''}>Previous</button>
-                      <button class="page-btn" id="bindSiteNextBtn" ${state.bindSitePage >= Math.ceil(availableSites.length / 6) ? 'disabled' : ''}>Next</button>
+                      <button class="page-btn" id="bindSiteNextBtn" ${state.bindSitePage >= Math.ceil(availableSites.length / 8) ? 'disabled' : ''}>Next</button>
                     </div>
                   </div>
                 </div>
@@ -315,7 +315,7 @@
       renderAccountsView();
     });
     pageContainer.querySelector('#bindSiteNextBtn')?.addEventListener('click', () => {
-      state.bindSitePage = Math.min(Math.ceil(availableSites.length / 6), state.bindSitePage + 1);
+      state.bindSitePage = Math.min(Math.ceil(availableSites.length / 8), state.bindSitePage + 1);
       renderAccountsView();
     });
 
