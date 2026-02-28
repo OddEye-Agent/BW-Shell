@@ -746,7 +746,8 @@ tbody tr:hover {
 
 .site-collab-pop {
   position: absolute;
-  left: 0;
+  right: 0;
+  left: auto;
   top: calc(100% + 0.25rem);
   min-width: 240px;
   background: #fff;
@@ -772,14 +773,16 @@ tbody tr:hover {
   right: 0;
   top: calc(100% + 0.25rem);
   width: 320px;
-  background: #0f233f;
-  color: #f1f6ff;
+  background: #ffffff;
+  color: #2b3f5d;
+  border: 1px solid #d7e0ec;
   border-radius: 6px;
   padding: 0.55rem 0.65rem;
   font-size: 0.78rem;
   line-height: 1.35;
   display: none;
   z-index: 25;
+  box-shadow: 0 8px 24px rgba(18, 27, 44, 0.16);
 }
 
 .site-collab-pop div {
