@@ -3,7 +3,9 @@
   const state = {
     mode: 'list', // list | create-account | account-details
     selectedAccount: null,
-    accountTab: 'details' // details | users | websites
+    accountTab: 'details', // details | users | websites
+    bindSiteModalOpen: false,
+    bindSitePage: 1
   };
 
   function openAccountDetails(accountName) {
@@ -106,6 +108,18 @@
 
   function renderAccountDetails() {
     const accountName = state.selectedAccount || 'Hatfield Production Test';
+    const availableSites = [
+      { name: 'ABC Investments', createdDate: '01-08-2026', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-27' },
+      { name: 'Wealth Management Solutions', createdDate: '10-11-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-26' },
+      { name: 'Investment Excellence Group', createdDate: '12-13-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-24' },
+      { name: 'Capital Growth Advisors', createdDate: '12-14-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-23' },
+      { name: 'Guardian Asset Management', createdDate: '01-03-2026', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-21' },
+      { name: 'Summit Financial Planning', createdDate: '01-08-2026', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-20' },
+      { name: 'Elite Financial Services', createdDate: '01-04-2026', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-19' },
+      { name: 'Northstar Advisory Group', createdDate: '11-22-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-18' },
+      { name: 'Crescent Wealth Partners', createdDate: '11-09-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-16' },
+      { name: 'Maple Ridge Advisors', createdDate: '10-02-2025', createdBy: 'Yoshi Sales', msid: 'MS373103', url: 'http://abcinvestments.com', lastUpdated: '2026-02-14' }
+    ];
 
     const usersRows = `
       <tr>
@@ -181,8 +195,34 @@
             </div>
             <section class="roles-panel" style="padding:0.85rem;">
               <h3 style="margin:0 0 0.6rem; font-size:14px;">Quick Action</h3>
-              <button class="new-role-btn" style="width:100%; margin-left:0;">🔗 Bind New Site</button>
+              <button class="new-role-btn" id="bindNewSiteBtn" style="width:100%; margin-left:0;">🔗 Bind New Site</button>
             </section>
+          </div>
+
+          <div class="pdf-modal" id="bindSiteModal" ${state.bindSiteModalOpen ? '' : 'hidden'}>
+            <div class="pdf-modal-backdrop" id="bindSiteBackdrop"></div>
+            <div class="pdf-modal-dialog" style="max-width: 1060px; height: auto;">
+              <div class="pdf-modal-header">
+                <h3>Bind New Site</h3>
+                <button class="page-btn" id="bindSiteCloseBtn" type="button">Close</button>
+              </div>
+              <div class="pdf-modal-body" style="padding:0.9rem; max-height:70vh; overflow:auto;">
+                <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
+                  <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search available site" /><span class="search-icon">⌕</span></div>
+                  <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
+                </div>
+                <div class="bind-site-grid">
+                  ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Created By: ${site.createdBy}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                </div>
+                <div class="accounts-pagination" style="margin-top:0.8rem;">
+                  <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
+                  <div style="display:flex; gap:0.45rem;">
+                    <button class="page-btn" id="bindSitePrevBtn" ${state.bindSitePage <= 1 ? 'disabled' : ''}>Previous</button>
+                    <button class="page-btn" id="bindSiteNextBtn" ${state.bindSitePage >= Math.ceil(availableSites.length / 8) ? 'disabled' : ''}>Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         `;
 
@@ -213,9 +253,32 @@
       state.mode = 'list';
       renderAccountsView();
     });
+    pageContainer.querySelector('#bindNewSiteBtn')?.addEventListener('click', () => {
+      state.bindSiteModalOpen = true;
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSiteCloseBtn')?.addEventListener('click', () => {
+      state.bindSiteModalOpen = false;
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSiteBackdrop')?.addEventListener('click', () => {
+      state.bindSiteModalOpen = false;
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSitePrevBtn')?.addEventListener('click', () => {
+      state.bindSitePage = Math.max(1, state.bindSitePage - 1);
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSiteNextBtn')?.addEventListener('click', () => {
+      state.bindSitePage = Math.min(Math.ceil(availableSites.length / 8), state.bindSitePage + 1);
+      renderAccountsView();
+    });
+
     pageContainer.querySelectorAll('[data-account-tab]').forEach((btn) => {
       btn.addEventListener('click', () => {
         state.accountTab = btn.getAttribute('data-account-tab');
+        state.bindSiteModalOpen = false;
+        state.bindSitePage = 1;
         renderAccountsView();
       });
     });
