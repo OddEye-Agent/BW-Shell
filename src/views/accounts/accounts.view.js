@@ -163,7 +163,12 @@
             </div>
             <div class="field-group">
               <label>Account Type<span class="required">*</span></label>
-              <select class="text-input"><option>Retail Advisor</option></select>
+              <select class="text-input">
+                <option>Retail Advisor</option>
+                <option>Retail BD</option>
+                <option>Enterprise</option>
+                <option>Sub Account</option>
+              </select>
             </div>
             <div class="field-group">
               <label>Parent account</label>
@@ -324,9 +329,10 @@
             <label for="newAccountType">Account Type<span class="required">*</span></label>
             <select id="newAccountType" class="text-input">
               <option>Select account type</option>
-              <option>Home Office</option>
-              <option>Financial Advisor</option>
+              <option>Retail Advisor</option>
+              <option>Retail BD</option>
               <option>Enterprise</option>
+              <option>Sub Account</option>
             </select>
           </div>
 
