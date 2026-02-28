@@ -225,7 +225,7 @@
                 </div>
                 <div class="pdf-modal-body" style="padding:0.9rem; max-height:88vh; overflow:hidden;">
                   <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
-                    <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search available site" /><span class="search-icon">⌕</span></div>
+                    <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search by Site, URL or MSID" /><span class="search-icon">⌕</span></div>
                     <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
                   </div>
                   <div class="bind-site-grid">
