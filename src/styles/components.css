@@ -584,7 +584,7 @@ tbody tr:hover {
 .admin-tools-table.tab-bulk-upload-events {
   min-width: 0;
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
 }
 
 .admin-tools-table.tab-bulk-upload-events th:nth-child(4),
@@ -2221,4 +2221,35 @@ tbody tr:hover {
   margin-top: 0.55rem;
   color: #1f6b3a;
   font-weight: 600;
+}
+
+
+.admin-tools-table.tab-bulk-upload-events th,
+.admin-tools-table.tab-bulk-upload-events td {
+  padding-left: 0.42rem;
+  padding-right: 0.42rem;
+  font-size: 0.84rem;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(6),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(6) {
+  width: 22%;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(4),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(4) {
+  max-width: 170px;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(7),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(7) {
+  max-width: 118px;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(8),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(8) {
+  width: 52px;
+  max-width: 52px;
 }
