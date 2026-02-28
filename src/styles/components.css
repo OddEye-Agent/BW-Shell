@@ -770,6 +770,10 @@ tbody tr:hover {
   display: block;
 }
 
+.bind-summary-tile {
+  position: relative;
+}
+
 .account-users-actions {
   position: relative;
 }
