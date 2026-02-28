@@ -110,16 +110,16 @@
   function renderAccountDetails() {
     const accountName = state.selectedAccount || 'Hatfield Production Test';
     const availableSites = [
-      { name: 'ABC Investments', createdDate: '01-08-2026', msid: 'A1B2-C3D4-E5F6-G7H8', url: 'http://abcinvestments.com', lastUpdated: '2026-02-27' },
-      { name: 'Wealth Management Solutions', createdDate: '10-11-2025', msid: 'J9K0-L1M2-N3P4-Q5R6', url: 'http://abcinvestments.com', lastUpdated: '2026-02-26' },
-      { name: 'Investment Excellence Group', createdDate: '12-13-2025', msid: 'S7T8-U9V0-W1X2-Y3Z4', url: 'http://abcinvestments.com', lastUpdated: '2026-02-24' },
-      { name: 'Capital Growth Advisors', createdDate: '12-14-2025', msid: 'B4C5-D6E7-F8G9-H0J1', url: 'http://abcinvestments.com', lastUpdated: '2026-02-23' },
-      { name: 'Guardian Asset Management', createdDate: '01-03-2026', msid: 'K2L3-M4N5-P6Q7-R8S9', url: 'http://abcinvestments.com', lastUpdated: '2026-02-21' },
-      { name: 'Summit Financial Planning', createdDate: '01-08-2026', msid: 'T0U1-V2W3-X4Y5-Z6A7', url: 'http://abcinvestments.com', lastUpdated: '2026-02-20' },
-      { name: 'Elite Financial Services', createdDate: '01-04-2026', msid: 'C8D9-E0F1-G2H3-J4K5', url: 'http://abcinvestments.com', lastUpdated: '2026-02-19' },
-      { name: 'Northstar Advisory Group', createdDate: '11-22-2025', msid: 'L6M7-N8P9-Q0R1-S2T3', url: 'http://abcinvestments.com', lastUpdated: '2026-02-18' },
-      { name: 'Crescent Wealth Partners', createdDate: '11-09-2025', msid: 'U4V5-W6X7-Y8Z9-A0B1', url: 'http://abcinvestments.com', lastUpdated: '2026-02-16' },
-      { name: 'Maple Ridge Advisors', createdDate: '10-02-2025', msid: 'D2E3-F4G5-H6J7-K8L9', url: 'http://abcinvestments.com', lastUpdated: '2026-02-14' }
+      { name: 'ABC Investments', createdDate: '01-08-2026', msid: 'A1B2-C3D4-E5F6-G7H8', url: 'http://abcinvestments.com', lastUpdated: '2026-02-27', collaborators: [{name:'Brad Donovan', email:'brad.donovan@abcinvestments.com'},{name:'Amy Peterson', email:'amy.peterson@abcinvestments.com'},{name:'Sean Admin', email:'sean.admin@abcinvestments.com'}] },
+      { name: 'Wealth Management Solutions', createdDate: '10-11-2025', msid: 'J9K0-L1M2-N3P4-Q5R6', url: 'http://abcinvestments.com', lastUpdated: '2026-02-26', collaborators: [{name:'Yoshi Sales', email:'yoshi.sales@abcinvestments.com'},{name:'Lana Core', email:'lana.core@abcinvestments.com'}] },
+      { name: 'Investment Excellence Group', createdDate: '12-13-2025', msid: 'S7T8-U9V0-W1X2-Y3Z4', url: 'http://abcinvestments.com', lastUpdated: '2026-02-24', collaborators: [{name:'Greg Mallett', email:'greg.mallett@broadridge.com'}] },
+      { name: 'Capital Growth Advisors', createdDate: '12-14-2025', msid: 'B4C5-D6E7-F8G9-H0J1', url: 'http://abcinvestments.com', lastUpdated: '2026-02-23', collaborators: [{name:'Bob Jones', email:'bob.jones@abcinvestments.com'},{name:'Jane Mitchell', email:'jane.mitchell@abcinvestments.com'}] },
+      { name: 'Guardian Asset Management', createdDate: '01-03-2026', msid: 'K2L3-M4N5-P6Q7-R8S9', url: 'http://abcinvestments.com', lastUpdated: '2026-02-21', collaborators: [{name:'Robert Godwin', email:'robert.godwin@abcinvestments.com'}] },
+      { name: 'Summit Financial Planning', createdDate: '01-08-2026', msid: 'T0U1-V2W3-X4Y5-Z6A7', url: 'http://abcinvestments.com', lastUpdated: '2026-02-20', collaborators: [{name:'Mia Chen', email:'mia.chen@abcinvestments.com'},{name:'Arjun Patel', email:'arjun.patel@abcinvestments.com'},{name:'Noah West', email:'noah.west@abcinvestments.com'}] },
+      { name: 'Elite Financial Services', createdDate: '01-04-2026', msid: 'C8D9-E0F1-G2H3-J4K5', url: 'http://abcinvestments.com', lastUpdated: '2026-02-19', collaborators: [{name:'Olivia Park', email:'olivia.park@abcinvestments.com'}] },
+      { name: 'Northstar Advisory Group', createdDate: '11-22-2025', msid: 'L6M7-N8P9-Q0R1-S2T3', url: 'http://abcinvestments.com', lastUpdated: '2026-02-18', collaborators: [{name:'Tom Ridge', email:'tom.ridge@abcinvestments.com'},{name:'Eva Cruz', email:'eva.cruz@abcinvestments.com'}] },
+      { name: 'Crescent Wealth Partners', createdDate: '11-09-2025', msid: 'U4V5-W6X7-Y8Z9-A0B1', url: 'http://abcinvestments.com', lastUpdated: '2026-02-16', collaborators: [{name:'Nora Vale', email:'nora.vale@abcinvestments.com'}] },
+      { name: 'Maple Ridge Advisors', createdDate: '10-02-2025', msid: 'D2E3-F4G5-H6J7-K8L9', url: 'http://abcinvestments.com', lastUpdated: '2026-02-14', collaborators: [{name:'Sam Lee', email:'sam.lee@abcinvestments.com'},{name:'Ira Bloom', email:'ira.bloom@abcinvestments.com'}] }
     ];
 
     const usersRows = `
@@ -228,7 +228,7 @@
                     <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
                   </div>
                   <div class="bind-site-grid">
-                    ${availableSites.slice((state.bindSitePage - 1) * 6, state.bindSitePage * 6).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                    ${availableSites.slice((state.bindSitePage - 1) * 6, state.bindSitePage * 6).map((site) => `<article class="bind-site-card"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><div class="site-collab-wrap"><button type="button" class="site-collab-chip" aria-label="Collaborators">👤 ${site.collaborators?.length || 0}</button><div class="site-collab-pop">${(site.collaborators||[]).map((c)=>`<div><strong>${c.name}</strong><br/><span>${c.email}</span></div>`).join('')}</div></div><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
                   </div>
                   <div class="accounts-pagination" style="margin-top:0.8rem;">
                     <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 6))}</span>

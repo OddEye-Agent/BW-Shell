@@ -712,6 +712,48 @@ tbody tr:hover {
   color: #5f6d82;
 }
 
+.site-collab-wrap {
+  position: relative;
+  display: inline-block;
+  margin: 0.25rem 0 0.3rem;
+}
+
+.site-collab-chip {
+  border: 1px solid #c8d5e8;
+  background: #f4f8ff;
+  color: #214f9c;
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.8rem;
+  cursor: default;
+}
+
+.site-collab-pop {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.25rem);
+  min-width: 240px;
+  background: #fff;
+  border: 1px solid #d6deea;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(18, 27, 44, 0.18);
+  padding: 0.45rem 0.55rem;
+  display: none;
+  z-index: 20;
+}
+
+.site-collab-pop div {
+  margin-bottom: 0.35rem;
+  color: #2f415b;
+}
+
+.site-collab-pop div:last-child { margin-bottom: 0; }
+.site-collab-pop span { color: #6a7990; font-size: 0.83rem; }
+
+.site-collab-wrap:hover .site-collab-pop {
+  display: block;
+}
+
 .account-users-actions {
   position: relative;
 }
