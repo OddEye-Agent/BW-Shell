@@ -6,7 +6,8 @@
     accountTab: 'details', // details | users | websites
     bindSiteModalOpen: false,
     bindSitePage: 1,
-    accountUsersMenuOpen: false
+    accountUsersMenuOpen: false,
+    bindSiteSelected: null
   };
 
   function openAccountDetails(accountName) {
@@ -228,7 +229,7 @@
                     <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
                   </div>
                   <div class="bind-site-grid">
-                    ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site) => `<article class="bind-site-card">${(site.collaborators?.length || 0) > 0 ? `<div class="site-collab-wrap top-right"><button type="button" class="site-collab-chip" aria-label="Collaborators">👤 ${site.collaborators.length}</button><div class="site-collab-pop">${(site.collaborators||[]).map((c)=>`<div><strong>${c.name}</strong><br/><span>${c.email}</span></div>`).join('')}</div></div>` : ''}<h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                    ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site, siteIndex) => `<article class="bind-site-card" data-bind-site-index="${siteIndex + ((state.bindSitePage - 1) * 8)}">${(site.collaborators?.length || 0) > 0 ? `<div class="site-collab-wrap top-right"><button type="button" class="site-collab-chip" aria-label="Collaborators">👤 ${site.collaborators.length}</button><div class="site-collab-pop">${(site.collaborators||[]).map((c)=>`<div><strong>${c.name}</strong><br/><span>${c.email}</span></div>`).join('')}</div></div>` : ''}<h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
                   </div>
                   <div class="accounts-pagination" style="margin-top:0.8rem;">
                     <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
@@ -265,6 +266,7 @@
         <button class="users-subnav-item ${state.accountTab === 'activity' ? 'active' : ''}" data-account-tab="activity" type="button">Activity</button>
       </div>
       ${tabContent}
+      ${state.accountTab === 'websites' && state.bindSiteSelected != null ? `<div class="pdf-modal" id="bindSiteSummaryModal"><div class="pdf-modal-backdrop" id="bindSiteSummaryBackdrop"></div><div class="pdf-modal-dialog" style="max-width:980px;height:auto;"><div class="pdf-modal-header"><h3>Bind Site & Invite Collaborator</h3><button class="page-btn" id="bindSiteSummaryCloseBtn" type="button">Close</button></div><div class="pdf-modal-body" style="padding:1rem;"><p class="account-settings-copy" style="margin-bottom:.8rem;">Review the selected site information, then invite collaborators to join this site.</p><section class="roles-panel" style="background:#f4f9ff;margin-bottom:.9rem;"><h3 style="margin:0 0 .4rem;font-size:1.1rem;">Website Details</h3><div class="create-account-grid" style="grid-template-columns:1fr 1fr;"><div><label class="muted">Selected Site:</label><div><strong>${availableSites[state.bindSiteSelected]?.url?.replace('http://','www.') || ''}</strong></div><label class="muted" style="margin-top:.4rem;display:block;">MSID:</label><div>${availableSites[state.bindSiteSelected]?.msid || ''}</div></div><div><label class="muted">Target Account:</label><div><strong>${accountName}</strong></div></div></div></section><h3 style="margin:0 0 .6rem;">Invite as Collaborator</h3><div class="field-group" style="margin-bottom:.7rem;"><label>Collaborator Name<span class="required">*</span></label><select class="text-input" id="bindCollaboratorSelect"><option>Select a Collaborator</option><option>Internal Test Broadridge (wixbroadridgetest12@gmail.com)</option></select></div><div class="field-group"><label>Roles<span class="required">*</span></label><select class="text-input" id="bindRoleSelect"><option>Select a Role</option><option>Financial Advisor</option></select></div><div class="role-form-actions" style="margin-top:1rem;"><button class="page-btn" id="bindSiteSummaryCancelBtn" type="button">Cancel</button><button class="page-btn primary" id="bindSiteSendInviteBtn" type="button" disabled>Send Invite</button></div></div></div></div>` : ''}
     `;
 
     const goBack = (e) => {
@@ -319,12 +321,37 @@
       renderAccountsView();
     });
 
+    pageContainer.querySelectorAll('[data-bind-site-index]').forEach((card) => {
+      card.addEventListener('click', () => {
+        state.bindSiteSelected = Number(card.getAttribute('data-bind-site-index'));
+        renderAccountsView();
+      });
+    });
+
+    const closeBindSummary = () => {
+      state.bindSiteSelected = null;
+      renderAccountsView();
+    };
+    pageContainer.querySelector('#bindSiteSummaryCloseBtn')?.addEventListener('click', closeBindSummary);
+    pageContainer.querySelector('#bindSiteSummaryBackdrop')?.addEventListener('click', closeBindSummary);
+    pageContainer.querySelector('#bindSiteSummaryCancelBtn')?.addEventListener('click', closeBindSummary);
+    const collabSel = pageContainer.querySelector('#bindCollaboratorSelect');
+    const roleSel = pageContainer.querySelector('#bindRoleSelect');
+    const sendBtn = pageContainer.querySelector('#bindSiteSendInviteBtn');
+    const syncInviteButton = () => {
+      if (!sendBtn || !collabSel || !roleSel) return;
+      sendBtn.disabled = collabSel.selectedIndex === 0 || roleSel.selectedIndex === 0;
+    };
+    collabSel?.addEventListener('change', syncInviteButton);
+    roleSel?.addEventListener('change', syncInviteButton);
+
     pageContainer.querySelectorAll('[data-account-tab]').forEach((btn) => {
       btn.addEventListener('click', () => {
         state.accountTab = btn.getAttribute('data-account-tab');
         state.bindSiteModalOpen = false;
         state.bindSitePage = 1;
         state.accountUsersMenuOpen = false;
+        state.bindSiteSelected = null;
         renderAccountsView();
       });
     });

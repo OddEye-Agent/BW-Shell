@@ -701,6 +701,12 @@ tbody tr:hover {
   border-radius: 6px;
   background: #fff;
   padding: 0.95rem 0.8rem 0.7rem;
+  cursor: pointer;
+}
+
+.bind-site-card:hover {
+  border-color: #bcd0ec;
+  background: #f9fcff;
 }
 
 .bind-site-card h4 {
