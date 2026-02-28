@@ -5,7 +5,8 @@
     selectedAccount: null,
     accountTab: 'details', // details | users | websites
     bindSiteModalOpen: false,
-    bindSitePage: 1
+    bindSitePage: 1,
+    accountUsersMenuOpen: false
   };
 
   function openAccountDetails(accountName) {
@@ -183,7 +184,7 @@
       `
       : state.accountTab === 'users'
         ? `
-          <div class="users-header-row users-header-spaced"><div></div><button class="new-role-btn">Create or Add Users ▾</button></div>
+          <div class="users-header-row users-header-spaced"><div></div><div class="account-users-actions"><button class="new-role-btn" id="accountUsersMenuBtn">Create or Add Users ▾</button><div class="dropdown account-users-dropdown ${state.accountUsersMenuOpen ? 'open' : ''}" id="accountUsersDropdown" ${state.accountUsersMenuOpen ? '' : 'hidden'}><button type="button">＋ New User</button><button type="button">⊕ Add Existing User</button></div></div></div>
           <div class="table-wrap users-table-wrap">
             <table class="users-table">
               <thead>
@@ -282,6 +283,21 @@
       state.mode = 'list';
       renderAccountsView();
     });
+
+    const menuBtn = pageContainer.querySelector('#accountUsersMenuBtn');
+    const menu = pageContainer.querySelector('#accountUsersDropdown');
+    menuBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.accountUsersMenuOpen = !state.accountUsersMenuOpen;
+      renderAccountsView();
+    });
+    pageContainer.addEventListener('click', (e) => {
+      if (!state.accountUsersMenuOpen) return;
+      if (menu && menu.contains(e.target)) return;
+      if (menuBtn && menuBtn.contains(e.target)) return;
+      state.accountUsersMenuOpen = false;
+      renderAccountsView();
+    });
     pageContainer.querySelector('#bindNewSiteBtn')?.addEventListener('click', () => {
       state.bindSiteModalOpen = true;
       renderAccountsView();
@@ -308,6 +324,7 @@
         state.accountTab = btn.getAttribute('data-account-tab');
         state.bindSiteModalOpen = false;
         state.bindSitePage = 1;
+        state.accountUsersMenuOpen = false;
         renderAccountsView();
       });
     });

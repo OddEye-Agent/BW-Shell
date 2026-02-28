@@ -712,6 +712,16 @@ tbody tr:hover {
   color: #5f6d82;
 }
 
+.account-users-actions {
+  position: relative;
+}
+
+.account-users-dropdown {
+  right: 0;
+  top: calc(100% + 0.35rem);
+  min-width: 190px;
+}
+
 .linkedin-card.connected {
   border-color: #d5e7d9;
   background: #fbfffc;
