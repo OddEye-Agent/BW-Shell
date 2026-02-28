@@ -742,6 +742,26 @@ tbody tr:hover {
   padding: 0.12rem 0.45rem;
   font-size: 0.8rem;
   cursor: default;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.collab-person-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  color: #1f57d6;
+}
+
+.collab-person-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .site-collab-pop {
