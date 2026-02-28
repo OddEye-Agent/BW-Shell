@@ -1,15 +1,24 @@
 // Accounts view renderer
 (function () {
   const state = {
-    mode: 'list' // list | create-account
+    mode: 'list', // list | create-account | account-details
+    selectedAccount: null,
+    accountTab: 'details' // details | users | websites
   };
+
+  function openAccountDetails(accountName) {
+    state.mode = 'account-details';
+    state.selectedAccount = accountName;
+    state.accountTab = 'details';
+    renderAccountsView();
+  }
 
   function renderAccountsList() {
     const tableRows = accountRows
       .map(
         (row) => `
           <tr>
-            <td><a class="account-link" href="#">${row.accountName}</a></td>
+            <td><a class="account-link" href="#" data-open-account="${row.accountName}">${row.accountName}</a></td>
             <td>${row.parentAccount || 'Broadridge'}</td>
             <td class="numeric-cell">${row.subAccounts}</td>
             <td class="numeric-cell">${row.userCount}</td>
@@ -86,6 +95,130 @@
       state.mode = 'create-account';
       renderAccountsView();
     });
+
+    pageContainer.querySelectorAll('[data-open-account]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAccountDetails(el.getAttribute('data-open-account'));
+      });
+    });
+  }
+
+  function renderAccountDetails() {
+    const accountName = state.selectedAccount || 'Hatfield Production Test';
+
+    const usersRows = `
+      <tr>
+        <td><a class="account-link" href="#">Internal Test Broadridge</a></td>
+        <td><a class="account-link" href="#">wixbroadridgetest12@gmail.com</a></td>
+        <td>FINANCIAL_ADVISOR</td>
+        <td>02/27/2026</td>
+        <td>${accountName}</td>
+        <td>Active</td>
+        <td class="actions-cell">⋮</td>
+      </tr>
+    `;
+
+    const websitesRows = `
+      <tr>
+        <td>02/27/2026</td>
+        <td><a class="archive-link" href="#">www.hatfieldfinancialgroup.com</a></td>
+        <td>Internal Test Broadridge</td>
+        <td><a class="archive-link" href="#">1</a></td>
+        <td>In Draft</td>
+        <td class="actions-cell">👤</td>
+      </tr>
+    `;
+
+    const tabContent = state.accountTab === 'details'
+      ? `
+        <section class="create-account-panel">
+          <div class="create-account-grid">
+            <div class="field-group">
+              <label>Account Name<span class="required">*</span></label>
+              <input class="text-input" value="${accountName}" />
+            </div>
+            <div class="field-group">
+              <label>Account Type<span class="required">*</span></label>
+              <select class="text-input"><option>Retail Advisor</option></select>
+            </div>
+            <div class="field-group">
+              <label>Parent account</label>
+              <select class="text-input"><option>Select parent account</option></select>
+            </div>
+          </div>
+        </section>
+        <div class="role-form-actions">
+          <button class="page-btn" id="cancelAccountDetailBtn" type="button">Cancel</button>
+          <button class="page-btn primary" type="button">Save</button>
+        </div>
+      `
+      : state.accountTab === 'users'
+        ? `
+          <div class="users-header-row users-header-spaced"><div></div><button class="new-role-btn">Create or Add Users ▾</button></div>
+          <div class="table-wrap users-table-wrap">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Name</th><th>Email</th><th>Role</th><th>User Created Date</th><th>Account Affiliation</th><th>User Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>${usersRows}</tbody>
+            </table>
+          </div>
+        `
+        : `
+          <div style="display:grid; grid-template-columns: 1fr 180px; gap: 0.8rem; align-items:start;">
+            <div class="table-wrap users-table-wrap">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th>Created On</th><th>Website Name</th><th>Site Owner</th><th>Collaborators Info</th><th>Site Status</th><th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>${websitesRows}</tbody>
+              </table>
+            </div>
+            <section class="roles-panel" style="padding:0.85rem;">
+              <h3 style="margin:0 0 0.6rem; font-size:14px;">Quick Action</h3>
+              <button class="new-role-btn" style="width:100%; margin-left:0;">🔗 Bind New Site</button>
+            </section>
+          </div>
+        `;
+
+    pageContainer.innerHTML = `
+      <div class="users-breadcrumb"><a href="#" id="backToAccounts">Accounts</a> <span>›</span> <a href="#" id="accountCrumb">${accountName}</a> <span>›</span> <span>${state.accountTab === 'details' ? 'Account Details' : state.accountTab === 'users' ? 'Users' : 'Websites'}</span></div>
+      <div class="users-header-row users-header-spaced"><h1 class="page-title">Account Details - ${accountName}</h1></div>
+      <div class="users-subnav" style="margin-bottom:0.85rem;">
+        <button class="users-subnav-item ${state.accountTab === 'details' ? 'active' : ''}" data-account-tab="details" type="button">Account Details</button>
+        <button class="users-subnav-item ${state.accountTab === 'users' ? 'active' : ''}" data-account-tab="users" type="button">Users</button>
+        <button class="users-subnav-item ${state.accountTab === 'websites' ? 'active' : ''}" data-account-tab="websites" type="button">Websites</button>
+      </div>
+      ${tabContent}
+    `;
+
+    const goBack = (e) => {
+      e.preventDefault();
+      state.mode = 'list';
+      renderAccountsView();
+    };
+
+    pageContainer.querySelector('#backToAccounts')?.addEventListener('click', goBack);
+    pageContainer.querySelector('#accountCrumb')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      state.accountTab = 'details';
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#cancelAccountDetailBtn')?.addEventListener('click', () => {
+      state.mode = 'list';
+      renderAccountsView();
+    });
+    pageContainer.querySelectorAll('[data-account-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.accountTab = btn.getAttribute('data-account-tab');
+        renderAccountsView();
+      });
+    });
   }
 
   function renderCreateAccount() {
@@ -144,6 +277,10 @@
   window.renderAccountsView = function renderAccountsView() {
     if (state.mode === 'create-account') {
       renderCreateAccount();
+      return;
+    }
+    if (state.mode === 'account-details') {
+      renderAccountDetails();
       return;
     }
     renderAccountsList();
