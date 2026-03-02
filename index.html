@@ -235,6 +235,7 @@
                 <td>${row.submitter_id}</td>
                 <td>${row.approver_id}</td>
                 <td><span class="archive-status ${statusClass}">${row.status}</span></td>
+                <td>${row.bas_group || 'Default Group'}</td>
                 <td>${row.bas_account_id}</td>
                 <td>${row.wix_account_id}</td>
                 <td>${row.site_id}</td>
@@ -253,9 +254,15 @@
       const statusFilter = document.getElementById('archiveStatusFilter');
       const tableBody = document.getElementById('archiveTableBody');
       const resultsSummary = document.getElementById('archiveResultsSummary');
+      const groupFilter = document.getElementById('archiveGroupFilter');
+      const dateFromInput = document.getElementById('archiveDateFrom');
+      const dateToInput = document.getElementById('archiveDateTo');
 
       const query = queryInput.value.trim().toLowerCase();
       const selectedStatus = statusFilter.value;
+      const selectedGroup = groupFilter?.value || '';
+      const dateFrom = dateFromInput?.value ? new Date(`${dateFromInput.value}T00:00:00`) : null;
+      const dateTo = dateToInput?.value ? new Date(`${dateToInput.value}T23:59:59`) : null;
 
       const archiveRows = Array.isArray(globalThis.complianceArchiveRows) ? globalThis.complianceArchiveRows : [];
 
@@ -268,16 +275,21 @@
             row.website_id.toLowerCase().includes(query) ||
             row.bas_account_id.toLowerCase().includes(query) ||
             row.wix_account_id.toLowerCase().includes(query) ||
-            row.site_id.toLowerCase().includes(query);
+            row.site_id.toLowerCase().includes(query) ||
+            (row.bas_group || '').toLowerCase().includes(query);
 
           const matchesStatus = !selectedStatus || row.status === selectedStatus;
-          return matchesQuery && matchesStatus;
+          const matchesGroup = !selectedGroup || (row.bas_group || 'Default Group') === selectedGroup;
+          const eventDate = new Date(row.event_date);
+          const matchesDateFrom = !dateFrom || eventDate >= dateFrom;
+          const matchesDateTo = !dateTo || eventDate <= dateTo;
+          return matchesQuery && matchesStatus && matchesGroup && matchesDateFrom && matchesDateTo;
         })
         .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
       tableBody.innerHTML = filteredRows.length
         ? renderArchiveTableRows(filteredRows)
-        : '<tr><td colspan="12">No archive records match your filters.</td></tr>';
+        : '<tr><td colspan="13">No archive records match your filters.</td></tr>';
 
       resultsSummary.textContent = `Showing ${filteredRows.length} of ${archiveRows.length} compliance archive records`;
     }
@@ -285,8 +297,11 @@
     function attachArchiveFilterEvents() {
       const queryInput = document.getElementById('archiveSearchInput');
       const statusFilter = document.getElementById('archiveStatusFilter');
+      const groupFilter = document.getElementById('archiveGroupFilter');
+      const dateFromInput = document.getElementById('archiveDateFrom');
+      const dateToInput = document.getElementById('archiveDateTo');
 
-      [queryInput, statusFilter].forEach((element) => {
+      [queryInput, statusFilter, groupFilter, dateFromInput, dateToInput].forEach((element) => {
         element.addEventListener('input', applyArchiveFilters);
         element.addEventListener('change', applyArchiveFilters);
       });
@@ -314,6 +329,17 @@
                 <option value="Rejected">Rejected</option>
               </select>
             </div>
+            <div class="field-group">
+              <label for="archiveGroupFilter">Group</label>
+              <select id="archiveGroupFilter" class="text-input"><option value="">All groups</option></select>
+            </div>
+            <div class="field-group">
+              <label for="archiveDateFrom">Date Filter</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;">
+                <input id="archiveDateFrom" class="text-input" type="date" />
+                <input id="archiveDateTo" class="text-input" type="date" />
+              </div>
+            </div>
           </div>
 
           <p class="archive-summary" id="archiveResultsSummary"></p>
@@ -327,6 +353,7 @@
                   <th>Submitter ID</th>
                   <th>Reviewer ID</th>
                   <th>Status</th>
+                  <th>Group</th>
                   <th>BAS Account ID</th>
                   <th>Wix Account ID</th>
                   <th>Site MSID</th>
@@ -356,6 +383,13 @@
             </div>
           </div>
         `;
+
+      const archiveRows = Array.isArray(globalThis.complianceArchiveRows) ? globalThis.complianceArchiveRows : [];
+      const groupOptions = [...new Set(archiveRows.map((row) => row.bas_group || 'Default Group'))];
+      const groupFilter = document.getElementById('archiveGroupFilter');
+      if (groupFilter) {
+        groupFilter.innerHTML = `<option value="">All groups</option>${groupOptions.map((g) => `<option value="${g}">${g}</option>`).join('')}`;
+      }
 
       attachArchiveFilterEvents();
       applyArchiveFilters();
