@@ -10,8 +10,8 @@
     bindSiteSelected: null,
     ownerManagerOpen: false,
     accountOwners: [
-      { name: 'Sean Admin', email: 'sean.admin@abcinvestments.com' },
-      { name: 'Jane Mitchell', email: 'jane.mitchell@abcinvestments.com' }
+      { name: 'Sean Admin', email: 'sean.admin@abcinvestments.com', role: 'Program Admin' },
+      { name: 'Jane Mitchell', email: 'jane.mitchell@abcinvestments.com', role: 'Financial Advisor' }
     ]
   };
 
@@ -162,46 +162,48 @@
 
     const tabContent = state.accountTab === 'details'
       ? `
-        <section class="create-account-panel">
-          <div class="create-account-grid">
-            <div class="field-group">
-              <label>Account Name<span class="required">*</span></label>
-              <input class="text-input" value="${accountName}" />
+        <div style="display:grid; grid-template-columns: 1.35fr 1fr; gap:0.85rem; align-items:start;">
+          <section class="create-account-panel" style="margin:0;">
+            <div class="create-account-grid" style="grid-template-columns:1fr;">
+              <div class="field-group">
+                <label>Account Name<span class="required">*</span></label>
+                <input class="text-input" value="${accountName}" />
+              </div>
+              <div class="field-group">
+                <label>Account Type<span class="required">*</span></label>
+                <select class="text-input">
+                  <option>Retail Advisor</option>
+                  <option>Retail BD</option>
+                  <option>Enterprise</option>
+                  <option>Sub Account</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Parent account</label>
+                <select class="text-input"><option>Select parent account</option></select>
+              </div>
             </div>
-            <div class="field-group">
-              <label>Account Type<span class="required">*</span></label>
-              <select class="text-input">
-                <option>Retail Advisor</option>
-                <option>Retail BD</option>
-                <option>Enterprise</option>
-                <option>Sub Account</option>
-              </select>
-            </div>
-            <div class="field-group">
-              <label>Parent account</label>
-              <select class="text-input"><option>Select parent account</option></select>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="roles-panel" style="margin-top:0.85rem;">
-          <div class="users-header-row users-header-spaced" style="margin-bottom:0.55rem;">
-            <h3 style="margin:0; font-size:1.02rem;">Account Owners</h3>
-            <div class="users-actions">
-              <button class="new-role-btn secondary" id="removeOwnerBtn" type="button">Remove Owner</button>
-              <button class="new-role-btn" id="addOwnerBtn" type="button">Add Owner</button>
+          <section class="roles-panel" style="margin:0;">
+            <div class="users-header-row users-header-spaced" style="margin-bottom:0.55rem;">
+              <h3 style="margin:0; font-size:1.02rem;">Account Owners</h3>
+              <div class="users-actions">
+                <button class="new-role-btn secondary" id="removeOwnerBtn" type="button">Remove Owner</button>
+                <button class="new-role-btn" id="addOwnerBtn" type="button">Add Owner</button>
+              </div>
             </div>
-          </div>
-          <div class="table-wrap users-table-wrap">
-            <table class="users-table">
-              <thead><tr><th>Owner Name</th><th>Email</th><th>Primary</th></tr></thead>
-              <tbody>
-                ${state.accountOwners.map((o, i) => `<tr><td>${o.name}</td><td>${o.email}</td><td>${i===0 ? '<span class="status-pill active">Primary</span>' : '<span class="status-pill">Owner</span>'}</td></tr>`).join('')}
-              </tbody>
-            </table>
-          </div>
-          <p class="archive-summary" style="margin-top:.45rem;">Multiple owners are supported for this account.</p>
-        </section>
+            <div class="table-wrap users-table-wrap">
+              <table class="users-table">
+                <thead><tr><th>Owner Name</th><th>Email</th><th>Role</th></tr></thead>
+                <tbody>
+                  ${state.accountOwners.map((o) => `<tr><td>${o.name}</td><td>${o.email}</td><td>${o.role || 'Financial Advisor'}</td></tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+            <p class="archive-summary" style="margin-top:.45rem;">Multiple owners are supported for this account.</p>
+          </section>
+        </div>
 
         <div class="pdf-modal" id="ownerModal" ${state.ownerManagerOpen ? '' : 'hidden'}>
           <div class="pdf-modal-backdrop" id="ownerModalBackdrop"></div>
