@@ -2405,3 +2405,19 @@ tbody tr:hover {
   min-width: 0 !important;
   table-layout: auto;
 }
+
+
+.inline-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #b7c7de;
+  color: #365d94;
+  font-size: 0.7rem;
+  background: #eef4ff;
+  cursor: help;
+  vertical-align: middle;
+}
