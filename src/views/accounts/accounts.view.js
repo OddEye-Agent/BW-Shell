@@ -184,7 +184,7 @@
               </div>
             </div>
 
-            <section class="roles-panel" style="margin:0;">
+            <div class="account-owners-inline" style="margin:0;">
               <div class="users-header-row users-header-spaced" style="margin-bottom:0.55rem;">
                 <h3 style="margin:0; font-size:1.02rem;">Account Owners</h3>
                 <div class="users-actions">
@@ -201,7 +201,7 @@
                 </table>
               </div>
               <p class="archive-summary" style="margin-top:.45rem;">Multiple owners are supported for this account.</p>
-            </section>
+            </div>
           </div>
         </section>
 

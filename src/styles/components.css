@@ -2451,3 +2451,10 @@ tbody tr:hover {
 .inline-help:focus::after {
   opacity: 1;
 }
+
+
+.account-owners-inline {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
