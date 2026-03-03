@@ -7,6 +7,7 @@
     bindSiteModalOpen: false,
     bindSitePage: 1,
     bindSiteCreatedDateFilter: '',
+    bindSiteDateMode: 'created',
     accountUsersMenuOpen: false,
     bindSiteSelected: null,
     ownerManagerOpen: false,
@@ -279,10 +280,10 @@
                 <div class="pdf-modal-body" style="padding:0.9rem; max-height:88vh; overflow:hidden;">
                   <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
                     <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search by Site, URL or MSID" /><span class="search-icon">⌕</span></div>
-                    <div class="field-group" style="min-width:240px;"><input class="text-input" type="date" id="bindSiteCreatedDateFilter" value="${state.bindSiteCreatedDateFilter || ""}" /></div>
+                    <div class="field-group" style="min-width:340px;"><div style="display:grid;grid-template-columns: 1fr 1fr; gap:0.45rem;"><select class="text-input" id="bindSiteDateMode"><option value="created" ${state.bindSiteDateMode === 'created' ? 'selected' : ''}>Created Date</option><option value="updated" ${state.bindSiteDateMode === 'updated' ? 'selected' : ''}>Last Updated</option></select><input class="text-input" type="date" id="bindSiteCreatedDateFilter" value="${state.bindSiteCreatedDateFilter || ""}" /></div></div>
                   </div>
                   <div class="bind-site-grid">
-                    ${availableSites.filter((site) => { const f = state.bindSiteCreatedDateFilter; return !f || (site.createdDate && site.createdDate.split('-').reverse().join('-') === f); }).slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site, siteIndex) => `<article class="bind-site-card" data-bind-site-index="${siteIndex + ((state.bindSitePage - 1) * 8)}"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Last Updated: ${site.lastUpdated || site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                    ${availableSites.filter((site) => { const f = state.bindSiteCreatedDateFilter; const mode = state.bindSiteDateMode || 'created'; const source = mode === 'updated' ? (site.lastUpdated || site.createdDate) : site.createdDate; return !f || (source && source.split('-').reverse().join('-') === f); }).slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site, siteIndex) => `<article class="bind-site-card" data-bind-site-index="${siteIndex + ((state.bindSitePage - 1) * 8)}"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Last Updated: ${site.lastUpdated || site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
                   </div>
                   <div class="accounts-pagination" style="margin-top:0.8rem;">
                     <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
@@ -374,6 +375,7 @@
     pageContainer.querySelector('#bindNewSiteBtn')?.addEventListener('click', () => {
       state.bindSiteModalOpen = true;
       state.bindSiteCreatedDateFilter = '';
+      state.bindSiteDateMode = 'created';
       renderAccountsView();
     });
     pageContainer.querySelector('#bindSiteCloseBtn')?.addEventListener('click', () => {
@@ -386,6 +388,11 @@
     });
     pageContainer.querySelector('#bindSiteCreatedDateFilter')?.addEventListener('change', (e) => {
       state.bindSiteCreatedDateFilter = e.target.value;
+      state.bindSitePage = 1;
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSiteDateMode')?.addEventListener('change', (e) => {
+      state.bindSiteDateMode = e.target.value;
       state.bindSitePage = 1;
       renderAccountsView();
     });
