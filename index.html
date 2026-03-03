@@ -57,6 +57,7 @@
     const store = window.bwShellStore;
     const archivePdfSamples = ['assets/pdfs/ArchiveSnapsnot2.pdf', 'assets/pdfs/archivingExample.pdf'];
     let adminToolsPage = 1;
+    let bulkUploadDetailEvent = null;
     const ROLE_PROFILES = {
       'Super Admin': { label: 'BAS Super Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video','Admin Tools','Experimental'], readOnly: false },
       'Program Admin': { label: 'BD Program Admin', pages: ['Accounts','Users','Compliance','Content','Websites','Locator','Video'], readOnly: false },
@@ -700,7 +701,8 @@
                   'Row 7: Created successfully'
                 ];
             const enriched = lines.map((line, idx) => line.startsWith('Row') ? line : `Row ${idx + 1}: ${line}`);
-            setBulkErrorsModalOpen(true, [`Event: ${payload.eventId || 'n/a'}`, `File: ${payload.fileName || 'n/a'}`, `Status: ${payload.status || 'n/a'}`, '---', ...enriched]);
+            bulkUploadDetailEvent = { ...payload, query: '', statusFilter: '' };
+            renderAdminToolsPanel('Bulk Upload Events');
           });
         });
       }
@@ -874,6 +876,67 @@
         `;
     }
 
+    function buildBulkUploadRows(eventPayload) {
+      const errors = Array.isArray(eventPayload?.errorDetails) ? eventPayload.errorDetails : [];
+      if (errors.length) {
+        return errors.map((line, idx) => {
+          const m = String(line).match(/^Row\s*(\d+)\s*:\s*(.*)$/i);
+          const rowNum = m ? m[1] : String(idx + 1);
+          const msg = m ? m[2] : String(line);
+          return { csvRow: rowNum, status: /fail|error|invalid|missing|denied/i.test(msg) ? 'Error' : 'Processed', message: msg };
+        });
+      }
+      return Array.from({ length: 12 }).map((_, i) => ({
+        csvRow: String(i + 1),
+        status: 'Processed',
+        message: 'Created successfully'
+      }));
+    }
+
+    function renderBulkUploadDetailView(tabName) {
+      const panel = document.getElementById('adminToolsPanel');
+      if (!panel || !bulkUploadDetailEvent) return;
+      const query = String(bulkUploadDetailEvent.query || '').toLowerCase();
+      const statusFilter = bulkUploadDetailEvent.statusFilter || '';
+      const rows = buildBulkUploadRows(bulkUploadDetailEvent);
+      const filtered = rows.filter((r) => {
+        const matchesQ = !query || String(r.csvRow).includes(query) || String(r.message).toLowerCase().includes(query);
+        const matchesS = !statusFilter || r.status === statusFilter;
+        return matchesQ && matchesS;
+      });
+
+      panel.dataset.activeAdminToolsTab = tabName;
+      panel.innerHTML = `
+        <div class="users-breadcrumb"><a href="#" id="bulkBackToEvents">Admin Tools</a> <span>›</span> <span>Bulk Upload Events</span> <span>›</span> <span>${bulkUploadDetailEvent.eventId || 'Event'}</span></div>
+        <div class="users-header-row users-header-spaced"><h3>Bulk Upload Details — ${bulkUploadDetailEvent.eventId || ''}</h3></div>
+        <div class="admin-tools-toolbar" aria-label="bulk upload row filters">
+          <div class="field-group"><label for="bulkDetailSearch">Search</label><input id="bulkDetailSearch" class="text-input" type="search" placeholder="Search by row or message" value="${bulkUploadDetailEvent.query || ''}" /></div>
+          <div class="field-group"><label for="bulkDetailStatus">Status</label><select id="bulkDetailStatus" class="text-input"><option value="">All statuses</option><option value="Processed" ${statusFilter === 'Processed' ? 'selected' : ''}>Processed</option><option value="Error" ${statusFilter === 'Error' ? 'selected' : ''}>Error</option></select></div>
+        </div>
+        <p class="admin-tools-summary">Showing ${filtered.length} of ${rows.length} rows from ${bulkUploadDetailEvent.fileName || 'uploaded file'}</p>
+        <div class="table-wrap">
+          <table class="users-table">
+            <thead><tr><th>CSV Row</th><th>Status</th><th>Message</th></tr></thead>
+            <tbody>${filtered.length ? filtered.map((r) => `<tr><td>${r.csvRow}</td><td><span class="status-pill ${r.status === 'Error' ? 'status-failed-validation' : 'status-completed'}">${r.status}</span></td><td>${r.message}</td></tr>`).join('') : '<tr><td colspan="3">No rows match filters.</td></tr>'}</tbody>
+          </table>
+        </div>
+      `;
+
+      panel.querySelector('#bulkBackToEvents')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        bulkUploadDetailEvent = null;
+        renderAdminToolsPanel('Bulk Upload Events');
+      });
+      panel.querySelector('#bulkDetailSearch')?.addEventListener('input', (e) => {
+        bulkUploadDetailEvent.query = e.target.value || '';
+        renderBulkUploadDetailView(tabName);
+      });
+      panel.querySelector('#bulkDetailStatus')?.addEventListener('change', (e) => {
+        bulkUploadDetailEvent.statusFilter = e.target.value || '';
+        renderBulkUploadDetailView(tabName);
+      });
+    }
+
     function renderAdminToolsPanel(tabName) {
       const selectedTab = adminToolsTabs.find((tab) => tab.name === tabName) || adminToolsTabs[0];
 
@@ -884,6 +947,11 @@
 
       if (selectedTab.name === 'Calculators') {
         renderCalculatorsPanel(selectedTab);
+        return;
+      }
+
+      if (selectedTab.name === 'Bulk Upload Events' && bulkUploadDetailEvent) {
+        renderBulkUploadDetailView(selectedTab.name);
         return;
       }
 
@@ -957,6 +1025,7 @@
             button.setAttribute('aria-selected', String(button === item));
           });
           adminToolsPage = 1;
+          if (selectedTabName !== 'Bulk Upload Events') bulkUploadDetailEvent = null;
           renderAdminToolsPanel(selectedTabName);
         });
       });
