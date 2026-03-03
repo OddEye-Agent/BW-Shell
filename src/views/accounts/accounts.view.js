@@ -162,7 +162,7 @@
 
     const tabContent = state.accountTab === 'details'
       ? `
-        <div style="display:grid; grid-template-columns: 1.35fr 1fr; gap:0.85rem; align-items:start;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.85rem; align-items:start;">
           <section class="create-account-panel" style="margin:0;">
             <div class="create-account-grid" style="grid-template-columns:1fr;">
               <div class="field-group">
