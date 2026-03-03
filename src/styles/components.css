@@ -2495,3 +2495,36 @@ tbody tr:hover {
 .account-owners-inline .users-actions {
   margin-left: 0;
 }
+
+
+/* Final bulk upload table fit overrides */
+.admin-tools-table.tab-bulk-upload-events {
+  min-width: 0 !important;
+  width: 100%;
+  table-layout: auto !important;
+}
+
+.admin-tools-table.tab-bulk-upload-events th,
+.admin-tools-table.tab-bulk-upload-events td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.admin-tools-table.tab-bulk-upload-events th:nth-child(1),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(1) { min-width: 120px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(2),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(2) { min-width: 120px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(3),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(3) { min-width: 110px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(4),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(4) { min-width: 150px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(5),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(5) { min-width: 120px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(6),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(6) { white-space: normal; min-width: 210px; }
+.admin-tools-table.tab-bulk-upload-events th:nth-child(7),
+.admin-tools-table.tab-bulk-upload-events td:nth-child(7) { min-width: 92px; width: 92px; text-align:center; }
+
+.detail-row-btn { padding: 0.24rem 0.55rem; }

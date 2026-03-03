@@ -330,9 +330,8 @@ const accountRows = [
           { key: 'creationMode', label: 'Creation Mode' },
           { key: 'fileName', label: 'CSV File', width: '190px' },
           { key: 'status', label: 'Status', width: '150px' },
-          { key: 'output', label: 'Output Data', width: '15%' },
-          { key: 'downloadCsv', label: 'Download CSV' },
-          { key: 'errorDetails', label: 'Details', width: '64px' }
+          { key: 'output', label: 'Output Data', width: '24%' },
+          { key: 'errorDetails', label: 'Details', width: '120px' }
         ],
         rows: [
           { eventId: 'EVT-902110', eventDate: '2026-02-27 15:41', creationMode: 'BAS + Wix', fileName: 'advisor_batch_01.csv', status: 'Completed', output: '250/250 created. Notifications suppressed.', downloadCsv: 'exports/evt-902110-results.csv' },
