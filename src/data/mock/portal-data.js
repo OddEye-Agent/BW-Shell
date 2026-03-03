@@ -331,7 +331,8 @@ const accountRows = [
           { key: 'fileName', label: 'CSV File', width: '190px' },
           { key: 'status', label: 'Status', width: '150px' },
           { key: 'output', label: 'Output Data', width: '24%' },
-          { key: 'errorDetails', label: 'Details', width: '120px' }
+          { key: 'errorDetails', label: 'Details', width: '120px' },
+          { key: 'rerun', label: 'Rerun', width: '110px' }
         ],
         rows: [
           { eventId: 'EVT-902110', eventDate: '2026-02-27 15:41', creationMode: 'BAS + Wix', fileName: 'advisor_batch_01.csv', status: 'Completed', output: '250/250 created. Notifications suppressed.', downloadCsv: 'exports/evt-902110-results.csv' },
@@ -341,7 +342,7 @@ const accountRows = [
           { eventId: 'EVT-902106', eventDate: '2026-02-27 10:18', creationMode: 'BAS + Wix', fileName: 'enterprise_wave1.csv', status: 'Completed', output: '500/500 created and assigned.', downloadCsv: 'exports/evt-902106-results.csv' },
           { eventId: 'EVT-902105', eventDate: '2026-02-26 18:52', creationMode: 'Wix Only', fileName: 'wix_fixup_07.csv', status: 'Completed with Errors', output: '186/200 created, 14 permission collisions.', downloadCsv: 'exports/evt-902105-results.csv', errorDetails: ['Row 9: Role not permitted for account', 'Row 26: Website folder not accessible', 'Row 41: Owner Account ID inactive', 'Row 62: Duplicate advisor email', 'Row 84: Contributor account not linked', 'Row 113: Publish flag invalid', 'Row 131: Website assignment denied'] },
           { eventId: 'EVT-902104', eventDate: '2026-02-26 17:31', creationMode: 'BAS Portal', fileName: 'retail_batch_b.csv', status: 'Completed', output: '300/300 created in BAS portal.', downloadCsv: 'exports/evt-902104-results.csv' },
-          { eventId: 'EVT-902103', eventDate: '2026-02-26 16:07', creationMode: 'BAS + Wix', fileName: 'retail_batch_a.csv', status: 'Processing', output: 'Batch accepted, processing in queue.', downloadCsv: 'exports/evt-902103-results.csv' },
+          { eventId: 'EVT-902103', eventDate: '2026-02-26 16:07', creationMode: 'BAS + Wix', fileName: 'retail_batch_a.csv', status: 'Processing', output: 'Batch accepted, processing in queue. (Server retry advised)', downloadCsv: 'exports/evt-902103-results.csv' },
           { eventId: 'EVT-902102', eventDate: '2026-02-26 14:44', creationMode: 'BAS + Wix', fileName: 'advisor_migration_9.csv', status: 'Completed', output: '249/249 created.', downloadCsv: 'exports/evt-902102-results.csv' },
           { eventId: 'EVT-902101', eventDate: '2026-02-26 13:19', creationMode: 'BAS Portal', fileName: 'program_admin_seed.csv', status: 'Completed', output: '42/42 created and role-bound.', downloadCsv: 'exports/evt-902101-results.csv' },
           { eventId: 'EVT-902100', eventDate: '2026-02-26 11:55', creationMode: 'Wix Only', fileName: 'wix_site_bindings.csv', status: 'Completed', output: '88/88 assigned to websites.', downloadCsv: 'exports/evt-902100-results.csv' },

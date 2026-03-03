@@ -535,6 +535,10 @@
                 return `<td class="${tdClasses}"${widthStyle}><button type="button" class="page-btn detail-row-btn" data-error-details="${payload}" title="View upload details">View</button></td>`;
               }
 
+              if (tabConfig.name === 'Bulk Upload Events' && column.key === 'rerun') {
+                return `<td class="${tdClasses}"${widthStyle}><button type="button" class="page-btn rerun-row-btn" data-rerun-id="${row.eventId}">Rerun Upload</button></td>`;
+              }
+
               if (isEditing) {
                 return `<td class="${tdClasses}" contenteditable="true" data-column-key="${column.key}"${widthStyle}>${value}</td>`;
               }
@@ -703,6 +707,17 @@
             const enriched = lines.map((line, idx) => line.startsWith('Row') ? line : `Row ${idx + 1}: ${line}`);
             bulkUploadDetailEvent = { ...payload, query: '', statusFilter: '' };
             renderAdminToolsPanel('Bulk Upload Events');
+          });
+        });
+
+        tableBody.querySelectorAll('.rerun-row-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-rerun-id');
+            const row = sourceRows.find((r) => r.eventId === id);
+            if (!row) return;
+            row.status = 'Processing';
+            row.output = `Rerun initiated at ${new Date().toISOString().slice(0,16).replace('T',' ')}`;
+            applyAdminToolsFilters();
           });
         });
       }
