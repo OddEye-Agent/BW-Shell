@@ -190,7 +190,23 @@
       const list = document.getElementById('bulkErrorsList');
       if (!modal || !list) return;
       if (isOpen) {
-        list.innerHTML = (lines || []).map((line) => `<li>${line}</li>`).join('') || '<li>No row-level errors found.</li>';
+        const parsed = (lines || []).map((line, idx) => {
+          const m = String(line).match(/^Row\s*(\d+)\s*:\s*(.*)$/i);
+          if (m) {
+            const msg = m[2] || '';
+            const status = /fail|error|invalid|missing|denied/i.test(msg) ? 'Error' : 'Processed';
+            return { row: m[1], status, message: msg };
+          }
+          if (/^Event:|^File:|^Status:/i.test(String(line))) {
+            return { row: '-', status: 'Info', message: String(line) };
+          }
+          if (String(line).trim() === '---') return null;
+          return { row: idx + 1, status: 'Processed', message: String(line) };
+        }).filter(Boolean);
+
+        list.innerHTML = parsed.length
+          ? parsed.map((r) => `<tr><td>${r.row}</td><td><span class="status-pill ${r.status === 'Error' ? 'status-failed-validation' : r.status === 'Info' ? '' : 'status-completed'}">${r.status}</span></td><td>${r.message}</td></tr>`).join('')
+          : '<tr><td colspan="3">No row-level details available.</td></tr>';
         modal.hidden = false;
       } else {
         modal.hidden = true;
@@ -1095,13 +1111,18 @@
           <section class="admin-tools-panel" id="adminToolsPanel"></section>
           <div class="pdf-modal" id="bulkErrorsModal" hidden>
             <div class="pdf-modal-backdrop" id="bulkErrorsBackdrop"></div>
-            <div class="pdf-modal-dialog" style="max-width: 760px; height: auto;">
+            <div class="pdf-modal-dialog" style="max-width: 1120px; height: auto;">
               <div class="pdf-modal-header">
                 <h3>Bulk Upload Row Details</h3>
                 <button class="page-btn" type="button" id="bulkErrorsCloseBtn">Close</button>
               </div>
-              <div class="pdf-modal-body" style="padding:1rem;max-height:60vh;overflow:auto;">
-                <ul id="bulkErrorsList" class="bulk-errors-list"></ul>
+              <div class="pdf-modal-body" style="padding:1rem;max-height:72vh;overflow:auto;">
+                <div class="table-wrap">
+                  <table class="users-table" id="bulkErrorsTable">
+                    <thead><tr><th>CSV Row</th><th>Status</th><th>Message</th></tr></thead>
+                    <tbody id="bulkErrorsList"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

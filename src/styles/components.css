@@ -600,15 +600,20 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
-.bulk-errors-list {
-  margin: 0;
-  padding-left: 1.2rem;
-  color: #30445f;
-  line-height: 1.45;
+.bulk-errors-list td {
+  vertical-align: top;
 }
 
-.bulk-errors-list li {
-  margin-bottom: 0.4rem;
+#bulkErrorsTable th:nth-child(1),
+#bulkErrorsTable td:nth-child(1) {
+  width: 90px;
+  white-space: nowrap;
+}
+
+#bulkErrorsTable th:nth-child(2),
+#bulkErrorsTable td:nth-child(2) {
+  width: 130px;
+  white-space: nowrap;
 }
 
 .account-settings-subnav {
