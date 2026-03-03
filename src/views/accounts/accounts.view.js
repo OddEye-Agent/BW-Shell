@@ -6,6 +6,7 @@
     accountTab: 'details', // details | users | websites
     bindSiteModalOpen: false,
     bindSitePage: 1,
+    bindSiteCreatedDateFilter: '',
     accountUsersMenuOpen: false,
     bindSiteSelected: null,
     ownerManagerOpen: false,
@@ -278,10 +279,10 @@
                 <div class="pdf-modal-body" style="padding:0.9rem; max-height:88vh; overflow:hidden;">
                   <div class="accounts-filter-row" style="margin-bottom:0.8rem;">
                     <div class="search-like-wrap" style="flex:1 1 auto;"><input class="text-input" type="text" placeholder="Search by Site, URL or MSID" /><span class="search-icon">⌕</span></div>
-                    <div class="field-group" style="min-width:240px;"><select class="text-input"><option>Last Updated</option><option>Newest First</option><option>Oldest First</option></select></div>
+                    <div class="field-group" style="min-width:240px;"><input class="text-input" type="date" id="bindSiteCreatedDateFilter" value="${state.bindSiteCreatedDateFilter || ""}" /></div>
                   </div>
                   <div class="bind-site-grid">
-                    ${availableSites.slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site, siteIndex) => `<article class="bind-site-card" data-bind-site-index="${siteIndex + ((state.bindSitePage - 1) * 8)}"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Last Updated: ${site.lastUpdated || site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
+                    ${availableSites.filter((site) => { const f = state.bindSiteCreatedDateFilter; return !f || (site.createdDate && site.createdDate.split('-').reverse().join('-') === f); }).slice((state.bindSitePage - 1) * 8, state.bindSitePage * 8).map((site, siteIndex) => `<article class="bind-site-card" data-bind-site-index="${siteIndex + ((state.bindSitePage - 1) * 8)}"><h4>${site.name}</h4><p>Created Date: ${site.createdDate}</p><p>Last Updated: ${site.lastUpdated || site.createdDate}</p><p>MSID: ${site.msid}</p><a class="archive-link" href="#">${site.url}</a></article>`).join('')}
                   </div>
                   <div class="accounts-pagination" style="margin-top:0.8rem;">
                     <span>Page ${state.bindSitePage} of ${Math.max(1, Math.ceil(availableSites.length / 8))}</span>
@@ -372,6 +373,7 @@
     });
     pageContainer.querySelector('#bindNewSiteBtn')?.addEventListener('click', () => {
       state.bindSiteModalOpen = true;
+      state.bindSiteCreatedDateFilter = '';
       renderAccountsView();
     });
     pageContainer.querySelector('#bindSiteCloseBtn')?.addEventListener('click', () => {
@@ -380,6 +382,11 @@
     });
     pageContainer.querySelector('#bindSiteBackdrop')?.addEventListener('click', () => {
       state.bindSiteModalOpen = false;
+      renderAccountsView();
+    });
+    pageContainer.querySelector('#bindSiteCreatedDateFilter')?.addEventListener('change', (e) => {
+      state.bindSiteCreatedDateFilter = e.target.value;
+      state.bindSitePage = 1;
       renderAccountsView();
     });
     pageContainer.querySelector('#bindSitePrevBtn')?.addEventListener('click', () => {
