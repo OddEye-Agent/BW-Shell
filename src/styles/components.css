@@ -2533,3 +2533,11 @@ tbody tr:hover {
 .admin-tools-table.tab-bulk-upload-events td:nth-child(7) { min-width: 92px; width: 92px; text-align:center; }
 
 .detail-row-btn { padding: 0.24rem 0.55rem; }
+
+
+.rerun-row-btn:disabled {
+  background: #eef1f5;
+  color: #9aa6b8;
+  border-color: #d8dee7;
+  cursor: not-allowed;
+}

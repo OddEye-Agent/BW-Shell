@@ -536,7 +536,8 @@
               }
 
               if (tabConfig.name === 'Bulk Upload Events' && column.key === 'rerun') {
-                return `<td class="${tdClasses}"${widthStyle}><button type="button" class="page-btn rerun-row-btn" data-rerun-id="${row.eventId}">Rerun Upload</button></td>`;
+                const canRerun = String(row.status || '').toLowerCase().includes('failed');
+                return `<td class="${tdClasses}"${widthStyle}><button type="button" class="page-btn rerun-row-btn" data-rerun-id="${row.eventId}" ${canRerun ? '' : 'disabled'}>Rerun Upload</button></td>`;
               }
 
               if (isEditing) {
