@@ -194,7 +194,7 @@
               </div>
             </div>
             <div class="table-wrap users-table-wrap">
-              <table class="users-table">
+              <table class="users-table account-owners-table">
                 <thead><tr><th>Owner Name</th><th>Email</th><th>Role</th></tr></thead>
                 <tbody>
                   ${state.accountOwners.map((o) => `<tr><td>${o.name}</td><td>${o.email}</td><td>${o.role || 'Financial Advisor'}</td></tr>`).join('')}

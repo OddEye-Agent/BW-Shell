@@ -2399,3 +2399,9 @@ tbody tr:hover {
   width: 52px;
   max-width: 52px;
 }
+
+
+.account-owners-table {
+  min-width: 0 !important;
+  table-layout: auto;
+}
