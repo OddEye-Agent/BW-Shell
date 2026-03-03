@@ -2421,3 +2421,33 @@ tbody tr:hover {
   cursor: help;
   vertical-align: middle;
 }
+
+.inline-help {
+  position: relative;
+}
+
+.inline-help::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%);
+  min-width: 320px;
+  max-width: 420px;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid #d7e0ec;
+  border-radius: 6px;
+  background: #fff;
+  color: #2c3f5b;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  box-shadow: 0 10px 24px rgba(17, 28, 46, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 120;
+}
+
+.inline-help:hover::after,
+.inline-help:focus::after {
+  opacity: 1;
+}

@@ -170,7 +170,7 @@
                 <input class="text-input" value="${accountName}" />
               </div>
               <div class="field-group">
-                <label>Account Type<span class="required">*</span> <span class="inline-help" title="Retail Advisor: individual advisor account. Retail BD: broker/dealer retail structure. Enterprise: large-scale multi-team client setup. Sub Account: nested account under a parent enterprise/retail structure.">ⓘ</span></label>
+                <label>Account Type<span class="required">*</span> <span class="inline-help" data-tooltip="Retail Advisor: individual advisor account. Retail BD: broker/dealer retail structure. Enterprise: large-scale multi-team client setup. Sub Account: nested account under a parent enterprise/retail structure.">ⓘ</span></label>
                 <select class="text-input">
                   <option>Retail Advisor</option>
                   <option>Retail BD</option>
