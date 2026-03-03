@@ -59,7 +59,7 @@
     const actionButtons = state.activeTab === 'Manage Roles'
       ? '<button class="new-role-btn" id="newRoleBtn" type="button">New Role</button>'
       : state.activeTab === 'Users'
-        ? '<div class="users-actions"><button class="new-role-btn secondary" id="bulkCreateBtn" type="button">Bulk Create</button><button class="new-role-btn" id="newUserBtn" type="button">＋ New User</button></div>'
+        ? '<div class="users-actions"><button class="new-role-btn" id="newUserBtn" type="button">＋ New User</button></div>'
         : state.activeTab === 'Groups'
           ? '<button class="new-role-btn" id="newGroupBtn" type="button">New Group</button>'
           : '';
@@ -219,12 +219,6 @@ ${bulkDrawerMarkup}    `;
       renderUsersView();
     };
 
-    container.querySelector('#bulkCreateBtn')?.addEventListener('click', () => {
-      state.bulkCreateDrawerOpen = true;
-      state.bulkStep = 'method';
-      state.bulkUploadStatus = 'none';
-      renderUsersView();
-    });
     container.querySelector('#closeBulkDrawerBtn')?.addEventListener('click', closeBulkDrawer);
     container.querySelector('#cancelBulkDrawerBtn')?.addEventListener('click', closeBulkDrawer);
     container.querySelector('#bulkDrawerOverlay')?.addEventListener('click', closeBulkDrawer);

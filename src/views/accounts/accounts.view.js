@@ -239,7 +239,7 @@
       `
       : state.accountTab === 'users'
         ? `
-          <div class="users-header-row users-header-spaced"><div></div><div class="account-users-actions"><button class="new-role-btn" id="accountUsersMenuBtn">Create or Add Users ▾</button><div class="dropdown account-users-dropdown ${state.accountUsersMenuOpen ? 'open' : ''}" id="accountUsersDropdown" ${state.accountUsersMenuOpen ? '' : 'hidden'}><button type="button">＋ New User</button><button type="button">⊕ Add Existing User</button></div></div></div>
+          <div class="users-header-row users-header-spaced"><div></div><div class="account-users-actions"><button class="new-role-btn" id="accountUsersMenuBtn">Create or Add Users ▾</button><div class="dropdown account-users-dropdown ${state.accountUsersMenuOpen ? 'open' : ''}" id="accountUsersDropdown" ${state.accountUsersMenuOpen ? '' : 'hidden'}><button type="button">＋ New User</button><button type="button" id="accountBulkCreateBtn">⤓ Bulk Create</button><button type="button">⊕ Add Existing User</button></div></div></div>
           <div class="table-wrap users-table-wrap">
             <table class="users-table">
               <thead>
@@ -365,6 +365,15 @@
       state.accountUsersMenuOpen = !state.accountUsersMenuOpen;
       renderAccountsView();
     });
+    pageContainer.querySelector('#accountBulkCreateBtn')?.addEventListener('click', () => {
+      state.accountUsersMenuOpen = false;
+      window.__openBulkCreateFromAccounts = true;
+      if (window.store) {
+        window.store.set({ activePage: 'Users' });
+      }
+      renderUsersView();
+    });
+
     pageContainer.addEventListener('click', (e) => {
       if (!state.accountUsersMenuOpen) return;
       if (menu && menu.contains(e.target)) return;
