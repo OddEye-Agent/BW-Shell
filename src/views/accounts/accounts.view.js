@@ -7,7 +7,12 @@
     bindSiteModalOpen: false,
     bindSitePage: 1,
     accountUsersMenuOpen: false,
-    bindSiteSelected: null
+    bindSiteSelected: null,
+    ownerManagerOpen: false,
+    accountOwners: [
+      { name: 'Sean Admin', email: 'sean.admin@abcinvestments.com' },
+      { name: 'Jane Mitchell', email: 'jane.mitchell@abcinvestments.com' }
+    ]
   };
 
   function openAccountDetails(accountName) {
@@ -178,6 +183,51 @@
             </div>
           </div>
         </section>
+
+        <section class="roles-panel" style="margin-top:0.85rem;">
+          <div class="users-header-row users-header-spaced" style="margin-bottom:0.55rem;">
+            <h3 style="margin:0; font-size:1.02rem;">Account Owners</h3>
+            <div class="users-actions">
+              <button class="new-role-btn secondary" id="removeOwnerBtn" type="button">Remove Owner</button>
+              <button class="new-role-btn" id="addOwnerBtn" type="button">Add Owner</button>
+            </div>
+          </div>
+          <div class="table-wrap users-table-wrap">
+            <table class="users-table">
+              <thead><tr><th>Owner Name</th><th>Email</th><th>Primary</th></tr></thead>
+              <tbody>
+                ${state.accountOwners.map((o, i) => `<tr><td>${o.name}</td><td>${o.email}</td><td>${i===0 ? '<span class="status-pill active">Primary</span>' : '<span class="status-pill">Owner</span>'}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+          <p class="archive-summary" style="margin-top:.45rem;">Multiple owners are supported for this account.</p>
+        </section>
+
+        <div class="pdf-modal" id="ownerModal" ${state.ownerManagerOpen ? '' : 'hidden'}>
+          <div class="pdf-modal-backdrop" id="ownerModalBackdrop"></div>
+          <div class="pdf-modal-dialog" style="max-width:680px; height:auto;">
+            <div class="pdf-modal-header">
+              <h3 id="ownerModalTitle">Manage Account Owners</h3>
+              <button class="page-btn" id="ownerModalCloseBtn" type="button">Close</button>
+            </div>
+            <div class="pdf-modal-body" style="padding:1rem;">
+              <div class="field-group" style="margin-bottom:.7rem;">
+                <label>Owner User</label>
+                <select class="text-input" id="ownerUserSelect">
+                  <option>Select user</option>
+                  <option>Internal Test Broadridge (wixbroadridgetest12@gmail.com)</option>
+                  <option>Greg Mallett (greg.mallett@broadridge.com)</option>
+                  <option>Amy Peterson (amy.peterson@abcinvestments.com)</option>
+                </select>
+              </div>
+              <div class="role-form-actions">
+                <button class="page-btn" id="ownerModalCancelBtn" type="button">Cancel</button>
+                <button class="page-btn primary" id="ownerModalConfirmBtn" type="button">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="role-form-actions">
           <button class="page-btn" id="cancelAccountDetailBtn" type="button">Cancel</button>
           <button class="page-btn primary" type="button">Save</button>
@@ -285,6 +335,24 @@
       state.mode = 'list';
       renderAccountsView();
     });
+
+    const openOwnerModal = (mode) => {
+      const title = document.getElementById('ownerModalTitle');
+      if (title) title.textContent = mode === 'remove' ? 'Remove Account Owner' : 'Add Account Owner';
+      state.ownerManagerOpen = true;
+      state.ownerMode = mode;
+      renderAccountsView();
+    };
+
+    pageContainer.querySelector('#addOwnerBtn')?.addEventListener('click', () => openOwnerModal('add'));
+    pageContainer.querySelector('#removeOwnerBtn')?.addEventListener('click', () => openOwnerModal('remove'));
+    const closeOwnerModal = () => {
+      state.ownerManagerOpen = false;
+      renderAccountsView();
+    };
+    pageContainer.querySelector('#ownerModalCloseBtn')?.addEventListener('click', closeOwnerModal);
+    pageContainer.querySelector('#ownerModalCancelBtn')?.addEventListener('click', closeOwnerModal);
+    pageContainer.querySelector('#ownerModalBackdrop')?.addEventListener('click', closeOwnerModal);
 
     const menuBtn = pageContainer.querySelector('#accountUsersMenuBtn');
     const menu = pageContainer.querySelector('#accountUsersDropdown');
