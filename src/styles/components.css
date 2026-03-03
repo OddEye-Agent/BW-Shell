@@ -2458,3 +2458,13 @@ tbody tr:hover {
   border: none;
   padding: 0;
 }
+
+.account-owners-inline .users-table th {
+  font-weight: 600;
+}
+.account-owners-inline .users-table td {
+  font-weight: 400;
+}
+.account-owners-inline .users-header-row {
+  align-items: center;
+}

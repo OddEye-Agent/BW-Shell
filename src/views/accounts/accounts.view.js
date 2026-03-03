@@ -163,7 +163,7 @@
     const tabContent = state.accountTab === 'details'
       ? `
         <section class="create-account-panel" style="margin:0;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.85rem; align-items:start;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.35rem; align-items:start;">
             <div class="create-account-grid" style="grid-template-columns:1fr; margin:0;">
               <div class="field-group">
                 <label>Account Name<span class="required">*</span></label>
@@ -186,7 +186,7 @@
 
             <div class="account-owners-inline" style="margin:0;">
               <div class="users-header-row users-header-spaced" style="margin-bottom:0.55rem;">
-                <h3 style="margin:0; font-size:1.02rem;">Account Owners</h3>
+                <h3 style="margin:0; font-size:1rem; font-weight:600; color:#2e3d53;">Account Owners</h3>
                 <div class="users-actions">
                   <button class="new-role-btn secondary" id="removeOwnerBtn" type="button">Remove Owner</button>
                   <button class="new-role-btn" id="addOwnerBtn" type="button">Add Owner</button>
