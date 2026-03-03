@@ -164,9 +164,9 @@
       ? `
         <section class="create-account-panel" style="margin:0;">
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.35rem; align-items:start;">
-            <div class="create-account-grid" style="grid-template-columns:1fr; margin:0;">
+            <div class="create-account-grid account-left-fields" style="grid-template-columns:1fr; margin:0;">
               <div class="field-group">
-                <label>Account Name<span class="required">*</span></label>
+                <label class="account-section-title">Account Name<span class="required">*</span></label>
                 <input class="text-input" value="${accountName}" />
               </div>
               <div class="field-group">
@@ -192,7 +192,7 @@
                   <button class="new-role-btn" id="addOwnerBtn" type="button">Add Owner</button>
                 </div>
               </div>
-              <div class="table-wrap users-table-wrap">
+              <div class="table-wrap users-table-wrap account-owners-table-wrap">
                 <table class="users-table account-owners-table">
                   <thead><tr><th>Owner Name</th><th>Email</th><th>Role</th></tr></thead>
                   <tbody>

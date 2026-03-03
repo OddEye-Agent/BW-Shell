@@ -2468,3 +2468,30 @@ tbody tr:hover {
 .account-owners-inline .users-header-row {
   align-items: center;
 }
+
+
+.account-section-title {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #2e3d53 !important;
+  margin-bottom: 0.45rem !important;
+}
+
+.account-left-fields {
+  align-content: start;
+}
+
+.account-owners-head {
+  min-height: 30px;
+  align-items: center;
+}
+
+.account-owners-table-wrap,
+.account-owners-table-wrap table,
+.account-owners-table-wrap tbody tr {
+  background: #fff;
+}
+
+.account-owners-inline .users-actions {
+  margin-left: 0;
+}
